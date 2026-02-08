@@ -113,6 +113,7 @@ export default function TextToImagePage() {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [models, setModels] = useState<ImageModel[]>([]);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
+  const [isTranslating, setIsTranslating] = useState(false); // 翻译状态
 
   // Image to Image 相关状态
   const [referenceImage, setReferenceImage] = useState<File | null>(null);
@@ -124,6 +125,7 @@ export default function TextToImagePage() {
   const [generatedI2IImage, setGeneratedI2IImage] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("text-to-image");
+  const [isTranslatingI2I, setIsTranslatingI2I] = useState(false); // 图生图翻译状态
 
   // 根据路由参数过滤模型（文生图）
   const filteredModels = models.filter(m => {
@@ -209,6 +211,7 @@ export default function TextToImagePage() {
 
         // 使用硬编码的模型列表
         const mockModels: ImageModel[] = [
+          // ✅ 已实现：Evolink Nano Banana
           {
             id: 'nano-banana-2-lite',
             name: 'Nano Banana Pro',
@@ -218,20 +221,12 @@ export default function TextToImagePage() {
             supportsTextToImage: true,
             supportsImageToImage: true
           },
-          {
-            id: 'gemini-2.5-flash-imagen-3',
-            name: 'Gemini 2.5 Flash (Imagen 3)',
-            model: 'gemini-2.5-flash',
-            description: 'Google Gemini 2.5 Flash with Imagen 3 support',
-            provider: 'google-gemini',
-            supportsTextToImage: true,
-            supportsImageToImage: true
-          },
+          // 🔜 即将推出：Google Imagen 4 系列（保留前端选项，方便后续集成）
           {
             id: 'imagen-4-standard',
             name: 'Imagen 4 Standard',
             model: 'imagen-4-standard',
-            description: 'Google Imagen 4 标准版',
+            description: 'Google\'s latest image generation model with balanced quality and speed',
             provider: 'google',
             supportsTextToImage: true,
             supportsImageToImage: true
@@ -240,7 +235,7 @@ export default function TextToImagePage() {
             id: 'imagen-4-ultra',
             name: 'Imagen 4 Ultra',
             model: 'imagen-4-ultra',
-            description: 'Google Imagen 4 超高质量版',
+            description: 'Highest quality image generation with exceptional detail and realism',
             provider: 'google',
             supportsTextToImage: true,
             supportsImageToImage: true
@@ -249,7 +244,7 @@ export default function TextToImagePage() {
             id: 'imagen-4-fast',
             name: 'Imagen 4 Fast',
             model: 'imagen-4-fast',
-            description: 'Google Imagen 4 快速版',
+            description: 'Fast image generation optimized for speed',
             provider: 'google',
             supportsTextToImage: true,
             supportsImageToImage: true
@@ -489,7 +484,17 @@ export default function TextToImagePage() {
         throw new Error('Task timeout');
       }
 
-      // 其他模型使用通用 API
+      // 🔜 Google Imagen 系列模型：即将推出
+      if (model.includes('imagen-4')) {
+        console.log('[Google Imagen] 用户选择了即将推出的模型:', model);
+        toast.info('🚀 Google Imagen 4 系列即将推出，敬请期待！\n\n当前可用模型：Nano Banana Pro', {
+          duration: 4000
+        });
+        setIsGenerating(false);
+        return;
+      }
+
+      // 其他模型使用通用 API（如有）
       console.log('开始生成图片...', {
         prompt,
         modelId: model,
@@ -568,6 +573,16 @@ export default function TextToImagePage() {
     setGeneratedI2IImage(null);
 
     try {
+      // 🔜 Google Imagen 系列模型：即将推出
+      if (i2iModel.includes('imagen-4')) {
+        console.log('[ImageToImage] 用户选择了即将推出的模型:', i2iModel);
+        toast.info('🚀 Google Imagen 4 图生图功能即将推出，敬请期待！\n\n当前可用模型：Nano Banana Pro', {
+          duration: 4000
+        });
+        setIsGeneratingI2I(false);
+        return;
+      }
+
       const formData = new FormData();
       formData.append('image', referenceImage);
       formData.append('prompt', i2iPrompt);
@@ -619,6 +634,113 @@ export default function TextToImagePage() {
       toast.error(t('generation_error'));
     } finally {
       setIsGeneratingI2I(false);
+    }
+  };
+
+  // 翻译提示词（文生图）
+  const handleTranslate = async () => {
+    if (!prompt.trim()) {
+      toast.error(t('enter_prompt'));
+      return;
+    }
+
+    if (!session) {
+      saveRedirectUrl();
+      toast.error(t('login_to_get_credits'));
+      authEventBus.emit({
+        type: 'login-expired',
+        message: t('login_to_get_credits')
+      });
+      return;
+    }
+
+    setIsTranslating(true);
+
+    try {
+      console.log('[Translate] 开始翻译提示词:', prompt);
+
+      // 目标语言：根据当前语言决定
+      // 如果当前是中文，翻译成英文；如果是英文，翻译成中文
+      const targetLanguage = locale === 'zh' ? 'en' : 'zh';
+
+      const response = await fetch('/api/text-to-prompt/translate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: prompt,
+          targetLanguage: targetLanguage
+        })
+      });
+
+      const result = await response.json();
+      console.log('[Translate] 翻译响应:', result);
+
+      if (result.code === 1000 && result.data?.translated) {
+        setPrompt(result.data.translated);
+        toast.success(t('translate_success') || 'Translation completed!');
+      } else {
+        throw new Error(result.message || 'Translation failed');
+      }
+    } catch (error: any) {
+      console.error('[Translate] 翻译异常:', error);
+      toast.error(error.message || t('translate_failed') || 'Translation failed');
+    } finally {
+      setIsTranslating(false);
+    }
+  };
+
+  // 翻译提示词（图生图）
+  const handleTranslateI2I = async () => {
+    if (!i2iPrompt.trim()) {
+      toast.error(t('enter_prompt'));
+      return;
+    }
+
+    if (!session) {
+      saveRedirectUrl();
+      toast.error(t('please_login'));
+      authEventBus.emit({
+        type: 'login-expired',
+        message: t('please_login')
+      });
+      return;
+    }
+
+    setIsTranslatingI2I(true);
+
+    try {
+      console.log('[Translate I2I] 开始翻译提示词:', i2iPrompt);
+
+      // 目标语言：根据当前语言决定
+      const targetLanguage = locale === 'zh' ? 'en' : 'zh';
+
+      const response = await fetch('/api/text-to-prompt/translate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: i2iPrompt,
+          targetLanguage: targetLanguage
+        })
+      });
+
+      const result = await response.json();
+      console.log('[Translate I2I] 翻译响应:', result);
+
+      if (result.code === 1000 && result.data?.translated) {
+        setI2iPrompt(result.data.translated);
+        toast.success(t('translate_success') || 'Translation completed!');
+      } else {
+        throw new Error(result.message || 'Translation failed');
+      }
+    } catch (error: any) {
+      console.error('[Translate I2I] 翻译异常:', error);
+      toast.error(error.message || t('translate_failed') || 'Translation failed');
+    } finally {
+      setIsTranslatingI2I(false);
     }
   };
 
@@ -725,9 +847,15 @@ export default function TextToImagePage() {
                       <Wand2 className="h-3.5 w-3.5 mr-1.5" />
                       {t('ai_magic_enhance')}
                     </Button>
-                    <Button variant="outline" size="sm" className="border-border">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="border-border"
+                      onClick={handleTranslate}
+                      disabled={isTranslating || !prompt.trim()}
+                    >
                       <Globe className="h-3.5 w-3.5 mr-1.5" />
-                      {t('translate')}
+                      {isTranslating ? t('translating') || 'Translating...' : t('translate')}
                     </Button>
                   </div>
 
@@ -965,9 +1093,15 @@ export default function TextToImagePage() {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" className="border-border">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="border-border"
+                      onClick={handleTranslateI2I}
+                      disabled={isTranslatingI2I || !i2iPrompt.trim()}
+                    >
                       <Globe className="h-3.5 w-3.5 mr-1.5" />
-                      {t('image_to_image.translate')}
+                      {isTranslatingI2I ? t('translating') || 'Translating...' : t('image_to_image.translate')}
                     </Button>
                   </div>
 

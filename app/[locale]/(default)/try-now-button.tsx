@@ -4,10 +4,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { trackTryItNowClick } from "@/lib/analytics";
 
-export function TryNowButton({ locale, label }: { locale: string; label: string }) {
+export function TryNowButton({ label }: { label: string }) {
   return (
     <Link
-      href={`/${locale}/txt-to-image/nano-banana`}
+      href="/txt-to-image/nano-banana"
       onClick={() => trackTryItNowClick('hero')}
     >
       <Button

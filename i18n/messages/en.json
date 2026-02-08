@@ -126,7 +126,7 @@
     "social_login": "Social Login",
     "phone_login": "Phone Login",
     "social_login_desc": "Sign in quickly with your social account",
-    "phone_password_required": "Please enter phone number and password",
+    "phone_password_required": "Please enter email and password",
     "invalid_phone": "Please enter a valid phone number",
     "login_success": "Login successful",
     "login_failed": "Login failed",
@@ -211,7 +211,10 @@
     "captcha_dialog_desc": "Please enter the captcha to continue",
     "captcha_hint": "Can't see clearly? Click image to refresh",
     "confirm": "Confirm",
-    "password_required": "Please enter password"
+    "password_required": "Please enter password",
+    "name_title": "Name",
+    "name_placeholder": "Enter your name",
+    "already_have_account": "Already have an account?"
   },
   "my_orders": {
     "title": "My Orders",
@@ -516,7 +519,7 @@
       "reference_image_desc": "Upload an image to use as a reference for generation",
       "upload_or_drag": "Click to upload or drag and drop",
       "prompt_title": "Prompt",
-      "prompt_desc": "Only English prompts are supported now",
+      "prompt_desc": "You can input image prompt in any language, but English prompts generate the most accurate images.",
       "prompt_placeholder": "Describe how you want to transform the image...",
       "translate": "Translate",
       "select_ratio": "Select ratio"
@@ -531,6 +534,9 @@
     "generation_success": "Image generated successfully!",
     "generation_failed": "Generation failed, please try again",
     "generation_error": "Generation failed, please try again later",
+    "translate_success": "Translation completed!",
+    "translate_failed": "Translation failed",
+    "translating": "Translating...",
     "upload_reference_image": "Please upload a reference image",
     "loading": "Loading...",
     "no_models_available": "No models available",
@@ -1360,6 +1366,45 @@
     "effects": {
       "title": "Transform Text & Images into Videos with These Trending AI Video Effects",
       "description": "Pixmind AI provides a variety of innovative AI video effects, including AI Kiss, AI Hug, AI Inflate, and more. Unleash your creativity now with these trending AI video generators!"
+    }
+  },
+  "profile": {
+    "sidebar": {
+      "profile": "Profile",
+      "billing": "Billing",
+      "credits": "Credits",
+      "api_keys": "API Keys"
+    },
+    "email_label": "Email",
+    "email_readonly_hint": "Email address cannot be changed",
+    "name_label": "Name",
+    "name_placeholder": "Enter your name",
+    "avatar_label": "Avatar",
+    "change_avatar": "Change Avatar",
+    "avatar_hint": "PNG, JPG up to 2MB",
+    "save_changes": "Save Changes",
+    "saving": "Saving...",
+    "uploading": "Uploading...",
+    "save_success": "Profile updated successfully",
+    "save_failed": "Failed to update profile",
+    "avatar_upload_success": "Avatar uploaded successfully",
+    "avatar_upload_failed": "Failed to upload avatar",
+    "errors": {
+      "name_required": "Name is required",
+      "invalid_image": "Invalid file type. Only images are allowed.",
+      "image_too_large": "File too large. Maximum size is 2MB."
+    },
+    "billing": {
+      "coming_soon_title": "Coming Soon",
+      "coming_soon_description": "Billing management features will be available soon."
+    },
+    "api_keys": {
+      "coming_soon_title": "Coming Soon",
+      "coming_soon_description": "API key management features will be available soon."
+    },
+    "tabs": {
+      "activity": "Activity",
+      "settings": "Settings"
     }
   },
   "affiliate": {

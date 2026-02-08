@@ -38,8 +38,8 @@ export default async function LandingPage({
           </p>
 
           <div className="flex justify-center gap-4 mb-16">
-            <TryNowButton locale={locale} label={t("hero.try_now")} />
-            <Link href={`/${locale}/blog`}>
+            <TryNowButton label={t("hero.try_now")} />
+            <Link href="blog">
               <Button
                 size="lg"
                 variant="outline"
@@ -117,7 +117,7 @@ export default async function LandingPage({
                 <p className="text-muted-foreground leading-relaxed">
                   {t("showcase.card2.description")}
                 </p>
-                <Link href={`/${locale}/text-to-video`}>
+                <Link href="/video-generate/sora-2">
                   <Button
                     size="lg"
                     className="rounded-full px-8"
@@ -150,14 +150,36 @@ export default async function LandingPage({
                 <p className="text-muted-foreground leading-relaxed">
                   {t("showcase.card3.description")}
                 </p>
-                <Link href={`/${locale}/text-to-image`}>
-                  <Button
-                    size="lg"
-                    className="rounded-full px-8"
-                  >
-                    {t("showcase.card3.start_creating")}
-                  </Button>
-                </Link>
+                
+                {/* 模型选择按钮 */}
+                <div className="flex flex-wrap gap-3">
+                  <Link href="/txt-to-image/all">
+                    <Button
+                      size="lg"
+                      className="rounded-full px-6"
+                    >
+                      🎨 All Models
+                    </Button>
+                  </Link>
+                  <Link href="/txt-to-image/nano-banana">
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="rounded-full px-6"
+                    >
+                      🍌 Nano Banana
+                    </Button>
+                  </Link>
+                  <Link href="/txt-to-image/google-imagen">
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="rounded-full px-6"
+                    >
+                      🚀 Google Imagen 4
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

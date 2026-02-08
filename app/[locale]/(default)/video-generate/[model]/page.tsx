@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useTranslations } from 'next-intl';
+import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { authEventBus } from "@/lib/auth-event";
 import { Textarea } from "@/components/ui/textarea";
@@ -90,11 +91,15 @@ function GoogleAuthHandler() {
 interface VideoModel {
   id: string;
   name: string;
+  model: string;
   description: string;
   maxDuration: number;
   supportedResolutions?: string[];
   supportedAspectRatios?: string[];
   supportedAspectDuration?: number[];
+  provider?: string;
+  supportsTextToVideo?: boolean;
+  supportsImageToVideo?: boolean;
 }
 
 export default function VideoGeneratePage() {
@@ -102,9 +107,9 @@ export default function VideoGeneratePage() {
   const routeModel = params?.model as string || 'all'; // 获取路由中的模型参数
   const t = useTranslations('video-generate');
   const { getCredits } = useConsumptionItems();
+  const { data: session, status } = useSession();
 
   // 通用状态
-  const [aiHubToken, setAiHubToken] = useState<string>("");
   const [isMounted, setIsMounted] = useState(false);
 
   // Text to Video 状态
@@ -174,6 +179,14 @@ export default function VideoGeneratePage() {
       return m.id.toLowerCase().includes('seedance');
     }
 
+    // veo/google-veo/veo-3 页面：显示所有 Evolink 视频模型
+    if (routeModel === 'veo' || routeModel === 'google-veo' || routeModel === 'veo-3') {
+      return m.id.toLowerCase().includes('sora') ||
+             m.id.toLowerCase().includes('veo') ||
+             m.id.toLowerCase().includes('seedance') ||
+             m.provider === 'evolink';
+    }
+
     // 其他路由：匹配模型 id 或 name 字段
     return m.id.toLowerCase().includes(routeModel.toLowerCase()) ||
            m.name.toLowerCase().includes(routeModel.toLowerCase());
@@ -183,16 +196,6 @@ export default function VideoGeneratePage() {
     setIsMounted(true);
   }, []);
 
-  useEffect(() => {
-    const token = localStorage.getItem("aiHubToken");
-    if (token) {
-      setAiHubToken(token);
-      console.log('[VideoGenerate] 已获取 token');
-    } else {
-      console.log('[VideoGenerate] 没有 token，请先登录');
-    }
-  }, []);
-
   // 获取视频模型列表
   useEffect(() => {
     const fetchVideoModels = async () => {
@@ -200,18 +203,7 @@ export default function VideoGeneratePage() {
         setIsLoadingModels(true);
         console.log('[VideoModels] 开始获取模型列表');
 
-        // 构建请求头，如果有 token 就带上，没有也能请求
-        const headers: HeadersInit = {};
-        if (aiHubToken) {
-          headers['Authorization'] = aiHubToken;
-          console.log('[VideoModels] 使用 token 请求');
-        } else {
-          console.log('[VideoModels] 无 token，尝试公开访问');
-        }
-
-        const response = await fetch('/api/ai/video-models', {
-          headers,
-        });
+        const response = await fetch('/api/ai/video-models');
 
         console.log('[VideoModels] API 响应状态:', response.status);
 
@@ -219,7 +211,6 @@ export default function VideoGeneratePage() {
           console.error('[VideoModels] API 返回错误:', response.status, response.statusText);
           if (response.status === 401) {
             console.error('[VideoModels] 需要登录才能获取模型列表');
-            // 不显示错误提示，让用户可以正常浏览页面
             return;
           }
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -233,25 +224,16 @@ export default function VideoGeneratePage() {
           setVideoModels(result.data);
         } else {
           console.error('[VideoModels] 获取模型列表失败:', result.message);
-          // 只在有 token 的情况下显示错误提示
-          if (aiHubToken) {
-            toast.error(result.message || t('toast.getModelsFailed'));
-          }
         }
       } catch (error) {
         console.error('[VideoModels] 获取模型列表异常:', error);
-        // 只在有 token 的情况下显示错误提示
-        if (aiHubToken) {
-          toast.error(t('toast.getModelsFailedRetry'));
-        }
       } finally {
         setIsLoadingModels(false);
       }
     };
 
-    // 无论是否有 token 都获取模型列表
     fetchVideoModels();
-  }, [aiHubToken]);
+  }, []);
 
   // 当过滤后的模型列表变化时，设置默认选中第一个模型
   useEffect(() => {
@@ -492,11 +474,7 @@ export default function VideoGeneratePage() {
 
     const poll = async () => {
       try {
-        const response = await fetch(`/api/ai/video-generate/task-status?taskId=${taskId}`, {
-          headers: {
-            'Authorization': aiHubToken,
-          },
-        });
+        const response = await fetch(`/api/ai/video-generate/task-status?taskId=${taskId}`);
 
         const result = await response.json();
         console.log('[T2V] 任务状态:', result);
@@ -526,7 +504,17 @@ export default function VideoGeneratePage() {
             console.log('[T2V] ❌ 视频生成失败, error:', result.data.error);
             setIsGeneratingT2V(false);
             // 优先使用 error 字段，如果没有则使用 errorMessage，最后使用默认消息
-            const errorMsg = result.data.error || result.data.errorMessage || t('toast.videoGenerateFailed');
+            // error 可能是对象 {code, message} 或字符串
+            let errorMsg = t('toast.videoGenerateFailed');
+            if (result.data.error) {
+              if (typeof result.data.error === 'string') {
+                errorMsg = result.data.error;
+              } else if (result.data.error.message) {
+                errorMsg = result.data.error.message;
+              }
+            } else if (result.data.errorMessage) {
+              errorMsg = result.data.errorMessage;
+            }
             toast.error(errorMsg);
             return;
           } else if (status === 'processing' || status === 'pending') {
@@ -572,11 +560,7 @@ export default function VideoGeneratePage() {
 
     const poll = async () => {
       try {
-        const response = await fetch(`/api/ai/video-generate/task-status?taskId=${taskId}`, {
-          headers: {
-            'Authorization': aiHubToken,
-          },
-        });
+        const response = await fetch(`/api/ai/video-generate/task-status?taskId=${taskId}`);
 
         const result = await response.json();
         console.log('[I2V] 任务状态:', result);
@@ -606,7 +590,17 @@ export default function VideoGeneratePage() {
             console.log('[I2V] ❌ 视频生成失败, error:', result.data.error);
             setIsGeneratingI2V(false);
             // 优先使用 error 字段，如果没有则使用 errorMessage，最后使用默认消息
-            const errorMsg = result.data.error || result.data.errorMessage || t('toast.videoGenerateFailed');
+            // error 可能是对象 {code, message} 或字符串
+            let errorMsg = t('toast.videoGenerateFailed');
+            if (result.data.error) {
+              if (typeof result.data.error === 'string') {
+                errorMsg = result.data.error;
+              } else if (result.data.error.message) {
+                errorMsg = result.data.error.message;
+              }
+            } else if (result.data.errorMessage) {
+              errorMsg = result.data.errorMessage;
+            }
             toast.error(errorMsg);
             return;
           } else if (status === 'processing' || status === 'pending') {
@@ -646,10 +640,9 @@ export default function VideoGeneratePage() {
 
   // Text to Video 生成
   const handleT2VGenerate = async () => {
-    if (!aiHubToken) {
+    if (status !== 'authenticated' || !session?.user) {
       saveRedirectUrl();
       toast.error(t('toast.pleaseLogin'));
-      // 触发登录弹窗
       authEventBus.emit({
         type: 'login-expired',
         message: t('toast.pleaseLogin')
@@ -680,7 +673,6 @@ export default function VideoGeneratePage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': aiHubToken,
         },
         body: JSON.stringify({
           prompt: t2vPrompt,
@@ -713,10 +705,9 @@ export default function VideoGeneratePage() {
 
   // Image to Video 生成
   const handleI2VGenerate = async () => {
-    if (!aiHubToken) {
+    if (status !== 'authenticated' || !session?.user) {
       saveRedirectUrl();
       toast.error(t('toast.pleaseLogin'));
-      // 触发登录弹窗
       authEventBus.emit({
         type: 'login-expired',
         message: t('toast.pleaseLogin')
@@ -752,7 +743,6 @@ export default function VideoGeneratePage() {
       const response = await fetch('/api/ai/video-generate/create', {
         method: 'POST',
         headers: {
-          'Authorization': aiHubToken,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({

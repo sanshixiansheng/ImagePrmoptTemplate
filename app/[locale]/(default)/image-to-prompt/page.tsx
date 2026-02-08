@@ -1,557 +1,288 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
-import { useRouter, useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Upload, Image, FileText, Check, Copy, Loader2, X } from "lucide-react";
+import { Upload, Loader2, Copy, Wand2, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
-import { PromptHistoryDialog } from "@/components/prompt-history-dialog";
-import { savePromptToHistory } from "@/lib/prompt-history";
-import { useTranslations } from "next-intl";
+
+type AnalysisMode = "describe" | "prompt" | "detailed";
 
 export default function ImageToPromptPage() {
-  const t = useTranslations("imageToPrompt");
-  const params = useParams();
-  const locale = params.locale as string;
-  const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [generatedPrompt, setGeneratedPrompt] = useState<string>("");
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [selectedModel, setSelectedModel] = useState("normal");
-  const [uploadMethod, setUploadMethod] = useState<"upload" | "url">("upload");
   const [imageUrl, setImageUrl] = useState<string>("");
-  const [showHistory, setShowHistory] = useState(false);
-  const [promptLanguage, setPromptLanguage] = useState("en");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [result, setResult] = useState<string>("");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [mode, setMode] = useState<AnalysisMode>("prompt");
 
-  // Check if component is mounted (client-side)
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
-      processImageFile(file);
-    }
-  };
+    if (!file) return;
 
-  const processImageFile = (file: File) => {
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error(t("toast.fileTooLarge"));
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
       return;
     }
 
-    setSelectedImage(file);
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const files = e.dataTransfer.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      if (file.type.startsWith('image/')) {
-        processImageFile(file);
-      } else {
-        toast.error(t("toast.invalidFileType"));
-      }
-    }
-  };
-
-  const handleLoadImageUrl = async () => {
-    if (!imageUrl.trim()) {
-      toast.error(t("toast.invalidUrl"));
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error("Image size must be less than 10MB");
       return;
     }
 
-    try {
-      // Validate URL format
-      const url = new URL(imageUrl);
-
-      // Set preview directly
-      setImagePreview(imageUrl);
-
-      // Create a temporary image to verify it loads and convert to File
-      const img = document.createElement('img');
-      img.crossOrigin = 'anonymous';
-
-      await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = () => reject(new Error('Failed to load image'));
-        img.src = imageUrl;
-      });
-
-      // Convert image to canvas then to blob
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      ctx?.drawImage(img, 0, 0);
-
-      // Convert canvas to blob
-      const blob = await new Promise<Blob>((resolve, reject) => {
-        canvas.toBlob((blob) => {
-          if (blob) {
-            resolve(blob);
-          } else {
-            reject(new Error('Failed to convert image to blob'));
-          }
-        }, 'image/jpeg', 0.95);
-      });
-
-      const file = new File([blob], "url-image.jpg", { type: 'image/jpeg' });
-      setSelectedImage(file);
-
-      toast.success(t("toast.imageLoaded"));
-    } catch (error) {
-      console.error("Error loading image URL:", error);
-      // If CORS fails, still allow the preview but create a fallback
-      if (imagePreview === imageUrl) {
-        toast.warning(t("toast.corsWarning"));
-        // Try to use the URL directly without converting to File
-        // The API will need to handle URL as well
-      } else {
-        toast.error(t("toast.invalidImageUrl"));
-      }
-    }
+    setImageFile(file);
+    
+    // Create preview URL
+    const preview = URL.createObjectURL(file);
+    setPreviewUrl(preview);
+    
+    // Upload to R2
+    await uploadImage(file);
   };
 
-  const handleGeneratePrompt = async () => {
-    if (!selectedImage && !imagePreview) {
-      toast.error(t("toast.noImageSelected"));
-      return;
-    }
-
-    setIsGenerating(true);
-
+  const uploadImage = async (file: File) => {
     try {
       const formData = new FormData();
+      formData.append("file", file);
 
-      if (selectedImage) {
-        // Use uploaded file or converted blob
-        formData.append("img", selectedImage);
-      } else if (uploadMethod === "url" && imageUrl) {
-        // Use URL directly if no file was created
-        formData.append("imageUrl", imageUrl);
-      }
-
-      // Language name mapping
-      const languageNames: Record<string, string> = {
-        "en": "English",
-        "es": "Español",
-        "fr": "Français",
-        "de": "Deutsch",
-        "zh": "简体中文",
-        "zh-TW": "繁體中文",
-        "ko": "한국어",
-        "ru": "Русский",
-        "ja": "日本語",
-        "it": "Italiano",
-        "pt": "Português",
-        "ar": "العربية",
-        "hi": "हिन्दी",
-        "tr": "Türkçe",
-        "vi": "Tiếng Việt",
-        "id": "Bahasa Indonesia"
-      };
-
-      formData.append("promptType", selectedModel);
-      formData.append("language", languageNames[promptLanguage] || "English");
-      formData.append("userQuery", "Generate a detailed AI image prompt for this image");
-
-      const response = await fetch("/api/image-to-prompt", {
+      const uploadResponse = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to generate prompt");
+      if (!uploadResponse.ok) {
+        throw new Error("Failed to upload image");
       }
 
-      const result = await response.json();
-
-      if (result.success && result.prompt) {
-        setGeneratedPrompt(result.prompt);
-        // Save to history
-        savePromptToHistory(result.prompt, selectedModel, imagePreview || undefined);
-        toast.success(t("toast.promptGenerated"));
+      const uploadResult = await uploadResponse.json();
+      
+      if (uploadResult.code === 1000 && uploadResult.data?.fileUrl) {
+        setImageUrl(uploadResult.data.fileUrl);
+        toast.success("Image uploaded successfully");
       } else {
-        throw new Error("Invalid response from server");
+        throw new Error(uploadResult.message || "Upload failed");
       }
-    } catch (error) {
-      console.error("Error generating prompt:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to generate prompt. Please try again.");
+    } catch (error: any) {
+      console.error("[Upload Error]", error);
+      toast.error(error.message || "Failed to upload image");
+    }
+  };
+
+  const handleAnalyze = async () => {
+    if (!imageUrl) {
+      toast.error("Please upload an image first");
+      return;
+    }
+
+    setIsProcessing(true);
+    setResult("");
+
+    try {
+      const response = await fetch("/api/image-to-prompt/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imageUrl: imageUrl,
+          mode: mode,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.code === 1000) {
+        setResult(data.data.result);
+        toast.success("Analysis completed!");
+      } else {
+        throw new Error(data.message || "Analysis failed");
+      }
+    } catch (error: any) {
+      console.error("[Analysis Error]", error);
+      toast.error(error.message || "Failed to analyze image");
     } finally {
-      setIsGenerating(false);
+      setIsProcessing(false);
     }
   };
 
-  const handleCopyPrompt = () => {
-    if (generatedPrompt) {
-      navigator.clipboard.writeText(generatedPrompt);
-      toast.success(t("toast.promptCopied"));
-    }
+  const handleCopy = () => {
+    if (!result) return;
+    navigator.clipboard.writeText(result);
+    toast.success("Copied to clipboard!");
   };
 
-  // Prevent hydration mismatch by not rendering dynamic content until mounted
-  if (!mounted) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-purple-50/20 dark:to-purple-950/10">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-4 text-foreground">{t("title")}</h1>
-            <p className="text-muted-foreground">
-              {t("subtitle")}
-            </p>
-          </div>
-          <div className="max-w-6xl mx-auto">
-            <div className="flex items-center justify-center py-20">
-              <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handleClear = () => {
+    setImageUrl("");
+    setImageFile(null);
+    setPreviewUrl("");
+    setResult("");
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-purple-50/20 dark:to-purple-950/10">
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-4 text-foreground">{t("title")}</h1>
-          <p className="text-muted-foreground">
-            {t("subtitle")}
-          </p>
-        </div>
-
-        <div className="max-w-6xl mx-auto">
-          {/* Tab Navigation */}
-          <div className="flex justify-start mb-8">
-            <Tabs defaultValue="image-to-prompt">
-              <TabsList className="bg-card p-1 border border-border">
-                <TabsTrigger
-                  value="image-to-prompt"
-                  className="data-[state=active]:bg-purple-600 data-[state=active]:text-white px-6 py-2.5 rounded-md transition-all flex items-center gap-2"
-                >
-                  <Image className="h-4 w-4" />
-                  {t("tabs.imageToPrompt")}
-                </TabsTrigger>
-                <TabsTrigger
-                  value="text-to-prompt"
-                  className="data-[state=active]:bg-purple-600 data-[state=active]:text-white px-6 py-2.5 rounded-md transition-all flex items-center gap-2"
-                  onClick={() => router.push(`/${locale}/text-to-prompt`)}
-                >
-                  <FileText className="h-4 w-4" />
-                  {t("tabs.textToPrompt")}
-                </TabsTrigger>
-              </TabsList>
-            </Tabs>
-          </div>
-
-          {/* Main Content */}
-          <div>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                  <div className="border-2 border-dashed border-purple-300 dark:border-purple-700 rounded-lg p-4 h-[280px] flex flex-col">
-                    {/* Upload Method Tabs - Inside Upload Box */}
-                    <div className="flex gap-3 mb-4">
-                      <button
-                        onClick={() => setUploadMethod("upload")}
-                        className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
-                          uploadMethod === "upload"
-                            ? "bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 font-medium"
-                            : "text-muted-foreground hover:text-foreground"
-                        }`}
-                      >
-                        {t("upload.uploadImage")}
-                      </button>
-                      <button
-                        onClick={() => setUploadMethod("url")}
-                        className={`px-3 py-1.5 text-sm rounded-lg transition-colors ${
-                          uploadMethod === "url"
-                            ? "bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 font-medium"
-                            : "text-muted-foreground hover:text-foreground"
-                        }`}
-                      >
-                        {t("upload.inputImageUrl")}
-                      </button>
-                    </div>
-
-                    {/* Upload Content Area */}
-                    <div className="flex-1 flex items-center justify-center">
-                      {uploadMethod === "upload" ? (
-                        <label htmlFor="image-upload" className="cursor-pointer w-full h-full flex items-center justify-center">
-                          <div
-                            className="text-center w-full"
-                            onDragOver={handleDragOver}
-                            onDrop={handleDrop}
-                          >
-                            <Upload className="h-10 w-10 mx-auto mb-3 text-purple-400" />
-                            <p className="text-sm font-medium mb-1">{t("upload.dragDrop")}</p>
-                            <p className="text-xs text-muted-foreground">{t("upload.fileFormat")}</p>
-                          </div>
-                          <input
-                            id="image-upload"
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={handleImageUpload}
-                          />
-                        </label>
-                      ) : (
-                        <div className="w-full px-4">
-                          <Image className="h-10 w-10 mx-auto mb-3 text-purple-400" />
-                          <p className="text-sm font-medium mb-3 text-center">{t("upload.enterUrl")}</p>
-                          <input
-                            type="text"
-                            placeholder={t("upload.urlPlaceholder")}
-                            value={imageUrl}
-                            onChange={(e) => setImageUrl(e.target.value)}
-                            className="w-full px-3 py-1.5 text-sm border border-border rounded-lg mb-3 bg-card text-foreground"
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                handleLoadImageUrl();
-                              }
-                            }}
-                          />
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="w-full border-purple-300 text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
-                            onClick={handleLoadImageUrl}
-                          >
-                            {t("upload.loadUrl")}
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <Card className="p-4 h-[280px]">
-                    <div className="flex items-center justify-between mb-3">
-                      <h3 className="font-semibold text-sm text-foreground">{t("preview.title")}</h3>
-                      {imagePreview && (
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          onClick={() => {
-                            setSelectedImage(null);
-                            setImagePreview(null);
-                            setImageUrl("");
-                            setGeneratedPrompt("");
-                          }}
-                        >
-                          <X className="h-3 w-3" />
-                        </Button>
-                      )}
-                    </div>
-                    <div className="h-[calc(100%-2.5rem)] flex items-center justify-center overflow-hidden">
-                      {imagePreview ? (
-                        <img
-                          src={imagePreview}
-                          alt="Preview"
-                          className="max-w-full max-h-full rounded-lg object-contain"
-                        />
-                      ) : (
-                        <div className="flex flex-col items-center justify-center text-muted-foreground">
-                          <Image className="h-12 w-12 mb-2" />
-                          <p className="text-sm">{t("preview.placeholder")}</p>
-                        </div>
-                      )}
-                    </div>
-                  </Card>
-                </div>
-              </div>
-
-              {/* Model Selection */}
-              <div className="mt-8">
-                <h3 className="text-lg font-semibold text-foreground mb-4">{t("models.selectTitle")}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <Card className={`p-4 cursor-pointer border-2 transition-all relative ${selectedModel === 'normal' ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' : 'hover:border-purple-300'
-                  }`} onClick={() => setSelectedModel('normal')}>
-                  {selectedModel === 'normal' && (
-                    <div className="absolute top-3 right-3">
-                      <Check className="h-5 w-5 text-purple-600" />
-                    </div>
-                  )}
-                  <h4 className="font-semibold text-foreground mb-2">{t("models.generalTitle")}</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {t("models.generalDesc")}
-                  </p>
-                </Card>
-
-                <Card className={`p-4 cursor-pointer border-2 transition-all relative ${selectedModel === 'flux' ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' : 'hover:border-purple-300'
-                  }`} onClick={() => setSelectedModel('flux')}>
-                  {selectedModel === 'flux' && (
-                    <div className="absolute top-3 right-3">
-                      <Check className="h-5 w-5 text-purple-600" />
-                    </div>
-                  )}
-                  <h4 className="font-semibold text-foreground mb-2">{t("models.fluxTitle")}</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {t("models.fluxDesc")}
-                  </p>
-                </Card>
-
-                <Card className={`p-4 cursor-pointer border-2 transition-all relative ${selectedModel === 'midjouney' ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' : 'hover:border-purple-300'
-                  }`} onClick={() => setSelectedModel('midjouney')}>
-                  {selectedModel === 'midjouney' && (
-                    <div className="absolute top-3 right-3">
-                      <Check className="h-5 w-5 text-purple-600" />
-                    </div>
-                  )}
-                  <h4 className="font-semibold text-foreground mb-2">{t("models.midjourneyTitle")}</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {t("models.midjourneyDesc")}
-                  </p>
-                </Card>
-
-                <Card className={`p-4 cursor-pointer border-2 transition-all relative ${selectedModel === 'stableDiffusion' ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' : 'hover:border-purple-300'
-                  }`} onClick={() => setSelectedModel('stableDiffusion')}>
-                  {selectedModel === 'stableDiffusion' && (
-                    <div className="absolute top-3 right-3">
-                      <Check className="h-5 w-5 text-purple-600" />
-                    </div>
-                  )}
-                  <h4 className="font-semibold text-foreground mb-2">{t("models.stableDiffusionTitle")}</h4>
-                  <p className="text-sm text-muted-foreground">
-                    {t("models.stableDiffusionDesc")}
-                  </p>
-                </Card>
-                </div>
-
-                {/* Prompt Language Selection */}
-                <div className="mt-6 flex items-center gap-4 flex-wrap">
-                  <div className="flex items-center gap-3">
-                    <label className="text-sm font-semibold text-foreground whitespace-nowrap">
-                      {t("models.promptLanguage")}
-                    </label>
-                    <select
-                      value={promptLanguage}
-                      onChange={(e) => setPromptLanguage(e.target.value)}
-                      className="px-4 py-2.5 border-2 border-border rounded-lg bg-card text-foreground focus:outline-none focus:border-purple-500 transition-colors max-w-[300px]"
-                    >
-                      <option value="en">English</option>
-                      <option value="es">Español</option>
-                      <option value="fr">Français</option>
-                      <option value="de">Deutsch</option>
-                      <option value="zh">简体中文</option>
-                      <option value="zh-TW">繁體中文</option>
-                      <option value="ko">한국어</option>
-                      <option value="ru">Русский</option>
-                      <option value="ja">日本語</option>
-                      <option value="it">Italiano</option>
-                      <option value="pt">Português</option>
-                      <option value="ar">العربية</option>
-                      <option value="hi">हिन्दी</option>
-                      <option value="tr">Türkçe</option>
-                      <option value="vi">Tiếng Việt</option>
-                      <option value="id">Bahasa Indonesia</option>
-                    </select>
-                  </div>
-                  {promptLanguage !== "en" && (
-                    <p className="text-xs text-muted-foreground">
-                      {t("models.languageHint")}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              {/* Generate Button */}
-              <div className="mt-8 flex flex-col md:flex-row gap-4 items-center justify-center">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white px-8"
-                  onClick={handleGeneratePrompt}
-                  disabled={isGenerating || (!selectedImage && !imagePreview)}
-                >
-                  {isGenerating ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      {t("generate.generating")}
-                    </>
-                  ) : (
-                    t("generate.button")
-                  )}
-                </Button>
-
-                <Button
-                  variant="link"
-                  className="text-purple-600"
-                  onClick={() => setShowHistory(true)}
-                >
-                  {t("generate.viewHistory")}
-                </Button>
-              </div>
-
-              {/* Generated Prompt Output Box */}
-              <div className="mt-8 border-2 border-purple-300 dark:border-purple-700 rounded-lg p-6 min-h-[200px]">
-                <div className="flex justify-between items-start mb-4">
-                  <p className="text-muted-foreground">
-                    {generatedPrompt ? "" : t("result.placeholder")}
-                  </p>
-                  {generatedPrompt && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={handleCopyPrompt}
-                    >
-                      <Copy className="h-4 w-4 mr-2" />
-                      {t("result.copy")}
-                    </Button>
-                  )}
-                </div>
-                {generatedPrompt && (
-                  <div>
-                    <p className="text-sm whitespace-pre-wrap">{generatedPrompt}</p>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Bottom CTA */}
-            <div className="mt-16 text-center">
-            <p className="text-muted-foreground mb-2">
-              {t("cta.text")}{" "}
-              <Link href={`/${locale}/text-to-prompt`} className="text-purple-600 hover:underline font-medium">
-                {t("cta.link")}
-              </Link>
-            </p>
-          </div>
-
-          {/* Bottom Section */}
-          <div className="mt-16 pb-8">
-            <h2 className="text-3xl font-bold text-center mb-4 text-foreground">
-              {t("bottom.title")}
-            </h2>
-            <p className="text-center text-muted-foreground">
-              {t("bottom.description")}
-            </p>
-          </div>
-        </div>
+    <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="mb-8">
+        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          Image to Prompt
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
+          Upload an image and AI will analyze it to generate a detailed prompt or description
+        </p>
       </div>
 
-      {/* History Dialog */}
-      <PromptHistoryDialog open={showHistory} onOpenChange={setShowHistory} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Left: Image Upload */}
+        <Card className="p-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+            <ImageIcon className="w-5 h-5" />
+            Upload Image
+          </h2>
+
+          {/* Upload Area */}
+          <div className="mb-4">
+            <label
+              htmlFor="image-upload"
+              className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              {previewUrl ? (
+                <div className="relative w-full h-full">
+                  <img
+                    src={previewUrl}
+                    alt="Preview"
+                    className="w-full h-full object-contain rounded-lg"
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <Upload className="w-12 h-12 mb-4 text-gray-400" />
+                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                    <span className="font-semibold">Click to upload</span> or drag and drop
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    PNG, JPG, WEBP (MAX. 10MB)
+                  </p>
+                </div>
+              )}
+              <input
+                id="image-upload"
+                type="file"
+                className="hidden"
+                accept="image/*"
+                onChange={handleFileChange}
+              />
+            </label>
+          </div>
+
+          {/* Analysis Mode */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-2">Analysis Mode</label>
+            <Tabs value={mode} onValueChange={(value) => setMode(value as AnalysisMode)}>
+              <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="prompt">Prompt</TabsTrigger>
+                <TabsTrigger value="describe">Describe</TabsTrigger>
+                <TabsTrigger value="detailed">Detailed</TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <p className="text-xs text-gray-500 mt-2">
+              {mode === "prompt" && "Generate a concise image generation prompt"}
+              {mode === "describe" && "Get a detailed description of the image"}
+              {mode === "detailed" && "Get a comprehensive, technical prompt"}
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-2">
+            <Button
+              onClick={handleAnalyze}
+              disabled={!imageUrl || isProcessing}
+              className="flex-1"
+            >
+              {isProcessing ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Analyzing...
+                </>
+              ) : (
+                <>
+                  <Wand2 className="mr-2 h-4 w-4" />
+                  Analyze Image
+                </>
+              )}
+            </Button>
+            <Button
+              onClick={handleClear}
+              variant="outline"
+              disabled={isProcessing}
+            >
+              Clear
+            </Button>
+          </div>
+        </Card>
+
+        {/* Right: Result */}
+        <Card className="p-6">
+          <h2 className="text-xl font-semibold mb-4">Result</h2>
+          
+          {result ? (
+            <>
+              <Textarea
+                value={result}
+                onChange={(e) => setResult(e.target.value)}
+                className="min-h-[400px] mb-4 font-mono text-sm"
+                placeholder="Analysis result will appear here..."
+              />
+              <div className="flex gap-2">
+                <Button onClick={handleCopy} variant="outline" className="flex-1">
+                  <Copy className="mr-2 h-4 w-4" />
+                  Copy Result
+                </Button>
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-col items-center justify-center h-[400px] text-gray-400">
+              <Wand2 className="w-16 h-16 mb-4 opacity-50" />
+              <p className="text-center">
+                Upload an image and click "Analyze Image" to see the result
+              </p>
+            </div>
+          )}
+        </Card>
+      </div>
+
+      {/* Examples */}
+      <Card className="mt-6 p-6">
+        <h3 className="text-lg font-semibold mb-4">How it works</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div>
+            <h4 className="font-semibold mb-2">1. Upload Image</h4>
+            <p className="text-gray-600 dark:text-gray-400">
+              Upload any image you want to analyze
+            </p>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-2">2. Choose Mode</h4>
+            <p className="text-gray-600 dark:text-gray-400">
+              Select prompt generation, description, or detailed analysis
+            </p>
+          </div>
+          <div>
+            <h4 className="font-semibold mb-2">3. Get Result</h4>
+            <p className="text-gray-600 dark:text-gray-400">
+              AI analyzes the image and generates the result
+            </p>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 }

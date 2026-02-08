@@ -3,7 +3,6 @@ import Header from "@/components/blocks/header";
 import { ReactNode } from "react";
 import { getLandingPage } from "@/services/page";
 import Feedback from "@/components/feedback";
-import SignModal from "@/components/sign/modal";
 import AuthMigrator from "@/components/auth-migrator";
 
 export default async function DefaultLayout({
@@ -22,7 +21,6 @@ export default async function DefaultLayout({
       <main className="overflow-x-hidden">{children}</main>
       {page.footer && <Footer footer={page.footer} />}
       <Feedback socialLinks={page.footer?.social?.items} />
-      <SignModal />
       <AuthMigrator />
     </>
   );

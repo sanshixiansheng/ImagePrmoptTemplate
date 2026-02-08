@@ -1,5 +1,7 @@
 import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { GetObjectCommand } from "@aws-sdk/client-s3";
 
 interface StorageConfig {
   endpoint: string;
@@ -114,5 +116,38 @@ export class Storage {
       contentType,
       disposition,
     });
+  }
+
+  /**
+   * 生成预签名 URL（允许临时访问私有文件）
+   * @param key 文件路径
+   * @param bucket 存储桶名称
+   * @param expiresIn 过期时间（秒），默认 7 天
+   * @returns 预签名 URL
+   */
+  async getSignedUrl({
+    key,
+    bucket,
+    expiresIn = 7 * 24 * 60 * 60, // 默认 7 天
+  }: {
+    key: string;
+    bucket?: string;
+    expiresIn?: number;
+  }): Promise<string> {
+    if (!bucket) {
+      bucket = process.env.STORAGE_BUCKET || "";
+    }
+
+    if (!bucket) {
+      throw new Error("Bucket is required");
+    }
+
+    const command = new GetObjectCommand({
+      Bucket: bucket,
+      Key: key,
+    });
+
+    const signedUrl = await getSignedUrl(this.s3, command, { expiresIn });
+    return signedUrl;
   }
 }

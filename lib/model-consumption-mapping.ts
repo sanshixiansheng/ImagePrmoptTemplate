@@ -57,6 +57,16 @@ export function mapVideoModelToConsumptionType(modelId: string): string | null {
     return 'Veo3_1Video'
   }
 
+  // Sora 系列
+  if (modelId.includes('sora-2') || modelId.includes('sora2')) {
+    return 'Sora2Video'
+  }
+
+  // Seedance 系列
+  if (modelId.includes('seedance-1.5-pro') || modelId.includes('seedance-1.5') || modelId.includes('seedance1.5')) {
+    return 'Seedance1_5ProVideo'
+  }
+
   // 未找到映射
   return null
 }

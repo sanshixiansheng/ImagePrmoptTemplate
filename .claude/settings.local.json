@@ -11,7 +11,13 @@
       "Bash(pnpm dev:*)",
       "Bash(curl:*)",
       "Bash(pkill:*)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Bash(findstr /i \"sql\")",
+      "Bash(dir \"e:\\\\z-image\\\\ImagePrmoptTemplate\" /b /s)",
+      "Bash(taskkill /F /PID 35004)",
+      "Bash(taskkill:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)"
     ],
     "deny": []
   }

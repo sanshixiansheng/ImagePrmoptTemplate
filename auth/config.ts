@@ -8,6 +8,7 @@ import { getClientIp } from "@/lib/ip";
 
 const GOOGLE_ENABLED = process.env.NEXT_PUBLIC_AUTH_GOOGLE_ENABLED === "true";
 const GOOGLE_ONE_TAP_ENABLED = process.env.NEXT_PUBLIC_AUTH_GOOGLE_ONE_TAP_ENABLED === "true";
+const CREDENTIALS_ENABLED = process.env.NEXT_PUBLIC_AUTH_CREDENTIALS_ENABLED === "true";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -77,6 +78,54 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 access_type: "offline",
                 response_type: "code",
               },
+            },
+          }),
+        ]
+      : []),
+
+    // Email/Password Credentials Provider
+    ...(CREDENTIALS_ENABLED
+      ? [
+          Credentials({
+            id: "credentials",
+            name: "Credentials",
+            credentials: {
+              email: { label: "Email", type: "email" },
+              password: { label: "Password", type: "password" },
+            },
+            async authorize(credentials) {
+              const email = credentials.email as string;
+              const password = credentials.password as string;
+
+              if (!email || !password) {
+                console.error("[Credentials] Missing email or password");
+                return null;
+              }
+
+              try {
+                // 使用服务端验证函数
+                const { verifyUserCredentials } = await import("@/lib/auth-credentials");
+                const user = await verifyUserCredentials(email, password);
+
+                if (!user) {
+                  console.error("[Credentials] Invalid credentials for:", email);
+                  return null;
+                }
+
+                console.log("[Credentials] User authenticated:", email);
+
+                // Return user object
+                return {
+                  id: user.id,
+                  email: user.email,
+                  name: user.name,
+                  image: user.avatar_url,
+                  emailVerified: true,
+                } as User;
+              } catch (error) {
+                console.error("[Credentials] Authentication error:", error);
+                return null;
+              }
             },
           }),
         ]

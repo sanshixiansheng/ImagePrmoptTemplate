@@ -34,7 +34,8 @@ import {
 
 import { Header as HeaderType } from "@/types/blocks/header";
 import Icon from "@/components/icon";
-import { Link } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/routing";
+import { useRouter as useNextRouter } from "next/navigation";
 import LocaleToggle from "@/components/locale/toggle";
 import { Menu } from "lucide-react";
 import ThemeToggle from "@/components/theme/toggle";
@@ -48,6 +49,8 @@ import { useTranslations } from "next-intl";
 export default function Header({ header }: { header: HeaderType }) {
   const [isSticky, setIsSticky] = useState(false);
   const { data: session, status } = useSession();
+  const router = useRouter();
+  const nextRouter = useNextRouter();
   const t = useTranslations("user");
 
   // 调试：打印 session 信息
@@ -269,14 +272,14 @@ export default function Header({ header }: { header: HeaderType }) {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link href="my-profile">{t('my_profile')}</Link>
+                  <DropdownMenuItem onClick={() => nextRouter.push('/my-profile')}>
+                    {t('my_profile')}
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="my-orders">{t('my_orders')}</Link>
+                  <DropdownMenuItem onClick={() => nextRouter.push('/my-orders')}>
+                    {t('my_orders')}
                   </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link href="pricing">{t('recharge_credits')}</Link>
+                  <DropdownMenuItem onClick={() => nextRouter.push('/pricing')}>
+                    {t('recharge_credits')}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => signOut()}>
@@ -490,14 +493,26 @@ export default function Header({ header }: { header: HeaderType }) {
                         </div>
 
                         <div className="flex flex-col gap-2">
-                          <Button variant="ghost" className="justify-start" asChild>
-                            <Link href="my-profile">{t('my_profile')}</Link>
+                          <Button
+                            variant="ghost"
+                            className="justify-start"
+                            onClick={() => nextRouter.push('/my-profile')}
+                          >
+                            {t('my_profile')}
                           </Button>
-                          <Button variant="ghost" className="justify-start" asChild>
-                            <Link href="my-orders">{t('my_orders')}</Link>
+                          <Button
+                            variant="ghost"
+                            className="justify-start"
+                            onClick={() => nextRouter.push('/my-orders')}
+                          >
+                            {t('my_orders')}
                           </Button>
-                          <Button variant="ghost" className="justify-start" asChild>
-                            <Link href="pricing">{t('recharge_credits')}</Link>
+                          <Button
+                            variant="ghost"
+                            className="justify-start"
+                            onClick={() => nextRouter.push('/pricing')}
+                          >
+                            {t('recharge_credits')}
                           </Button>
                           <Button
                             variant="ghost"

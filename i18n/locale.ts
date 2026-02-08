@@ -17,7 +17,5 @@ export const localeDetection =
 export const pathnames = {
   "privacy-policy": "/privacy-policy",
   "terms-of-service": "/terms-of-service",
-  "my-profile": "/my-profile",
-  "my-orders": "/my-orders",
-  "pricing": "/pricing",
+  "blog": "/blog",
 } satisfies Pathnames<typeof locales>;
