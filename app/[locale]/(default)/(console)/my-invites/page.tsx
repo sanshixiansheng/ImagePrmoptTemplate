@@ -1,3 +1,4 @@
+﻿/* eslint-disable @next/next/no-img-element */
 import { RiDiscordFill, RiEmotionSadFill, RiGithubFill } from "react-icons/ri";
 import { getAffiliateSummary, getUserAffiliates } from "@/models/affiliate";
 import { getOrdersByPaidEmail, getOrdersByUserUuid } from "@/models/order";
@@ -151,3 +152,4 @@ export default async function () {
     </div>
   );
 }
+

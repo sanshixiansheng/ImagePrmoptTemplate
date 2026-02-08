@@ -1,8 +1,9 @@
+﻿/* eslint-disable @next/next/no-img-element */
 /**
- * 文件上传组件使用示例
+ * 鏂囦欢涓婁紶缁勪欢浣跨敤绀轰緥
  * 
- * 这个文件展示了如何在 React 组件中使用上传 API
- * 复制相关代码到你的实际组件中使用
+ * 杩欎釜鏂囦欢灞曠ず浜嗗浣曞湪 React 缁勪欢涓娇鐢ㄤ笂浼?API
+ * 澶嶅埗鐩稿叧浠ｇ爜鍒颁綘鐨勫疄闄呯粍浠朵腑浣跨敤
  */
 
 "use client";
@@ -16,22 +17,22 @@ export default function FileUploadExample() {
   const [uploadedUrl, setUploadedUrl] = useState<string>("");
 
   /**
-   * 处理文件选择
+   * 澶勭悊鏂囦欢閫夋嫨
    */
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      // 验证文件大小
+      // 楠岃瘉鏂囦欢澶у皬
       const maxSize = 10 * 1024 * 1024; // 10MB
       if (selectedFile.size > maxSize) {
-        toast.error("文件大小不能超过 10MB");
+        toast.error("鏂囦欢澶у皬涓嶈兘瓒呰繃 10MB");
         return;
       }
 
-      // 验证文件类型
+      // 楠岃瘉鏂囦欢绫诲瀷
       const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
       if (!allowedTypes.includes(selectedFile.type)) {
-        toast.error("仅支持 JPG、PNG、GIF、WebP 格式");
+        toast.error("浠呮敮鎸?JPG銆丳NG銆丟IF銆乄ebP 鏍煎紡");
         return;
       }
 
@@ -40,22 +41,22 @@ export default function FileUploadExample() {
   };
 
   /**
-   * 上传文件到服务器
+   * 涓婁紶鏂囦欢鍒版湇鍔″櫒
    */
   const handleUpload = async () => {
     if (!file) {
-      toast.error("请先选择文件");
+      toast.error("璇峰厛閫夋嫨鏂囦欢");
       return;
     }
 
     setUploading(true);
 
     try {
-      // 创建 FormData
+      // 鍒涘缓 FormData
       const formData = new FormData();
       formData.append("file", file);
 
-      // 调用上传 API
+      // 璋冪敤涓婁紶 API
       const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
@@ -64,27 +65,27 @@ export default function FileUploadExample() {
       const result = await response.json();
 
       if (result.code === 1000) {
-        // 上传成功
-        toast.success("文件上传成功！");
+        // 涓婁紶鎴愬姛
+        toast.success("File uploaded successfully");
         setUploadedUrl(result.data.fileUrl);
-        console.log("上传结果:", result.data);
+        console.log("涓婁紶缁撴灉:", result.data);
       } else if (result.code === 401) {
-        // 未登录
-        toast.error("请先登录");
+        // 鏈櫥褰?
+        toast.error("璇峰厛鐧诲綍");
       } else {
-        // 其他错误
-        toast.error(result.message || "上传失败");
+        // 鍏朵粬閿欒
+        toast.error(result.message || "涓婁紶澶辫触");
       }
     } catch (error: any) {
-      console.error("上传错误:", error);
-      toast.error("上传失败，请稍后重试");
+      console.error("涓婁紶閿欒:", error);
+      toast.error("涓婁紶澶辫触锛岃绋嶅悗閲嶈瘯");
     } finally {
       setUploading(false);
     }
   };
 
   /**
-   * 拖拽上传（可选功能）
+   * 鎷栨嫿涓婁紶锛堝彲閫夊姛鑳斤級
    */
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -100,9 +101,9 @@ export default function FileUploadExample() {
 
   return (
     <div className="max-w-md mx-auto p-6 space-y-4">
-      <h2 className="text-2xl font-bold">文件上传示例</h2>
+      <h2 className="text-2xl font-bold">鏂囦欢涓婁紶绀轰緥</h2>
 
-      {/* 拖拽上传区域 */}
+      {/* 鎷栨嫿涓婁紶鍖哄煙 */}
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -118,7 +119,7 @@ export default function FileUploadExample() {
         <label htmlFor="file-input" className="cursor-pointer">
           {file ? (
             <div>
-              <p className="text-sm text-gray-600">已选择文件:</p>
+              <p className="text-sm text-gray-600">宸查€夋嫨鏂囦欢:</p>
               <p className="font-medium">{file.name}</p>
               <p className="text-xs text-gray-500">
                 {(file.size / 1024).toFixed(2)} KB
@@ -126,30 +127,30 @@ export default function FileUploadExample() {
             </div>
           ) : (
             <div>
-              <p className="text-gray-600">点击选择文件或拖拽到此处</p>
+              <p className="text-gray-600">鐐瑰嚮閫夋嫨鏂囦欢鎴栨嫋鎷藉埌姝ゅ</p>
               <p className="text-xs text-gray-500 mt-2">
-                支持 JPG、PNG、GIF、WebP，最大 10MB
+                鏀寔 JPG銆丳NG銆丟IF銆乄ebP锛屾渶澶?10MB
               </p>
             </div>
           )}
         </label>
       </div>
 
-      {/* 上传按钮 */}
+      {/* 涓婁紶鎸夐挳 */}
       <button
         onClick={handleUpload}
         disabled={!file || uploading}
         className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
       >
-        {uploading ? "上传中..." : "上传文件"}
+        {uploading ? "涓婁紶涓?.." : "涓婁紶鏂囦欢"}
       </button>
 
-      {/* 显示上传结果 */}
+      {/* 鏄剧ず涓婁紶缁撴灉 */}
       {uploadedUrl && (
         <div className="space-y-2">
-          <p className="text-sm font-medium text-green-600">上传成功！</p>
+          <p className="text-sm font-medium text-green-600">Upload successful</p>
           <div className="border rounded-lg p-4 space-y-2">
-            <p className="text-xs text-gray-600">文件 URL:</p>
+            <p className="text-xs text-gray-600">鏂囦欢 URL:</p>
             <input
               type="text"
               value={uploadedUrl}
@@ -170,11 +171,11 @@ export default function FileUploadExample() {
 
 /**
  * ==========================================
- * 简化版使用示例（复制到你的组件中）
+ * 绠€鍖栫増浣跨敤绀轰緥锛堝鍒跺埌浣犵殑缁勪欢涓級
  * ==========================================
  */
 
-// 1. 基础上传函数
+// 1. 鍩虹涓婁紶鍑芥暟
 async function uploadFile(file: File) {
   const formData = new FormData();
   formData.append("file", file);
@@ -188,15 +189,16 @@ async function uploadFile(file: File) {
   return result;
 }
 
-// 2. 在组件中使用
+// 2. 鍦ㄧ粍浠朵腑浣跨敤
 // const handleUpload = async () => {
 //   try {
 //     const result = await uploadFile(selectedFile);
 //     if (result.code === 1000) {
-//       console.log("文件 URL:", result.data.fileUrl);
-//       toast.success("上传成功！");
+//       console.log("鏂囦欢 URL:", result.data.fileUrl);
+//       toast.success("涓婁紶鎴愬姛锛?);
 //     }
 //   } catch (error) {
-//     toast.error("上传失败");
+//     toast.error("涓婁紶澶辫触");
 //   }
 // };
+

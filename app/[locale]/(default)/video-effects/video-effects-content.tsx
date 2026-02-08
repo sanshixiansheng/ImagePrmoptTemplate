@@ -1,4 +1,6 @@
-'use client'
+﻿'use client'
+
+/* eslint-disable @next/next/no-img-element, react-hooks/exhaustive-deps */
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
@@ -25,17 +27,17 @@ interface Channel {
   }
 }
 
-// 缓存管理
+// 缂撳瓨绠＄悊
 const effectsCache = {
   data: null as any,
   timestamp: 0,
-  ttl: 5 * 60 * 1000 // 5分钟缓存
+  ttl: 5 * 60 * 1000 // 5鍒嗛挓缂撳瓨
 }
 
 const channelsCache = {
   data: null as Channel[] | null,
   timestamp: 0,
-  ttl: 5 * 60 * 1000 // 5分钟缓存
+  ttl: 5 * 60 * 1000 // 5鍒嗛挓缂撳瓨
 }
 
 const ITEMS_PER_PAGE = 20
@@ -79,14 +81,14 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
     }
   }, [selectedVideo])
 
-  // 切换分类时重置页码
+  // 鍒囨崲鍒嗙被鏃堕噸缃〉鐮?
   useEffect(() => {
     setCurrentPage(1)
   }, [selectedChannel])
 
   const fetchChannels = async () => {
     try {
-      // 检查缓存
+      // 妫€鏌ョ紦瀛?
       const now = Date.now()
       if (channelsCache.data && (now - channelsCache.timestamp) < channelsCache.ttl) {
         console.log('Using cached channels data')
@@ -97,7 +99,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
       const response = await fetch('/api/video-effects/channels')
       const data = await response.json()
 
-      // 更新缓存
+      // 鏇存柊缂撳瓨
       channelsCache.data = data
       channelsCache.timestamp = now
 
@@ -109,7 +111,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
 
   const fetchEffects = async () => {
     try {
-      // 检查缓存
+      // 妫€鏌ョ紦瀛?
       const now = Date.now()
       if (effectsCache.data && (now - effectsCache.timestamp) < effectsCache.ttl) {
         console.log('Using cached effects data')
@@ -121,7 +123,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
       const response = await fetch('/api/video-effects')
       const data = await response.json()
 
-      // 更新缓存
+      // 鏇存柊缂撳瓨
       effectsCache.data = data
       effectsCache.timestamp = now
 
@@ -158,7 +160,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
     ? effectItems
     : effectItems.filter(item => item.channel_ids && item.channel_ids.includes(selectedChannel))
 
-  // 分页计算
+  // 鍒嗛〉璁＄畻
   const totalPages = Math.ceil(filteredEffects.length / ITEMS_PER_PAGE)
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE
   const endIndex = startIndex + ITEMS_PER_PAGE
@@ -200,7 +202,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
         </div>
       </div>
 
-      {/* Effects Grid - 卡片大小减少30% */}
+      {/* Effects Grid - 鍗＄墖澶у皬鍑忓皯30% */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {displayedEffects.map((effect) => {
           const localizedName = getLocalizedName(effect.i18n_json) || effect.display_name
@@ -213,7 +215,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
               locale={locale}
               onClick={() => handleVideoClick(effect)}
               onGoCreate={(effectData) => {
-                // 将 effect 数据序列化后传递
+                // 灏?effect 鏁版嵁搴忓垪鍖栧悗浼犻€?
                 const fullEffect = effectData as any;
                 const effectToPass = {
                   template_id: fullEffect.template_id,
@@ -234,7 +236,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
         })}
       </div>
 
-      {/* 分页控件 */}
+      {/* 鍒嗛〉鎺т欢 */}
       {totalPages > 1 && (
         <div className="mt-8 flex items-center justify-center gap-2">
           <button
@@ -247,7 +249,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
 
           <div className="flex items-center gap-1">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
-              // 显示逻辑: 始终显示第一页、最后一页、当前页及其前后各1页
+              // 鏄剧ず閫昏緫: 濮嬬粓鏄剧ず绗竴椤点€佹渶鍚庝竴椤点€佸綋鍓嶉〉鍙婂叾鍓嶅悗鍚?椤?
               const showPage =
                 page === 1 ||
                 page === totalPages ||
@@ -292,10 +294,10 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
         </div>
       )}
 
-      {/* 显示统计 */}
+      {/* 鏄剧ず缁熻 */}
       <div className="mt-4 text-center text-sm text-muted-foreground">
         {locale === 'zh'
-          ? `显示 ${startIndex + 1}-${Math.min(endIndex, filteredEffects.length)} 项，共 ${filteredEffects.length} 项`
+          ? `显示 ${startIndex + 1}-${Math.min(endIndex, filteredEffects.length)}，共 ${filteredEffects.length} 个特效`
           : `Showing ${startIndex + 1}-${Math.min(endIndex, filteredEffects.length)} of ${filteredEffects.length} effects`
         }
       </div>
@@ -312,7 +314,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
   )
 }
 
-// 特效卡片组件 - 使用 memo 优化性能
+// 鐗规晥鍗＄墖缁勪欢 - 浣跨敤 memo 浼樺寲鎬ц兘
 function EffectCard({ effect, localizedName, locale, onClick, onGoCreate }: {
   effect: EffectItem
   localizedName: string
@@ -346,7 +348,7 @@ function EffectCard({ effect, localizedName, locale, onClick, onGoCreate }: {
 
   useEffect(() => {
     if (isVisible && !imageLoaded && !imageError) {
-      // 设置超时，如果3秒后还没加载完成，就隐藏loading
+      // 璁剧疆瓒呮椂锛屽鏋?绉掑悗杩樻病鍔犺浇瀹屾垚锛屽氨闅愯棌loading
       const timeout = setTimeout(() => {
         if (!imageLoaded) {
           setImageLoaded(true)
@@ -441,7 +443,7 @@ function EffectCard({ effect, localizedName, locale, onClick, onGoCreate }: {
   )
 }
 
-// 视频播放器模态框组件
+// 瑙嗛鎾斁鍣ㄦā鎬佹缁勪欢
 function VideoModal({ videoRef, selectedVideo, onClose }: {
   videoRef: React.RefObject<HTMLVideoElement>
   selectedVideo: { url: string; title: string }
@@ -486,3 +488,6 @@ function VideoModal({ videoRef, selectedVideo, onClose }: {
     </div>
   )
 }
+
+
+

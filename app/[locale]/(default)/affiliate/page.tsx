@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from "react";
 import { Card } from "@/components/ui/card";
@@ -172,7 +172,7 @@ export default function AffiliatePage() {
               <Card className="p-6">
                 <h3 className="font-semibold mb-2 text-foreground">How and when do I get paid?</h3>
                 <p className="text-muted-foreground">
-                  Commissions are paid monthly via PayPal on a NET-15 schedule, meaning you receive payment on the 15th of the following month for the previous month's earnings.
+                  Commissions are paid monthly via PayPal on a NET-15 schedule, meaning you receive payment on the 15th of the following month for the previous month&apos;s earnings.
                 </p>
               </Card>
 
@@ -189,3 +189,4 @@ export default function AffiliatePage() {
     </div>
   );
 }
+

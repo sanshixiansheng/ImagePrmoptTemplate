@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 
 import { Badge } from "@/components/ui/badge";

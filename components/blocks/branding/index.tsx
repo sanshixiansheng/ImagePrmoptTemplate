@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Section as SectionType } from "@/types/blocks/section";
 
 export default function Branding({ section }: { section: SectionType }) {

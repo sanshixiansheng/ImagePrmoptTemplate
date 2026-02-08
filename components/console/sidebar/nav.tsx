@@ -1,13 +1,12 @@
-"use client";
+﻿"use client";
 
 import Icon from "@/components/icon";
 import { Link } from "@/i18n/routing";
 import { NavItem } from "@/types/blocks/base";
-import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 
-export default function ({
+export default function SidebarNav({
   className,
   items,
   ...props
@@ -16,32 +15,30 @@ export default function ({
   items: NavItem[];
 }) {
   const pathname = usePathname();
-  console.log(pathname);
 
   return (
-    <nav
-      className={cn(
-        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
-        className
-      )}
-      {...props}
-    >
-      {items.map((item, index) => (
-        <Link
-          key={index}
-          href={item.url as any}
-          className={cn(
-            buttonVariants({ variant: "ghost" }),
-            item.is_active || pathname.includes(item.url as any)
-              ? "bg-muted/50 text-primary hover:bg-muted hover:text-primary"
-              : "hover:bg-transparent hover:underline",
-            "justify-start"
-          )}
-        >
-          {item.icon && <Icon name={item.icon} className="w-4 h-4" />}
-          {item.title}
-        </Link>
-      ))}
+    <nav className={cn("rounded-2xl border border-border/70 bg-background p-2", className)} {...props}>
+      <ul className="space-y-1">
+        {items.map((item, index) => {
+          const active = !!item.url && pathname.includes(item.url as any);
+          return (
+            <li key={index}>
+              <Link
+                href={item.url as any}
+                className={cn(
+                  "flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
+                  active
+                    ? "bg-primary text-primary-foreground"
+                    : "text-foreground/80 hover:bg-accent hover:text-foreground"
+                )}
+              >
+                {item.icon && <Icon name={item.icon} className="h-4 w-4" />}
+                <span>{item.title}</span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
     </nav>
   );
 }

@@ -7,25 +7,30 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    letter-spacing: -0.02em;
   }
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply text-foreground;
   }
+
   p {
-    @apply text-foreground;
-  }
-  span:not([class*="text-"]):not([class*="bg-"]) {
     @apply text-foreground;
   }
 }
 
 .container {
-  @apply mx-auto max-w-7xl px-4 md:px-8;
+  @apply mx-auto w-full max-w-7xl px-4 md:px-6;
 }
 
-/* 现代动画效果 */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -38,7 +43,7 @@
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -47,11 +52,11 @@
 }
 
 .animate-fade-in {
-  animation: fade-in 0.8s ease-out;
+  animation: fade-in 0.6s ease-out;
 }
 
 .animate-fade-in-up {
-  animation: fade-in-up 0.8s ease-out;
+  animation: fade-in-up 0.65s ease-out;
 }
 
 .animation-delay-200 {
@@ -74,7 +79,6 @@
   animation-fill-mode: both;
 }
 
-/* Hide scrollbar */
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -84,7 +88,6 @@
   display: none;
 }
 
-/* Shimmer animation for pricing card */
 @keyframes shimmer {
   0% {
     background-position: -200% 0;
@@ -94,7 +97,6 @@
   }
 }
 
-/* Pricing features list styles */
 .pricing-features li {
   @apply transition-colors duration-200;
 }

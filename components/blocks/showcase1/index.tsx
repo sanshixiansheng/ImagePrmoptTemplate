@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Section as SectionType } from "@/types/blocks/section";
+import Image from "next/image";
 
 export default function Showcase1({ section }: { section: SectionType }) {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
@@ -19,15 +20,16 @@ export default function Showcase1({ section }: { section: SectionType }) {
   const [canScrollNext, setCanScrollNext] = useState(false);
 
   useEffect(() => {
-    if (!carouselApi) {
-      return;
-    }
+    if (!carouselApi) return;
+
     const updateSelection = () => {
       setCanScrollPrev(carouselApi.canScrollPrev());
       setCanScrollNext(carouselApi.canScrollNext());
     };
+
     updateSelection();
     carouselApi.on("select", updateSelection);
+
     return () => {
       carouselApi.off("select", updateSelection);
     };
@@ -38,90 +40,83 @@ export default function Showcase1({ section }: { section: SectionType }) {
   }
 
   return (
-    <section id={section.name} className="py-16">
+    <section id={section.name} className="py-16 md:py-20">
       <div className="container">
-        <div className="mb-8 flex items-end justify-between md:mb-14 lg:mb-16">
-          <h2 className="mb-2 text-pretty text-3xl font-bold lg:text-4xl">
-            {section.title}
-          </h2>
-          <div className="shrink-0 gap-2 md:flex">
+        <div className="mb-8 flex items-end justify-between">
+          <h2 className="font-serif text-3xl md:text-4xl">{section.title}</h2>
+          <div className="hidden gap-2 md:flex">
             <Button
               size="icon"
-              variant="ghost"
-              onClick={() => {
-                carouselApi?.scrollPrev();
-              }}
+              variant="outline"
+              onClick={() => carouselApi?.scrollPrev()}
               disabled={!canScrollPrev}
-              className="disabled:pointer-events-auto"
             >
-              <ArrowLeft className="size-5" />
+              <ArrowLeft className="size-4" />
             </Button>
             <Button
               size="icon"
-              variant="ghost"
-              onClick={() => {
-                carouselApi?.scrollNext();
-              }}
+              variant="outline"
+              onClick={() => carouselApi?.scrollNext()}
               disabled={!canScrollNext}
-              className="disabled:pointer-events-auto"
             >
-              <ArrowRight className="size-5" />
+              <ArrowRight className="size-4" />
             </Button>
           </div>
         </div>
       </div>
-      <div className="w-full">
-        <Carousel
-          setApi={setCarouselApi}
-          opts={{
-            breakpoints: {
-              "(max-width: 768px)": {
-                dragFree: true,
-              },
-            },
-          }}
-        >
-          <CarouselContent className="container ml-[calc(theme(container.padding)-20px)] mr-[calc(theme(container.padding))] 2xl:ml-[calc(50vw-700px+theme(container.padding)-20px)] 2xl:mr-[calc(50vw-700px+theme(container.padding))]">
-            {section.items?.map((item, i) => (
-              <CarouselItem
-                key={i}
-                className="max-w-[320px] pl-[20px] lg:max-w-[360px]"
+
+      <Carousel setApi={setCarouselApi}>
+        <CarouselContent className="container ml-0 mr-0">
+          {section.items?.map((item, i) => (
+            <CarouselItem key={i} className="basis-[88%] pl-4 md:basis-[50%] lg:basis-[33.333%]">
+              <a
+                href={item.url}
+                target={item.target}
+                className="flex h-full flex-col rounded-2xl border border-border/70 bg-card p-4 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
               >
-                <a
-                  href={item.url}
-                  target={item.target}
-                  className="group flex flex-col justify-between rounded-xl border border-border bg-card p-6"
-                >
-                  <div>
-                    <div className="flex aspect-3/2 overflow-clip rounded-xl">
-                      <div className="flex-1">
-                        <div className="relative h-full w-full origin-bottom transition duration-300 group-hover:scale-105">
-                          <img
-                            src={item.image?.src}
-                            alt={item.image?.alt || item.title}
-                            className="h-full w-full object-cover object-center"
-                          />
-                        </div>
-                      </div>
-                    </div>
+                <div className="relative aspect-[16/10] overflow-hidden rounded-xl">
+                  <Image
+                    src={item.image?.src || ""}
+                    alt={item.image?.alt || item.title || "showcase"}
+                    fill
+                    className="object-cover transition-transform duration-300 hover:scale-105"
+                  />
+                </div>
+
+                {item.label && (
+                  <div className="mt-4">
+                    <Badge variant="secondary">{item.label}</Badge>
                   </div>
-                  {item.label && (
-                    <div className="mt-6">
-                      <Badge>{item.label}</Badge>
-                    </div>
-                  )}
-                  <div className="mb-2 line-clamp-3 break-words pt-4 text-lg font-medium md:mb-3 md:pt-4 md:text-xl lg:pt-4 lg:text-2xl">
-                    {item.title}
-                  </div>
-                  <div className="mb-2 line-clamp-2 text-sm text-muted-foreground md:mb-2 md:text-base lg:mb-2">
-                    {item.description}
-                  </div>
-                </a>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+                )}
+
+                <h3 className="mt-3 line-clamp-2 text-lg font-semibold">{item.title}</h3>
+                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{item.description}</p>
+              </a>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
+
+      <div className="container mt-4 flex gap-2 md:hidden">
+        <Button
+          size="icon"
+          variant="outline"
+          onClick={() => carouselApi?.scrollPrev()}
+          disabled={!canScrollPrev}
+        >
+          <ArrowLeft className="size-4" />
+        </Button>
+        <Button
+          size="icon"
+          variant="outline"
+          onClick={() => carouselApi?.scrollNext()}
+          disabled={!canScrollNext}
+        >
+          <ArrowRight className="size-4" />
+        </Button>
       </div>
     </section>
   );
 }
+
+

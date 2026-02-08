@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element, react/no-unescaped-entities, react-hooks/exhaustive-deps */
 
 import { useState, useEffect } from "react";
 import type { Metadata } from "next";

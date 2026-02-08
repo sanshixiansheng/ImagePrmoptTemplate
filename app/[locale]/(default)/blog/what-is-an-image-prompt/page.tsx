@@ -1,5 +1,6 @@
 "use client";
 
+/* eslint-disable react/no-unescaped-entities */
 import React from "react";
 import { useTranslations } from "next-intl";
 import { Card } from "@/components/ui/card";

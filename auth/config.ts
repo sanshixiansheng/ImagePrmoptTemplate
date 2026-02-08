@@ -1,4 +1,4 @@
-import NextAuth, { Account, Profile, User } from "next-auth";
+﻿import NextAuth, { Account, Profile, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
@@ -105,7 +105,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               }
 
               try {
-                // 使用服务端验证函数
+                // 浣跨敤鏈嶅姟绔獙璇佸嚱鏁?
                 const { verifyUserCredentials } = await import("@/lib/auth-credentials");
                 const user = await verifyUserCredentials(email, password);
 
@@ -199,7 +199,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
             // Create new user in database
             dbUserRecord = await insertUser(dbUser as any);
-            console.log("[NextAuth JWT] ✅ New user created successfully!");
+            console.log("[NextAuth JWT] 鉁?New user created successfully!");
             console.log("[NextAuth JWT] Saved user UUID:", dbUserRecord.uuid);
             console.log("[NextAuth JWT] Saved user email:", dbUserRecord.email);
 
@@ -207,15 +207,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             const initialCredits = parseInt(process.env.INITIAL_USER_CREDITS || "100");
             console.log("[NextAuth JWT] Creating initial credits:", initialCredits);
 
-            const creditRecord = await createUserCredits(dbUserRecord.uuid, initialCredits);
+            const userUuid = dbUserRecord.uuid || dbUser.uuid;
+            const creditRecord = await createUserCredits(userUuid, initialCredits);
             if (creditRecord) {
-              console.log("[NextAuth JWT] ✅ Initial credits created successfully!");
+              console.log("[NextAuth JWT] 鉁?Initial credits created successfully!");
               console.log("[NextAuth JWT] Credits balance:", creditRecord.balance);
             } else {
-              console.error("[NextAuth JWT] ❌ Failed to create initial credits");
+              console.error("[NextAuth JWT] 鉂?Failed to create initial credits");
             }
           } else {
-            console.log("[NextAuth JWT] ✅ Existing user found in database");
+            console.log("[NextAuth JWT] 鉁?Existing user found in database");
             console.log("[NextAuth JWT] User UUID:", dbUserRecord.uuid);
             console.log("[NextAuth JWT] User email:", dbUserRecord.email);
             console.log("[NextAuth JWT] User created at:", dbUserRecord.created_at);
@@ -223,20 +224,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           // Store user info in token (use database UUID for existing users)
           token.user = {
-            uuid: dbUserRecord.uuid,
+            uuid: dbUserRecord.uuid || dbUser.uuid,
             email: dbUserRecord.email,
             nickname: dbUserRecord.nickname || dbUser.nickname,
             avatar_url: dbUserRecord.avatar_url || dbUser.avatar_url,
             signin_provider: dbUserRecord.signin_provider || dbUser.signin_provider,
             created_at: dbUserRecord.created_at || dbUser.created_at,
-            // 保留原始的 name 和 image 用于头像显示
+            // 淇濈暀鍘熷鐨?name 鍜?image 鐢ㄤ簬澶村儚鏄剧ず
             name: user.name,
             image: user.image,
           };
 
-          console.log("[NextAuth JWT] ✅ Session token created with user info");
+          console.log("[NextAuth JWT] 鉁?Session token created with user info");
         } catch (error) {
-          console.error("[NextAuth JWT] ❌ Error saving user to database:", error);
+          console.error("[NextAuth JWT] 鉂?Error saving user to database:", error);
           if (error instanceof Error) {
             console.error("[NextAuth JWT] Error message:", error.message);
             console.error("[NextAuth JWT] Error stack:", error.stack);
@@ -252,7 +253,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (token.user) {
         session.user = {
           ...token.user,
-          // 确保 image 字段存在，用于显示头像
+          // 纭繚 image 瀛楁瀛樺湪锛岀敤浜庢樉绀哄ご鍍?
           image: (token.user as any).avatar_url || (token.user as any).image,
           name: (token.user as any).nickname || (token.user as any).name || 'User',
         };
@@ -272,3 +273,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   secret: process.env.AUTH_SECRET,
 });
+
+
+

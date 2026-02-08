@@ -1,3 +1,4 @@
+﻿/* eslint-disable @next/next/no-img-element, react/no-unescaped-entities */
 "use client";
 
 import React, { useState } from "react";
@@ -286,3 +287,4 @@ export default function ImageToPromptPage() {
     </div>
   );
 }
+

@@ -1,21 +1,12 @@
-"use client";
+﻿"use client";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Button, buttonVariants } from "@/components/ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
+import { useMemo, useState } from "react";
+import { Header as HeaderType } from "@/types/blocks/header";
+import Icon from "@/components/icon";
+import { Link, usePathname } from "@/i18n/routing";
+import LocaleToggle from "@/components/locale/toggle";
+import ThemeToggle from "@/components/theme/toggle";
+import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
@@ -31,235 +22,122 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-import { Header as HeaderType } from "@/types/blocks/header";
-import Icon from "@/components/icon";
-import { Link, useRouter } from "@/i18n/routing";
-import { useRouter as useNextRouter } from "next/navigation";
-import LocaleToggle from "@/components/locale/toggle";
-import { Menu } from "lucide-react";
-import ThemeToggle from "@/components/theme/toggle";
-import { cn } from "@/lib/utils";
-import { useState, useEffect } from "react";
-import { trackPriceMenuClick } from "@/lib/analytics";
-import { useSession, signOut } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Menu, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useSession, signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 export default function Header({ header }: { header: HeaderType }) {
-  const [isSticky, setIsSticky] = useState(false);
-  const { data: session, status } = useSession();
+  const pathname = usePathname();
+  const { data: session } = useSession();
   const router = useRouter();
-  const nextRouter = useNextRouter();
   const t = useTranslations("user");
+  const [open, setOpen] = useState(false);
 
-  // 调试：打印 session 信息
-  useEffect(() => {
-    if (session?.user) {
-      console.log('[Header] Session user:', {
-        name: session.user.name,
-        email: session.user.email,
-        image: session.user.image,
-      });
-    }
-  }, [session]);
+  const navItems = useMemo(() => header.nav?.items || [], [header.nav?.items]);
 
-  // 处理菜单项点击
-  const handleMenuClick = (itemTitle: string, itemUrl: string) => {
-    // 追踪 Pricing 菜单点击
-    if (itemUrl.includes('/pricing') || itemTitle.toLowerCase().includes('price')) {
-      trackPriceMenuClick();
-    }
-  };
-  
-  // 监听滚动事件
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      setIsSticky(scrollTop > 100);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-  
   if (header.disabled) {
     return null;
   }
 
   return (
-    <>
-      {/* 占位元素，避免吸顶时内容跳动 */}
-      {isSticky && <div className="h-[88px]" />}
-      
-      <section
-        className={cn(
-          "py-4 transition-all duration-300",
-          isSticky
-            ? "fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm"
-            : "relative bg-transparent"
-        )}
-      >
-        <div className="container">
-          <nav className="hidden justify-between lg:flex">
-          <div className="flex items-center gap-6">
-            <Link
-              href={(header.brand?.url as any) || "/"}
-              className="flex items-center gap-2"
-            >
-              {header.brand?.logo?.src && (
-                <img
-                  src={header.brand.logo.src}
-                  alt="ImagetoPrompt"
-                  className="w-8"
-                  style={{width: '145px', height: '45px'}}
-                />
-              )}
-              {/* {header.brand?.title && (
-                <span className="text-xl text-primary font-bold">
-                  {header.brand?.title || ""}
-                </span>
-              )} */}
-            </Link>
-            <div className="flex items-center">
-              <NavigationMenu delayDuration={100} skipDelayDuration={300}>
-                <NavigationMenuList>
-                  {header.nav?.items?.map((item, i) => {
-                    if (item.children && item.children.length > 0) {
-                      return (
-                        <NavigationMenuItem
-                          key={i}
-                          className="text-muted-foreground relative"
-                        >
-                          <NavigationMenuTrigger className="text-foreground font-medium hover:text-primary">
-                            {item.icon && (
-                              <Icon
-                                name={item.icon}
-                                className="size-4 shrink-0 mr-2"
-                              />
-                            )}
-                            <span>{item.title}</span>
-                          </NavigationMenuTrigger>
-                          <NavigationMenuContent>
-                            <ul className="w-80 p-3">
-                              {item.children.map((iitem, ii) => {
-                                // 如果二级菜单有children（三级菜单），渲染分组标题
-                                if (iitem.children && iitem.children.length > 0) {
-                                  return (
-                                    <li key={ii} className="mb-2">
-                                      <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                                        {iitem.title}
-                                      </div>
-                                      <ul>
-                                        {iitem.children.map((iiitem, iii) => (
-                                          <li key={iii}>
-                                            <NavigationMenuLink asChild>
-                                              <Link
-                                                className={cn(
-                                                  "flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                                                )}
-                                                href={iiitem.url as any}
-                                                target={iiitem.target}
-                                              >
-                                                {iiitem.icon && (
-                                                  <Icon
-                                                    name={iiitem.icon}
-                                                    className="size-5 shrink-0"
-                                                  />
-                                                )}
-                                                <div>
-                                                  <div className="text-sm font-semibold">
-                                                    {iiitem.title}
-                                                  </div>
-                                                  <p className="text-sm leading-snug text-muted-foreground">
-                                                    {iiitem.description}
-                                                  </p>
-                                                </div>
-                                              </Link>
-                                            </NavigationMenuLink>
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    </li>
-                                  );
-                                }
-                                // 否则渲染普通二级菜单项
-                                return (
-                                  <li key={ii}>
-                                    <NavigationMenuLink asChild>
-                                      <Link
-                                        className={cn(
-                                          "flex select-none gap-4 rounded-md p-3 leading-none no-underline outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                                        )}
-                                        href={iitem.url as any}
-                                        target={iitem.target}
-                                      >
-                                        {iitem.icon && (
-                                          <Icon
-                                            name={iitem.icon}
-                                            className="size-5 shrink-0"
-                                          />
-                                        )}
-                                        <div>
-                                          <div className="text-sm font-semibold">
-                                            {iitem.title}
-                                          </div>
-                                          <p className="text-sm leading-snug text-muted-foreground">
-                                            {iitem.description}
-                                          </p>
-                                        </div>
-                                      </Link>
-                                    </NavigationMenuLink>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </NavigationMenuContent>
-                        </NavigationMenuItem>
-                      );
-                    }
+    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/92 backdrop-blur-md">
+      <div className="container">
+        <div className="flex h-20 items-center gap-4">
+          <Link href={(header.brand?.url as any) || "/"} className="flex items-center gap-2">
+            {header.brand?.logo?.src ? (
+              <Image
+                src={header.brand.logo.src}
+                alt={header.brand.logo.alt || "Pixmind"}
+                width={160}
+                height={36}
+                className="h-9 w-auto"
+              />
+            ) : (
+              <span className="font-serif text-xl font-semibold">{header.brand?.title || "Pixmind"}</span>
+            )}
+          </Link>
 
-                    return (
-                      <NavigationMenuItem key={i}>
-                        <Link
-                          className={cn(
-                            "text-foreground font-medium hover:text-primary transition-colors",
-                            navigationMenuTriggerStyle,
-                            buttonVariants({
-                              variant: "ghost",
-                            })
-                          )}
-                          href={item.url as any}
-                          target={item.target}
-                          onClick={() => handleMenuClick(item.title || '', item.url || '')}
-                        >
-                          {item.icon && (
-                            <Icon
-                              name={item.icon}
-                              className="size-4 shrink-0 mr-0"
-                            />
-                          )}
-                          {item.title}
-                        </Link>
-                      </NavigationMenuItem>
-                    );
-                  })}
-                </NavigationMenuList>
-              </NavigationMenu>
-            </div>
-          </div>
-          <div className="shrink-0 flex gap-2 items-center">
-            {header.show_locale && <LocaleToggle />}
+          <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex">
+            {navItems.map((item, i) => {
+              const hasChildren = !!item.children?.length;
+              if (hasChildren) {
+                return (
+                  <DropdownMenu key={i}>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" className="h-9 rounded-lg px-3 text-sm font-medium text-foreground/80">
+                        {item.icon && <Icon name={item.icon} className="mr-1.5 size-4" />}
+                        {item.title}
+                        <ChevronDown className="ml-1.5 size-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="start" className="w-72">
+                      {item.children?.map((child, idx) => {
+                        if (child.children?.length) {
+                          return (
+                            <div key={idx} className="px-2 py-1.5">
+                              <p className="px-2 py-1 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+                                {child.title}
+                              </p>
+                              {child.children.map((g, gIdx) => (
+                                <DropdownMenuItem asChild key={gIdx}>
+                                  <Link href={g.url as any} target={g.target} className="cursor-pointer">
+                                    {g.icon && <Icon name={g.icon} className="mr-2 size-4" />}
+                                    <span>{g.title}</span>
+                                  </Link>
+                                </DropdownMenuItem>
+                              ))}
+                            </div>
+                          );
+                        }
+                        return (
+                          <DropdownMenuItem asChild key={idx}>
+                            <Link href={child.url as any} target={child.target} className="cursor-pointer">
+                              {child.icon && <Icon name={child.icon} className="mr-2 size-4" />}
+                              <span>{child.title}</span>
+                            </Link>
+                          </DropdownMenuItem>
+                        );
+                      })}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                );
+              }
+
+              return (
+                <Link
+                  key={i}
+                  href={item.url as any}
+                  target={item.target}
+                  className={cn(
+                    "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                    pathname === item.url
+                      ? "bg-primary/10 text-primary"
+                      : "text-foreground/80 hover:bg-accent hover:text-foreground"
+                  )}
+                >
+                  {item.icon && <Icon name={item.icon} className="mr-1.5 inline size-4" />}
+                  {item.title}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="hidden items-center gap-2 lg:flex">
             {header.show_theme && <ThemeToggle />}
+            {header.show_locale && <LocaleToggle />}
 
             {session ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={session.user?.image || ''} alt={session.user?.name || ''} />
-                      <AvatarFallback className="bg-primary text-primary-foreground">
-                        {session.user?.name?.[0]?.toUpperCase() || session.user?.email?.[0]?.toUpperCase() || 'U'}
+                  <Button variant="ghost" className="h-10 w-10 rounded-full p-0">
+                    <Avatar className="h-10 w-10 border border-border">
+                      <AvatarImage src={session.user?.image || ""} alt={session.user?.name || ""} />
+                      <AvatarFallback>
+                        {session.user?.name?.[0]?.toUpperCase() || session.user?.email?.[0]?.toUpperCase() || "U"}
                       </AvatarFallback>
                     </Avatar>
                   </Button>
@@ -267,321 +145,154 @@ export default function Header({ header }: { header: HeaderType }) {
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel>
                     <div className="flex flex-col space-y-1">
-                      <p className="text-sm font-medium leading-none">{session.user?.name}</p>
-                      <p className="text-xs leading-none text-muted-foreground">{session.user?.email}</p>
+                      <p className="text-sm font-medium">{session.user?.name}</p>
+                      <p className="text-xs text-muted-foreground">{session.user?.email}</p>
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => nextRouter.push('/my-profile')}>
-                    {t('my_profile')}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => nextRouter.push('/my-orders')}>
-                    {t('my_orders')}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => nextRouter.push('/pricing')}>
-                    {t('recharge_credits')}
-                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/my-profile")}>{t("my_profile")}</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/my-orders")}>{t("my_orders")}</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push("/pricing")}>{t("recharge_credits")}</DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => signOut()}>
-                    {t('sign_out')}
-                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => signOut()}>{t("sign_out")}</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               header.buttons?.map((item, i) => {
-                // 如果是登录按钮，触发登录弹窗
-                if (item.url === '/auth/signin') {
+                if (item.url === "/auth/signin") {
                   return (
                     <Button
                       key={i}
                       variant={item.variant}
-                      onClick={() => {
-                        window.dispatchEvent(new CustomEvent('open-sign-modal'));
-                      }}
+                      onClick={() => window.dispatchEvent(new CustomEvent("open-sign-modal"))}
                     >
                       {item.title}
-                      {item.icon && (
-                        <Icon name={item.icon} className="size-4 shrink-0" />
-                      )}
                     </Button>
                   );
                 }
-
-                // 其他按钮保持原样
                 return (
-                  <Button key={i} variant={item.variant}>
-                    <Link
-                      href={item.url as any}
-                      target={item.target || ""}
-                      className="flex items-center gap-1 cursor-pointer"
-                    >
+                  <Button key={i} variant={item.variant} asChild>
+                    <Link href={item.url as any} target={item.target || ""}>
                       {item.title}
-                      {item.icon && (
-                        <Icon name={item.icon} className="size-4 shrink-0" />
-                      )}
                     </Link>
                   </Button>
                 );
               })
             )}
           </div>
-        </nav>
 
-        <div className="block lg:hidden">
-          <div className="flex items-center justify-between">
-            <Link
-              href={(header.brand?.url || "/") as any}
-              className="flex items-center gap-2"
-            >
-              {header.brand?.logo?.src && (
-                <img
-                  src={header.brand.logo.src}
-                  alt="ImagetoPrompt"
-                  style={{width: '150px'}}
-                />
-              )}
-              {header.brand?.title && (
-                <span className="text-xl font-bold">
-                  {header.brand?.title || ""}
-                </span>
-              )}
-            </Link>
-            <Sheet>
+          <div className="ml-auto lg:hidden">
+            <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
-                <Button variant="default" size="icon">
+                <Button variant="outline" size="icon" aria-label="Open menu">
                   <Menu className="size-4" />
                 </Button>
               </SheetTrigger>
-              <SheetContent className="overflow-y-auto">
+              <SheetContent side="right" className="w-[320px] overflow-y-auto">
                 <SheetHeader>
-                  <SheetTitle>
-                    <Link
-                      href={(header.brand?.url || "/") as any}
-                      className="flex items-center gap-2"
-                    >
-                      {header.brand?.logo?.src && (
-                        <img
-                          src={header.brand.logo.src}
-                          alt="ImagetoPrompt"
-                          style={{width: '150px'}}
-                        />
-                      )}
-                      {header.brand?.title && (
-                        <span className="text-xl font-bold">
-                          {header.brand?.title || ""}
-                        </span>
-                      )}
-                    </Link>
-                  </SheetTitle>
+                  <SheetTitle className="text-left">Menu</SheetTitle>
                 </SheetHeader>
-                <div className="mb-8 mt-8 flex flex-col gap-4">
-                  <Accordion type="single" collapsible className="w-full">
-                    {header.nav?.items?.map((item, i) => {
-                      if (item.children && item.children.length > 0) {
-                        return (
-                          <AccordionItem
-                            key={i}
-                            value={item.title || ""}
-                            className="border-b-0"
-                          >
-                            <AccordionTrigger className="mb-4 py-0 font-semibold hover:no-underline text-left">
-                              {item.title}
-                            </AccordionTrigger>
-                            <AccordionContent className="mt-2">
-                              {item.children.map((iitem, ii) => {
-                                // 如果二级菜单有children（三级菜单），渲染分组
-                                if (iitem.children && iitem.children.length > 0) {
-                                  return (
-                                    <div key={ii} className="mb-3">
-                                      <div className="px-3 py-2 text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-                                        {iitem.title}
-                                      </div>
-                                      {iitem.children.map((iiitem, iii) => (
-                                        <Link
-                                          key={iii}
-                                          className={cn(
-                                            "flex select-none gap-4 rounded-md p-3 leading-none outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                                          )}
-                                          href={iiitem.url as any}
-                                          target={iiitem.target}
-                                        >
-                                          {iiitem.icon && (
-                                            <Icon
-                                              name={iiitem.icon}
-                                              className="size-4 shrink-0"
-                                            />
-                                          )}
-                                          <div>
-                                            <div className="text-sm font-semibold">
-                                              {iiitem.title}
-                                            </div>
-                                            <p className="text-sm leading-snug text-muted-foreground">
-                                              {iiitem.description}
-                                            </p>
-                                          </div>
-                                        </Link>
-                                      ))}
-                                    </div>
-                                  );
-                                }
-                                // 否则渲染普通二级菜单项
-                                return (
+
+                <div className="mt-4 space-y-2">
+                  {navItems.map((item, i) => (
+                    <div key={i} className="rounded-lg border border-border/70 bg-card p-2">
+                      {item.url ? (
+                        <Link
+                          href={item.url as any}
+                          target={item.target}
+                          className="block rounded-md px-3 py-2 font-medium"
+                          onClick={() => setOpen(false)}
+                        >
+                          {item.title}
+                        </Link>
+                      ) : (
+                        <p className="px-3 py-2 font-medium">{item.title}</p>
+                      )}
+                      {!!item.children?.length && (
+                        <div className="space-y-1 px-1 pb-1">
+                          {item.children.map((child, idx) =>
+                            child.children?.length ? (
+                              <div key={idx}>
+                                <p className="px-2 py-1 text-xs text-muted-foreground uppercase tracking-wide">
+                                  {child.title}
+                                </p>
+                                {child.children.map((g, gIdx) => (
                                   <Link
-                                    key={ii}
-                                    className={cn(
-                                      "flex select-none gap-4 rounded-md p-3 leading-none outline-hidden transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                                    )}
-                                    href={iitem.url as any}
-                                    target={iitem.target}
+                                    key={gIdx}
+                                    href={g.url as any}
+                                    target={g.target}
+                                    className="block rounded-md px-2 py-2 text-sm text-muted-foreground"
+                                    onClick={() => setOpen(false)}
                                   >
-                                    {iitem.icon && (
-                                      <Icon
-                                        name={iitem.icon}
-                                        className="size-4 shrink-0"
-                                      />
-                                    )}
-                                    <div>
-                                      <div className="text-sm font-semibold">
-                                        {iitem.title}
-                                      </div>
-                                      <p className="text-sm leading-snug text-muted-foreground">
-                                        {iitem.description}
-                                      </p>
-                                    </div>
+                                    {g.title}
                                   </Link>
-                                );
-                              })}
-                            </AccordionContent>
-                          </AccordionItem>
+                                ))}
+                              </div>
+                            ) : (
+                              <Link
+                                key={idx}
+                                href={child.url as any}
+                                target={child.target}
+                                className="block rounded-md px-2 py-2 text-sm text-muted-foreground"
+                                onClick={() => setOpen(false)}
+                              >
+                                {child.title}
+                              </Link>
+                            )
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-5 flex items-center gap-2">
+                  {header.show_theme && <ThemeToggle />}
+                  {header.show_locale && <LocaleToggle />}
+                </div>
+
+                <div className="mt-5 space-y-2 border-t border-border pt-4">
+                  {session ? (
+                    <>
+                      <Button variant="ghost" className="w-full justify-start" onClick={() => router.push("/my-profile")}>{t("my_profile")}</Button>
+                      <Button variant="ghost" className="w-full justify-start" onClick={() => router.push("/my-orders")}>{t("my_orders")}</Button>
+                      <Button variant="ghost" className="w-full justify-start" onClick={() => router.push("/pricing")}>{t("recharge_credits")}</Button>
+                      <Button variant="ghost" className="w-full justify-start" onClick={() => signOut()}>{t("sign_out")}</Button>
+                    </>
+                  ) : (
+                    header.buttons?.map((item, i) => {
+                      if (item.url === "/auth/signin") {
+                        return (
+                          <Button
+                            key={i}
+                            className="w-full"
+                            variant={item.variant}
+                            onClick={() => {
+                              window.dispatchEvent(new CustomEvent("open-sign-modal"));
+                              setOpen(false);
+                            }}
+                          >
+                            {item.title}
+                          </Button>
                         );
                       }
                       return (
-                        <Link
-                          key={i}
-                          href={item.url as any}
-                          target={item.target}
-                          className="font-semibold my-4 flex items-center gap-2 px-4"
-                        >
-                          {item.icon && (
-                            <Icon
-                              name={item.icon}
-                              className="size-4 shrink-0"
-                            />
-                          )}
-                          {item.title}
-                        </Link>
+                        <Button key={i} className="w-full" variant={item.variant} asChild>
+                          <Link href={item.url as any} target={item.target || ""} onClick={() => setOpen(false)}>
+                            {item.title}
+                          </Link>
+                        </Button>
                       );
-                    })}
-                  </Accordion>
-                </div>
-                <div className="flex-1"></div>
-                <div className="border-t pt-4">
-                  <div className="mt-2 flex flex-col gap-3">
-                    {session ? (
-                      <>
-                        <div className="flex items-center gap-3 p-3 rounded-lg bg-secondary">
-                          <Avatar className="h-12 w-12">
-                            <AvatarImage src={session.user?.image || ''} alt={session.user?.name || ''} />
-                            <AvatarFallback className="bg-primary text-primary-foreground">
-                              {session.user?.name?.[0]?.toUpperCase() || session.user?.email?.[0]?.toUpperCase() || 'U'}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1 flex flex-col">
-                            <p className="text-sm font-medium">{session.user?.name}</p>
-                            <p className="text-xs text-muted-foreground">{session.user?.email}</p>
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col gap-2">
-                          <Button
-                            variant="ghost"
-                            className="justify-start"
-                            onClick={() => nextRouter.push('/my-profile')}
-                          >
-                            {t('my_profile')}
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            className="justify-start"
-                            onClick={() => nextRouter.push('/my-orders')}
-                          >
-                            {t('my_orders')}
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            className="justify-start"
-                            onClick={() => nextRouter.push('/pricing')}
-                          >
-                            {t('recharge_credits')}
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            className="justify-start"
-                            onClick={() => signOut()}
-                          >
-                            {t('sign_out')}
-                          </Button>
-                        </div>
-                      </>
-                    ) : (
-                      header.buttons?.map((item, i) => {
-                        // 如果是登录按钮，触发登录弹窗
-                        if (item.url === '/auth/signin') {
-                          return (
-                            <Button
-                              key={i}
-                              variant={item.variant}
-                              onClick={() => {
-                                window.dispatchEvent(new CustomEvent('open-sign-modal'));
-                              }}
-                            >
-                              {item.title}
-                              {item.icon && (
-                                <Icon
-                                  name={item.icon}
-                                  className="size-4 shrink-0"
-                                />
-                              )}
-                            </Button>
-                          );
-                        }
-
-                        // 其他按钮保持原样
-                        return (
-                          <Button key={i} variant={item.variant}>
-                            <Link
-                              href={item.url as any}
-                              target={item.target || ""}
-                              className="flex items-center gap-1"
-                            >
-                              {item.title}
-                              {item.icon && (
-                                <Icon
-                                  name={item.icon}
-                                  className="size-4 shrink-0"
-                                />
-                              )}
-                            </Link>
-                          </Button>
-                        );
-                      })
-                    )}
-
-                  </div>
-
-                  <div className="mt-4 flex items-center gap-2">
-                    {header.show_locale && <LocaleToggle />}
-                    <div className="flex-1"></div>
-
-                    {header.show_theme && <ThemeToggle />}
-                  </div>
+                    })
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
           </div>
         </div>
-        </div>
-      </section>
-    </>
+      </div>
+    </header>
   );
 }
+
+

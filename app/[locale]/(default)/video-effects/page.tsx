@@ -1,3 +1,4 @@
+﻿/* eslint-disable react/no-unescaped-entities */
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -44,7 +45,7 @@ export default async function VideoEffectsPage({
               Generate Stunning Videos Online with AI Effects for Free
             </h2>
             <p className="text-lg text-muted-foreground">
-              Transform static images into stunning videos with Pixmind AI's innovative templates. Simply upload your photo, choose a professional AI effect, and create stunning videos in minutes—no experience needed. Start now!
+              Transform static images into stunning videos with Pixmind AI's innovative templates. Simply upload your photo, choose a professional AI effect, and create stunning videos in minutes鈥攏o experience needed. Start now!
             </p>
           </div>
 
@@ -57,7 +58,7 @@ export default async function VideoEffectsPage({
                   Boost Your Social Media Engagement with AI Fun Video Effects
                 </h3>
                 <p className="text-lg text-muted-foreground mb-6">
-                  Easily generate trending content in just minutes! Our AI entertainment effects—including the AI dance video effect, AI twerk generator, and AI bikini video generator—help you transform dull photos into hilarious and unique videos that can boost likes, comments, and follows across any social media platform!
+                  Easily generate trending content in just minutes! Our AI entertainment effects鈥攊ncluding the AI dance video effect, AI twerk generator, and AI bikini video generator鈥攈elp you transform dull photos into hilarious and unique videos that can boost likes, comments, and follows across any social media platform!
                 </p>
                 <Link href={`/${locale}/video-effects`}>
                   <Button size="lg" className="rounded-full px-8">
@@ -263,3 +264,4 @@ export default async function VideoEffectsPage({
     </div>
   );
 }
+

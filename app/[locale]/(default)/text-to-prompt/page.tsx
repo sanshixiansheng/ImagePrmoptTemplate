@@ -22,7 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Image, FileText, Copy, Loader2, X, Wand2, Edit, Globe } from "lucide-react";
+import { Image as ImageIcon, FileText, Copy, Loader2, X, Wand2, Edit, Globe } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
@@ -213,7 +213,7 @@ export default function TextToPromptPage() {
                   className="data-[state=active]:bg-purple-600 data-[state=active]:text-white px-6 py-2.5 rounded-md transition-all flex items-center gap-2"
                   onClick={() => router.push(`/${locale}/image-to-prompt`)}
                 >
-                  <Image className="h-4 w-4" />
+                  <ImageIcon className="h-4 w-4" />
                   {t("tab_image_to_prompt")}
                 </TabsTrigger>
                 <TabsTrigger

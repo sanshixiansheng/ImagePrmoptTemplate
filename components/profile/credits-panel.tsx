@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -105,7 +105,7 @@ export function CreditsPanel() {
   }, [session, contextUser]);
 
   // Fetch transactions
-  const fetchTransactions = async (page: number = 1) => {
+  const fetchTransactions = useCallback(async (page: number = 1) => {
     if (!session?.user) return;
 
     try {
@@ -129,10 +129,10 @@ export function CreditsPanel() {
     } finally {
       setLoadingTransactions(false);
     }
-  };
+  }, [session?.user]);
 
   // Fetch all orders
-  const fetchAllOrders = async (page: number = 1) => {
+  const fetchAllOrders = useCallback(async (page: number = 1) => {
     try {
       setLoadingTransactions(true);
       const response = await fetch(`/api/payment/order/my/list?page=${page}&size=20`);
@@ -177,7 +177,7 @@ export function CreditsPanel() {
     } finally {
       setLoadingTransactions(false);
     }
-  };
+  }, []);
 
   // Load data based on active tab
   useEffect(() => {
@@ -188,7 +188,7 @@ export function CreditsPanel() {
     } else if (activeTab === 'member-orders' || activeTab === 'points-orders') {
       fetchAllOrders(ordersCurrentPage);
     }
-  }, [activeTab, currentPage, ordersCurrentPage, session]);
+  }, [activeTab, currentPage, ordersCurrentPage, session, fetchTransactions, fetchAllOrders]);
 
   const getMemberName = () => {
     if (!accountInfo) return t('user.no_member');
@@ -297,3 +297,7 @@ export function CreditsPanel() {
     </div>
   );
 }
+
+
+
+

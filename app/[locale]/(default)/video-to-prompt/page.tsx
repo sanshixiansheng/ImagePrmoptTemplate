@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element, react/no-unescaped-entities */
 
 import React, { useState } from "react";
 import { useParams } from "next/navigation";

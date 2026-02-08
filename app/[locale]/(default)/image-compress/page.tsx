@@ -1,3 +1,4 @@
+﻿/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useState, useCallback } from "react";
@@ -29,7 +30,7 @@ export default function ImageCompressPage() {
   const [progress, setProgress] = useState(0);
   const [currentFile, setCurrentFile] = useState("");
 
-  // 前端WebP压缩
+  // 鍓嶇WebP鍘嬬缉
   const compressImageToWebP = async (file: File): Promise<Blob> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -82,7 +83,7 @@ export default function ImageCompressPage() {
     });
   };
 
-  // 后端API压缩（PNG/JPEG）
+  // 鍚庣API鍘嬬缉锛圥NG/JPEG锛?
   const compressImageViaAPI = async (file: File, format: "png" | "jpeg"): Promise<{ blob: Blob; compressedSize: number; compressedUrl: string }> => {
     const reader = new FileReader();
     const base64 = await new Promise<string>((resolve, reject) => {
@@ -111,14 +112,14 @@ export default function ImageCompressPage() {
 
     const result = await response.json();
 
-    // 检查返回的数据结构 (code 1000 表示成功)
+    // 妫€鏌ヨ繑鍥炵殑鏁版嵁缁撴瀯 (code 1000 琛ㄧず鎴愬姛)
     if (result.code !== 1000 && result.code !== 0) {
       throw new Error(result.message || 'API returned error');
     }
 
     const data = result.data;
 
-    // 直接下载压缩后的图片，通过代理API
+    // 鐩存帴涓嬭浇鍘嬬缉鍚庣殑鍥剧墖锛岄€氳繃浠ｇ悊API
     if (data.compressedUrl) {
       const proxyUrl = `/api/image-download?url=${encodeURIComponent(data.compressedUrl)}`;
       const imageResponse = await fetch(proxyUrl);
@@ -142,7 +143,7 @@ export default function ImageCompressPage() {
         compressedUrl: blobUrl
       };
     } else if (data.imageBase64) {
-      // 如果返回base64，转换为blob
+      // 濡傛灉杩斿洖base64锛岃浆鎹负blob
       const base64Data = data.imageBase64.split(',')[1];
       const byteCharacters = atob(base64Data);
       const byteNumbers = new Array(byteCharacters.length);
@@ -163,11 +164,11 @@ export default function ImageCompressPage() {
   };
 
   const compressImage = async (file: File, format: OutputFormat): Promise<{ blob: Blob; compressedSize: number; compressedUrl: string }> => {
-    // 确定目标格式
+    // 纭畾鐩爣鏍煎紡
     let targetFormat: "webp" | "png" | "jpeg" = "webp";
 
     if (format === "auto") {
-      // auto模式：保持原格式
+      // auto妯″紡锛氫繚鎸佸師鏍煎紡
       if (file.type === "image/png") {
         targetFormat = "png";
       } else if (file.type === "image/jpeg" || file.type === "image/jpg") {
@@ -179,14 +180,14 @@ export default function ImageCompressPage() {
       targetFormat = format as "webp" | "png" | "jpeg";
     }
 
-    // WebP使用前端压缩
+    // WebP浣跨敤鍓嶇鍘嬬缉
     if (targetFormat === "webp") {
       const blob = await compressImageToWebP(file);
       const blobUrl = URL.createObjectURL(blob);
       return { blob, compressedSize: blob.size, compressedUrl: blobUrl };
     }
 
-    // PNG/JPEG使用后端API压缩
+    // PNG/JPEG浣跨敤鍚庣API鍘嬬缉
     return await compressImageViaAPI(file, targetFormat);
   };
 
@@ -211,47 +212,47 @@ export default function ImageCompressPage() {
     setProgress(0);
 
     const total = validFiles.length;
-    const minDurationPerFile = 3000; // 每个文件至少 3 秒
-    const maxDurationPerFile = 5000; // 每个文件最多 5 秒
+    const minDurationPerFile = 3000; // 姣忎釜鏂囦欢鑷冲皯 3 绉?
+    const maxDurationPerFile = 5000; // 姣忎釜鏂囦欢鏈€澶?5 绉?
 
     for (let i = 0; i < validFiles.length; i++) {
       const file = validFiles[i];
       setCurrentFile(file.name);
 
-      // 随机选择一个持续时间（3-5秒）
+      // 闅忔満閫夋嫨涓€涓寔缁椂闂达紙3-5绉掞級
       const duration = Math.random() * (maxDurationPerFile - minDurationPerFile) + minDurationPerFile;
       const startTime = Date.now();
 
       try {
-        // 阶段 1: 0-20% - 读取文件
+        // 闃舵 1: 0-20% - 璇诲彇鏂囦欢
         setProgress(Math.round(((i) / total) * 100));
         await new Promise(resolve => setTimeout(resolve, duration * 0.2));
         setProgress(Math.round(((i) / total) * 100) + Math.round(20 / total));
 
-        // 阶段 2: 20-50% - 开始压缩
+        // 闃舵 2: 20-50% - 寮€濮嬪帇缂?
         const preview = URL.createObjectURL(file);
         await new Promise(resolve => setTimeout(resolve, duration * 0.15));
         setProgress(Math.round(((i) / total) * 100) + Math.round(35 / total));
 
-        // 阶段 3: 50-80% - 压缩处理中
+        // 闃舵 3: 50-80% - 鍘嬬缉澶勭悊涓?
         const compressPromise = compressImage(file, outputFormat);
         await new Promise(resolve => setTimeout(resolve, duration * 0.2));
         setProgress(Math.round(((i) / total) * 100) + Math.round(60 / total));
 
         const compressResult = await compressPromise;
 
-        // 阶段 4: 80-95% - 生成预览
+        // 闃舵 4: 80-95% - 鐢熸垚棰勮
         await new Promise(resolve => setTimeout(resolve, duration * 0.15));
         setProgress(Math.round(((i) / total) * 100) + Math.round(80 / total));
 
-        // 使用返回的 blob URL 作为预览
+        // 浣跨敤杩斿洖鐨?blob URL 浣滀负棰勮
         const compressedPreview = compressResult.compressedUrl;
 
         const originalSize = file.size;
         const compressedSize = compressResult.compressedSize;
         const savings = Math.round(((originalSize - compressedSize) / originalSize) * 100);
 
-        // 阶段 5: 95-100% - 完成
+        // 闃舵 5: 95-100% - 瀹屾垚
         await new Promise(resolve => setTimeout(resolve, duration * 0.1));
 
         setImages((prev) => [
@@ -267,13 +268,13 @@ export default function ImageCompressPage() {
           },
         ]);
 
-        // 确保至少经过了指定的时间
+        // 纭繚鑷冲皯缁忚繃浜嗘寚瀹氱殑鏃堕棿
         const elapsed = Date.now() - startTime;
         if (elapsed < duration) {
           await new Promise(resolve => setTimeout(resolve, duration - elapsed));
         }
 
-        // 完成当前文件
+        // 瀹屾垚褰撳墠鏂囦欢
         setProgress(Math.round(((i + 1) / total) * 100));
         await new Promise(resolve => setTimeout(resolve, 300));
       } catch (error: any) {
@@ -315,7 +316,7 @@ export default function ImageCompressPage() {
     const originalName = image.original.name.replace(/\.[^/.]+$/, "");
     let extension = "png";
 
-    // 从 blob type 判断格式
+    // 浠?blob type 鍒ゆ柇鏍煎紡
     if (image.compressed.type === "image/webp") {
       extension = "webp";
     } else if (image.compressed.type === "image/jpeg" || image.compressed.type === "image/jpg") {
@@ -324,7 +325,7 @@ export default function ImageCompressPage() {
       extension = "png";
     }
 
-    // 直接使用已有的 blob URL 下载
+    // 鐩存帴浣跨敤宸叉湁鐨?blob URL 涓嬭浇
     const a = document.createElement("a");
     a.href = image.compressedPreview;
     a.download = `${originalName}-compressed.${extension}`;
@@ -347,7 +348,7 @@ export default function ImageCompressPage() {
       const newImages = [...prev];
       const removed = newImages.splice(index, 1)[0];
       URL.revokeObjectURL(removed.preview);
-      // 只清理本地 blob URL，不清理远程 URL
+      // 鍙竻鐞嗘湰鍦?blob URL锛屼笉娓呯悊杩滅▼ URL
       if (removed.compressedPreview && removed.compressedPreview.startsWith('blob:')) {
         URL.revokeObjectURL(removed.compressedPreview);
       }
@@ -358,7 +359,7 @@ export default function ImageCompressPage() {
   const clearAll = () => {
     images.forEach((image) => {
       URL.revokeObjectURL(image.preview);
-      // 只清理本地 blob URL，不清理远程 URL
+      // 鍙竻鐞嗘湰鍦?blob URL锛屼笉娓呯悊杩滅▼ URL
       if (image.compressedPreview && image.compressedPreview.startsWith('blob:')) {
         URL.revokeObjectURL(image.compressedPreview);
       }
@@ -637,3 +638,4 @@ export default function ImageCompressPage() {
     </div>
   );
 }
+

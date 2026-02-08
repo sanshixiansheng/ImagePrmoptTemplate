@@ -1,4 +1,6 @@
-'use client'
+﻿'use client'
+
+/* eslint-disable @next/next/no-img-element */
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
@@ -55,7 +57,7 @@ export function HomepageEffectsShowcase({ locale }: { locale: string }) {
       const data = await response.json()
 
       if (data.effect_items) {
-        // 只取前8个特效
+        // 鍙彇鍓?涓壒鏁?
         setEffects(data.effect_items.slice(0, 8))
       }
     } catch (error) {
@@ -131,7 +133,7 @@ export function HomepageEffectsShowcase({ locale }: { locale: string }) {
                     loading="lazy"
                   />
 
-                  {/* HOT 标签 */}
+                  {/* HOT 鏍囩 */}
                   {effect.marker === 'hot' && (
                     <span className="absolute top-2 left-2 text-white text-xs font-semibold px-2 py-0.5 rounded bg-red-500 shadow-sm z-10">
                       HOT
@@ -173,7 +175,7 @@ export function HomepageEffectsShowcase({ locale }: { locale: string }) {
             variant="outline"
             className="px-8 py-6 text-lg rounded-full border-2"
           >
-            Explore More AI Video Effects →
+            Explore More AI Video Effects 鈫?
           </Button>
         </Link>
       </div>
@@ -232,3 +234,5 @@ export function HomepageEffectsShowcase({ locale }: { locale: string }) {
     </>
   )
 }
+
+

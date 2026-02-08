@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+﻿import { ReactNode } from "react";
 import { Sidebar } from "@/types/blocks/sidebar";
 import SidebarNav from "@/components/console/sidebar/nav";
 
@@ -10,15 +10,17 @@ export default async function ConsoleLayout({
   sidebar?: Sidebar;
 }) {
   return (
-    <div className="container md:max-w-7xl py-8 mx-auto">
-      <div className="w-full space-y-6 p-4 pb-16 block">
-        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-          {sidebar?.nav?.items && (
-            <aside className="md:min-w-40 flex-shrink-0">
-              <SidebarNav items={sidebar.nav?.items} />
-            </aside>
-          )}
-          <div className="flex-1 lg:max-w-full">{children}</div>
+    <div className="bg-background">
+      <div className="container py-8 md:py-10">
+        <div className="rounded-3xl border border-border/70 bg-card/60 p-4 shadow-sm backdrop-blur md:p-6">
+          <div className="grid gap-6 lg:grid-cols-[240px_1fr] lg:gap-8">
+            {sidebar?.nav?.items && (
+              <aside className="lg:sticky lg:top-24 lg:h-fit">
+                <SidebarNav items={sidebar.nav.items} />
+              </aside>
+            )}
+            <section className="min-w-0">{children}</section>
+          </div>
         </div>
       </div>
     </div>

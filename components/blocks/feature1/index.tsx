@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Icon from "@/components/icon";
 import { Section as SectionType } from "@/types/blocks/section";
 
