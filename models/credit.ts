@@ -36,6 +36,9 @@ export async function createUserCredits(
   userUuid: string,
   initialBalance: number = 0
 ): Promise<Credit | null> {
+  console.log("[DB] Creating credits for user:", userUuid);
+  console.log("[DB] Initial balance:", initialBalance);
+
   const { data, error } = await supabase
     .from("credits")
     .insert([{ user_uuid: userUuid, balance: initialBalance }])
@@ -43,9 +46,15 @@ export async function createUserCredits(
     .single();
 
   if (error) {
-    console.error("Error creating user credits:", error);
+    console.error("[DB] ❌ Error creating user credits:", error);
+    console.error("[DB] Error code:", error.code);
+    console.error("[DB] Error message:", error.message);
     return null;
   }
+
+  console.log("[DB] ✅ Credits created successfully");
+  console.log("[DB] Credits ID:", (data as any).id);
+  console.log("[DB] Credits balance:", (data as Credit).balance);
 
   return data as Credit;
 }

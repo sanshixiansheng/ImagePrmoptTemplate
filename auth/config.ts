@@ -5,6 +5,8 @@ import Credentials from "next-auth/providers/credentials";
 import { getUuid } from "@/lib/hash";
 import { getIsoTimestr } from "@/lib/time";
 import { getClientIp } from "@/lib/ip";
+import { findUserByEmail, insertUser } from "@/models/user";
+import { createUserCredits } from "@/models/credit";
 
 const GOOGLE_ENABLED = process.env.NEXT_PUBLIC_AUTH_GOOGLE_ENABLED === "true";
 const GOOGLE_ONE_TAP_ENABLED = process.env.NEXT_PUBLIC_AUTH_GOOGLE_ONE_TAP_ENABLED === "true";
@@ -172,21 +174,73 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         try {
           console.log("[NextAuth JWT] Creating user session...");
-
-          // Store user info in token
-          token.user = {
-            uuid: dbUser.uuid,
-            email: dbUser.email,
+          console.log("[NextAuth JWT] User data to save:", {
+            email: user.email,
             nickname: dbUser.nickname,
-            avatar_url: dbUser.avatar_url,
-            signin_provider: dbUser.signin_provider,
-            created_at: dbUser.created_at,
+            provider: account.provider,
+            signin_ip: signin_ip
+          });
+
+          // Check if user exists in database
+          console.log("[NextAuth JWT] Checking if user exists in database...");
+          let dbUserRecord = await findUserByEmail(user.email!, account.provider);
+
+          if (!dbUserRecord) {
+            console.log("[NextAuth JWT] User not found, creating new user in database...");
+            console.log("[NextAuth JWT] New user details:", {
+              uuid: dbUser.uuid,
+              email: dbUser.email,
+              nickname: dbUser.nickname,
+              avatar_url: dbUser.avatar_url,
+              signin_provider: dbUser.signin_provider,
+              signin_ip: dbUser.signin_ip,
+              created_at: dbUser.created_at
+            });
+
+            // Create new user in database
+            dbUserRecord = await insertUser(dbUser as any);
+            console.log("[NextAuth JWT] ✅ New user created successfully!");
+            console.log("[NextAuth JWT] Saved user UUID:", dbUserRecord.uuid);
+            console.log("[NextAuth JWT] Saved user email:", dbUserRecord.email);
+
+            // Create initial credits for new user (e.g., 100 free credits)
+            const initialCredits = parseInt(process.env.INITIAL_USER_CREDITS || "100");
+            console.log("[NextAuth JWT] Creating initial credits:", initialCredits);
+
+            const creditRecord = await createUserCredits(dbUserRecord.uuid, initialCredits);
+            if (creditRecord) {
+              console.log("[NextAuth JWT] ✅ Initial credits created successfully!");
+              console.log("[NextAuth JWT] Credits balance:", creditRecord.balance);
+            } else {
+              console.error("[NextAuth JWT] ❌ Failed to create initial credits");
+            }
+          } else {
+            console.log("[NextAuth JWT] ✅ Existing user found in database");
+            console.log("[NextAuth JWT] User UUID:", dbUserRecord.uuid);
+            console.log("[NextAuth JWT] User email:", dbUserRecord.email);
+            console.log("[NextAuth JWT] User created at:", dbUserRecord.created_at);
+          }
+
+          // Store user info in token (use database UUID for existing users)
+          token.user = {
+            uuid: dbUserRecord.uuid,
+            email: dbUserRecord.email,
+            nickname: dbUserRecord.nickname || dbUser.nickname,
+            avatar_url: dbUserRecord.avatar_url || dbUser.avatar_url,
+            signin_provider: dbUserRecord.signin_provider || dbUser.signin_provider,
+            created_at: dbUserRecord.created_at || dbUser.created_at,
             // 保留原始的 name 和 image 用于头像显示
             name: user.name,
             image: user.image,
           };
+
+          console.log("[NextAuth JWT] ✅ Session token created with user info");
         } catch (error) {
-          console.error("[NextAuth JWT] Error saving user:", error);
+          console.error("[NextAuth JWT] ❌ Error saving user to database:", error);
+          if (error instanceof Error) {
+            console.error("[NextAuth JWT] Error message:", error.message);
+            console.error("[NextAuth JWT] Error stack:", error.stack);
+          }
         }
       }
 

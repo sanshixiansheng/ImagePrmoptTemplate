@@ -21,20 +21,20 @@ export async function GET(
 
     const { taskId } = await params;
 
-    log('[Evolink Task] 查询任务状态:', {
+    log('[Evolink Video Task] 查询视频任务状态:', {
       user: session.user.email,
       taskId
     });
 
     const response = await evolinkAxios.get(`/v1/tasks/${taskId}`);
 
-    log('[Evolink Task] 任务状态响应:', response.data);
+    log('[Evolink Video Task] 任务状态响应:', response.data);
 
     const taskData = response.data;
 
     // 如果任务已完成且有结果,上传到 R2
     if (taskData.status === 'completed' && taskData.results && taskData.results.length > 0) {
-      log('[Evolink Task] 任务已完成,开始上传结果到 R2');
+      log('[Evolink Video Task] 任务已完成,开始上传结果到 R2');
 
       try {
         const storage = newStorage();
@@ -42,8 +42,8 @@ export async function GET(
         const uploadedResults = await Promise.all(
           taskData.results.map(async (resultUrl: string, index: number) => {
             try {
-              // 从 URL 提取文件扩展名
-              const extension = resultUrl.split('.').pop()?.split('?')[0] || 'png';
+              // 从 URL 提取文件扩展名 (通常是 mp4)
+              const extension = resultUrl.split('.').pop()?.split('?')[0] || 'mp4';
 
               // 生成存储路径
               const now = new Date();
@@ -53,23 +53,23 @@ export async function GET(
               const timestamp = now.getTime();
               const random = Math.random().toString(36).substring(2, 15);
               const filename = `${timestamp}-${random}.${extension}`;
-              const key = `ai-generated/images/${year}/${month}/${day}/${filename}`;
+              const key = `ai-generated/videos/${year}/${month}/${day}/${filename}`;
 
-              log('[Evolink Task] 开始下载并上传图片:', { url: resultUrl, key });
+              log('[Evolink Video Task] 开始下载并上传视频:', { url: resultUrl, key });
 
               // 下载并上传到 R2
               const uploadResult = await storage.downloadAndUpload({
                 url: resultUrl,
                 key,
-                contentType: `image/${extension}`,
+                contentType: `video/${extension}`,
                 disposition: 'inline'
               });
 
-              log('[Evolink Task] 图片上传成功:', uploadResult);
+              log('[Evolink Video Task] 视频上传成功:', uploadResult);
 
               return uploadResult.url;
             } catch (uploadError: any) {
-              logError('[Evolink Task] 图片上传失败:', uploadError);
+              logError('[Evolink Video Task] 视频上传失败:', uploadError);
               // 上传失败时返回原始 URL
               return resultUrl;
             }
@@ -87,7 +87,7 @@ export async function GET(
           }
         });
       } catch (uploadError: any) {
-        logError('[Evolink Task] 批量上传失败,返回原始数据:', uploadError);
+        logError('[Evolink Video Task] 批量上传失败,返回原始数据:', uploadError);
         // 上传失败时返回原始数据
         return NextResponse.json({
           code: 1000,
@@ -103,7 +103,7 @@ export async function GET(
       data: taskData
     });
   } catch (error: any) {
-    logError('[Evolink Task] 查询失败:', error);
+    logError('[Evolink Video Task] 查询失败:', error);
     const errorData = error.response?.data?.error || {};
     return NextResponse.json(
       {

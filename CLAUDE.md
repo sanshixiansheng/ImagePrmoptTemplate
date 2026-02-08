@@ -355,44 +355,115 @@ export default function MyComponent() {
 - All normalize to: `zh`
 - See: `i18n/request.ts` for logic
 
-### File Upload (Cloudflare R2)
+### Object Storage (Cloudflare R2)
 
-For image-to-image generation, reference images need to be uploaded:
+All AI-generated images and videos are automatically stored in Cloudflare R2 for persistence and delivery.
 
-**Pattern:**
-1. Client requests presigned upload URL from backend
-2. Client uploads file directly to R2 using presigned URL
-3. Client sends public R2 URL to AI provider
+**Why R2?**
+- **Zero egress fees**: Unlike S3, R2 doesn't charge for data transfer out
+- **S3 compatible**: Works seamlessly with AWS SDK
+- **Global CDN**: Automatic distribution via Cloudflare network
+- **Cost-effective**: ~90% cheaper than AWS S3
 
-**Implementation:**
+**Storage Flow:**
+1. AI provider generates image/video and returns temporary URL
+2. Backend downloads the result from temporary URL
+3. Backend uploads to R2 with organized path structure
+4. Backend returns R2 public URL to client
+5. Original temporary URL is kept as backup
+
+**Path Structure:**
+```
+ai-generated/
+  images/
+    YYYY/MM/DD/
+      timestamp-random.png
+  videos/
+    YYYY/MM/DD/
+      timestamp-random.mp4
+```
+
+**Configuration (`.env.local`):**
+```env
+# R2 Endpoint (format: https://{account_id}.r2.cloudflarestorage.com)
+STORAGE_ENDPOINT = "https://abc123.r2.cloudflarestorage.com"
+STORAGE_REGION = "auto"
+STORAGE_ACCESS_KEY = "your-r2-access-key-id"
+STORAGE_SECRET_KEY = "your-r2-secret-access-key"
+STORAGE_BUCKET = "your-bucket-name"
+STORAGE_DOMAIN = "https://r2.yourdomain.com"  # Custom domain (optional)
+```
+
+**Using the Storage Service:**
 ```typescript
-// 1. Get presigned URL (if needed - currently using public upload)
-const response = await fetch('/api/r2/presign-upload', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    fileName: file.name,
-    contentType: file.type
-  })
-});
-const { presignedUrl, publicUrl } = await response.json();
+import { newStorage } from '@/lib/storage';
 
-// 2. Upload file
-await fetch(presignedUrl, {
-  method: 'PUT',
-  body: file,
-  headers: { 'Content-Type': file.type }
+const storage = newStorage();
+
+// Upload a buffer
+await storage.uploadFile({
+  body: buffer,
+  key: 'ai-generated/images/2024/01/15/image.png',
+  contentType: 'image/png',
+  disposition: 'inline'
 });
 
-// 3. Use publicUrl in image generation request
-const genResponse = await fetch('/api/ai/evolink/generate', {
-  method: 'POST',
-  body: JSON.stringify({
-    prompt: 'Transform this image',
-    image_urls: [publicUrl]
-  })
+// Download from URL and upload to R2
+await storage.downloadAndUpload({
+  url: 'https://example.com/temp-image.png',
+  key: 'ai-generated/images/2024/01/15/image.png',
+  contentType: 'image/png'
 });
 ```
+
+**Automatic Upload Implementation:**
+
+The task polling API (`app/api/ai/evolink/task/[taskId]/route.ts`) automatically handles R2 upload when generation completes:
+
+```typescript
+// When task status is 'completed'
+if (taskData.status === 'completed' && taskData.results) {
+  const storage = newStorage();
+
+  const uploadedResults = await Promise.all(
+    taskData.results.map(async (url) => {
+      const r2Result = await storage.downloadAndUpload({
+        url,
+        key: generateStorageKey('images'),
+        contentType: 'image/png'
+      });
+      return r2Result.url; // R2 URL
+    })
+  );
+
+  return {
+    results: uploadedResults,      // R2 URLs
+    original_results: taskData.results  // Original URLs (backup)
+  };
+}
+```
+
+**Testing R2 Configuration:**
+
+Use the test endpoint to verify your setup:
+```bash
+# Must be authenticated
+GET /api/storage/test
+```
+
+Returns:
+- Configuration status
+- Test file upload result
+- Helpful error messages if misconfigured
+
+**Setup Guide:**
+
+See detailed configuration instructions in `/docs/R2_SETUP.md`:
+- Creating R2 bucket
+- Generating API tokens
+- Setting up custom domains
+- Cost estimation
+- Troubleshooting
 
 ## Code Conventions
 

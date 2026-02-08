@@ -283,49 +283,9 @@ export const AppContextProvider = ({ children, initialUserData }: { children: Re
         // 检查是否有 token
         let token = localStorage.getItem('aiHubToken');
 
-        // 如果没有 token，尝试从 NextAuth session 同步
+        // 如果没有 token，跳过获取用户信息
         if (!token || token.trim() === '') {
-          console.log('[AppContext] No token found, checking NextAuth session...');
-
-          // 调用同步 API
-          const syncResp = await fetch('/api/auth/sync');
-          if (syncResp.ok) {
-            const syncResult = await syncResp.json();
-            if (syncResult.code === 1000 && syncResult.data) {
-              console.log('[AppContext] NextAuth session synced successfully');
-
-              // 保存 token 到 localStorage
-              const authToken = syncResult.data.aiHubToken;
-              localStorage.setItem('aiHubToken', authToken);
-              localStorage.setItem('aiHubToken_full', JSON.stringify({
-                token: authToken,
-                refreshToken: syncResult.data.refreshToken || '',
-                expire: syncResult.data.expire || 2592000,
-                refreshExpire: syncResult.data.refreshExpire || 2592000,
-                loginTime: Date.now()
-              }));
-
-              // 设置用户信息
-              const userObj = syncResult.data.user;
-              const userData: User = {
-                uuid: userObj.id || userObj.uuid,
-                email: userObj.email || '',
-                phone: userObj.phone || '',
-                nickname: userObj.nickname || userObj.name || '用户',
-                avatar_url: userObj.avatar_url || userObj.avatar || '',
-                credits: userObj.credits || 0,
-                created_at: userObj.created_at || new Date().toISOString(),
-                invited_by: userObj.invited_by || null
-              };
-
-              console.log('[AppContext] User loaded from NextAuth:', userData.nickname);
-              setUser(userData);
-              setLastFetchTime(Date.now());
-              return;
-            }
-          }
-
-          console.log('[AppContext] No valid session found');
+          console.log('[AppContext] No aiHubToken found, skipping user info fetch');
           return;
         }
 

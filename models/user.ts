@@ -3,6 +3,14 @@ import { User } from "@/types/user";
 import { getSupabaseClient } from "@/models/db";
 
 export async function insertUser(user: User): Promise<User> {
+  console.log("[DB] Inserting new user into Supabase...");
+  console.log("[DB] User data:", {
+    uuid: user.uuid,
+    email: user.email,
+    nickname: user.nickname,
+    signin_provider: user.signin_provider
+  });
+
   const { data, error } = await supabase
     .from("users")
     .insert([user])
@@ -10,14 +18,23 @@ export async function insertUser(user: User): Promise<User> {
     .single();
 
   if (error) {
-    console.error("Error inserting user:", error);
+    console.error("[DB] ❌ Error inserting user:", error);
+    console.error("[DB] Error code:", error.code);
+    console.error("[DB] Error message:", error.message);
+    console.error("[DB] Error details:", error.details);
     throw error;
   }
+
+  console.log("[DB] ✅ User inserted successfully");
+  console.log("[DB] Inserted user ID:", (data as any).id);
+  console.log("[DB] Inserted user UUID:", (data as User).uuid);
 
   return data as User;
 }
 
 export async function findUserByEmail(email: string, provider?: string): Promise<User | null> {
+  console.log("[DB] Finding user by email:", email, "provider:", provider || "any");
+
   let query = supabase.from("users").select("*").eq("email", email);
 
   if (provider) {
@@ -27,8 +44,21 @@ export async function findUserByEmail(email: string, provider?: string): Promise
   const { data, error } = await query.single();
 
   if (error && error.code !== "PGRST116") {
-    console.error("Error finding user by email:", error);
+    console.error("[DB] Error finding user by email:", error);
     return null;
+  }
+
+  if (error && error.code === "PGRST116") {
+    console.log("[DB] User not found (PGRST116)");
+    return null;
+  }
+
+  if (data) {
+    console.log("[DB] ✅ User found:", {
+      uuid: (data as User).uuid,
+      email: (data as User).email,
+      created_at: (data as User).created_at
+    });
   }
 
   return data as User | null;
