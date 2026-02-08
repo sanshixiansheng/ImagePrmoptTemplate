@@ -8,19 +8,19 @@ export default function Feature1({ section }: { section: SectionType }) {
   }
 
   return (
-    <section id={section.name} className="py-16">
+    <section id={section.name} className="py-16 md:py-24">
       <div className="container">
-        <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-16">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
           {section.image && (
             <img
               src={section.image?.src}
               alt="placeholder hero"
-              className="max-h-full w-full rounded-md object-cover"
+              className="max-h-full w-full rounded-2xl border border-border/60 object-cover shadow-sm"
             />
           )}
           <div className="flex flex-col lg:text-left">
             {section.title && (
-              <h2 className="mb-6 text-pretty text-3xl font-bold lg:text-4xl">
+              <h2 className="mb-6 text-pretty text-3xl font-semibold tracking-tight lg:text-5xl">
                 {section.title}
               </h2>
             )}
@@ -31,15 +31,15 @@ export default function Feature1({ section }: { section: SectionType }) {
             )}
             <ul className="flex flex-col justify-center gap-y-8">
               {section.items?.map((item, i) => (
-                <li key={i} className="flex">
+                <li key={i} className="flex rounded-xl border border-border/50 bg-card/50 p-4">
                   {item.icon && (
                     <Icon
                       name={item.icon}
-                      className="mr-2 size-6 shrink-0 lg:mr-2 lg:size-6"
+                      className="mr-3 mt-0.5 size-5 shrink-0 text-primary lg:size-6"
                     />
                   )}
                   <div>
-                    <div className="mb-3 h-5 text-sm font-semibold text-accent-foreground md:text-base">
+                    <div className="mb-2 text-sm font-semibold text-foreground md:text-base">
                       {item.title}
                     </div>
                     <div className="text-sm font-medium text-muted-foreground md:text-base">

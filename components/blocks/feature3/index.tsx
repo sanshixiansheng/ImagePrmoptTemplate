@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import { Badge } from "@/components/ui/badge";
 import { Section as SectionType } from "@/types/blocks/section";
@@ -10,9 +10,9 @@ export default function Feature3({ section }: { section: SectionType }) {
   }
 
   return (
-    <section className="py-16">
-      <div className="container px-8">
-        <div className="mb-16 max-w-xl px-8 lg:px-0">
+    <section className="py-16 md:py-24">
+      <div className="container">
+        <div className="mb-12 max-w-2xl">
           {section.label && (
             <Badge variant="outline" className="mb-4">
               {section.label}
@@ -27,14 +27,14 @@ export default function Feature3({ section }: { section: SectionType }) {
         </div>
         <div>
           <Tabs defaultValue="tab-1">
-            <TabsList className="relative grid items-start gap-6 lg:grid-cols-4">
+            <TabsList className="relative grid h-auto w-full items-start gap-4 bg-transparent p-0 lg:grid-cols-4">
               <div className="absolute left-4 right-0 top-[30px] -z-10 hidden h-px bg-input lg:block"></div>
               {section.items?.map((item, index) => {
                 return (
                   <TabsTrigger
                     key={index}
                     value={`tab-${index + 1}`}
-                    className="group pointer-events-none lg:pointer-events-auto"
+                    className="group h-auto w-full justify-start p-0 text-left data-[state=active]:shadow-none"
                   >
                     <div className="flex gap-4 rounded-md px-8 py-4 text-left hover:bg-muted/50 lg:block lg:px-4">
                       <div className="flex flex-col items-center lg:contents">
@@ -47,7 +47,7 @@ export default function Feature3({ section }: { section: SectionType }) {
                         <h3 className="mb-1 font-medium lg:mt-4">
                           {item.title}
                         </h3>
-                        <p className="text-sm">{item.description}</p>
+                        <p className="text-sm text-muted-foreground">{item.description}</p>
                       </div>
                     </div>
                     {item.image && (
@@ -80,7 +80,7 @@ export default function Feature3({ section }: { section: SectionType }) {
                         src={item.image.src}
                         alt={item.image.alt || item.title}
                         className="h-full w-full rounded-xl border object-cover shadow-sm"
-                        style={{width: '100%', height: 'auto'}}
+                        style={{ width: "100%", height: "auto" }}
                       />
                     )}
                   </TabsContent>

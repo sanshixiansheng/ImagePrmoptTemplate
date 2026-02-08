@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -183,10 +183,10 @@ export default function TextToPromptPage() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-purple-50/20 dark:to-purple-950/10">
+      <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
         <div className="container mx-auto px-4 py-8">
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
           </div>
         </div>
       </div>
@@ -194,7 +194,7 @@ export default function TextToPromptPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-purple-50/20 dark:to-purple-950/10">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold mb-4 text-foreground">{t("title")}</h1>
@@ -210,7 +210,7 @@ export default function TextToPromptPage() {
               <TabsList className="bg-card p-1 border border-border">
                 <TabsTrigger
                   value="image-to-prompt"
-                  className="data-[state=active]:bg-purple-600 data-[state=active]:text-white px-6 py-2.5 rounded-md transition-all flex items-center gap-2"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white px-6 py-2.5 rounded-md transition-all flex items-center gap-2"
                   onClick={() => router.push(`/${locale}/image-to-prompt`)}
                 >
                   <ImageIcon className="h-4 w-4" />
@@ -218,7 +218,7 @@ export default function TextToPromptPage() {
                 </TabsTrigger>
                 <TabsTrigger
                   value="text-to-prompt"
-                  className="data-[state=active]:bg-purple-600 data-[state=active]:text-white px-6 py-2.5 rounded-md transition-all flex items-center gap-2"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white px-6 py-2.5 rounded-md transition-all flex items-center gap-2"
                 >
                   <FileText className="h-4 w-4" />
                   {t("tab_text_to_prompt")}
@@ -238,17 +238,17 @@ export default function TextToPromptPage() {
                   value={textPrompt}
                   onChange={(e) => setTextPrompt(e.target.value)}
                   maxLength={2048}
-                  className="h-full resize-none border-purple-300 dark:border-purple-700 focus:border-purple-500 focus:ring-purple-500 text-sm"
+                  className="h-full resize-none border-border dark:border-border focus:border-primary focus:ring-primary text-sm"
                 />
                 {!textPrompt && (
                   <div className="absolute top-3 left-3 right-3 pointer-events-none text-muted-foreground dark:text-muted-foreground">
                     <p className="text-xs mb-2">{t("prompt_placeholder")}</p>
                     <p className="text-xs font-medium mb-1.5">{t("tips_label")}</p>
                     <ul className="text-xs space-y-1">
-                      <li>• {t("tip1")}</li>
-                      <li>• {t("tip2")}</li>
-                      <li>• {t("tip3")}</li>
-                      <li>• {t("tip4")}</li>
+                      <li>- {t("tip1")}</li>
+                      <li>- {t("tip2")}</li>
+                      <li>- {t("tip3")}</li>
+                      <li>- {t("tip4")}</li>
                     </ul>
                   </div>
                 )}
@@ -261,7 +261,7 @@ export default function TextToPromptPage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-purple-300 dark:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all hover:scale-105 text-xs h-8 px-3"
+                  className="border-border dark:border-border hover:bg-muted dark:hover:bg-muted transition-all hover:scale-105 text-xs h-8 px-3"
                   onClick={handleMagicEnhance}
                   disabled={isProcessing || !textPrompt.trim()}
                 >
@@ -281,7 +281,7 @@ export default function TextToPromptPage() {
                 {/* <Button
                   variant="outline"
                   size="sm"
-                  className="border-purple-300 dark:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all hover:scale-105 text-xs h-8 px-3"
+                  className="border-border dark:border-border hover:bg-muted dark:hover:bg-muted transition-all hover:scale-105 text-xs h-8 px-3"
                   onClick={() => setIsEditDialogOpen(true)}
                   disabled={isProcessing || !textPrompt.trim()}
                 >
@@ -291,7 +291,7 @@ export default function TextToPromptPage() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="border-purple-300 dark:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all hover:scale-105 text-xs h-8 px-3"
+                  className="border-border dark:border-border hover:bg-muted dark:hover:bg-muted transition-all hover:scale-105 text-xs h-8 px-3"
                   onClick={() => setIsTranslateDialogOpen(true)}
                   disabled={isProcessing || !textPrompt.trim()}
                 >
@@ -305,7 +305,7 @@ export default function TextToPromptPage() {
             <div className="hidden lg:flex items-center justify-center px-2">
               <div className={`text-2xl font-bold transition-all duration-500 ${
                 isProcessing
-                  ? 'text-purple-600 dark:text-purple-400 animate-pulse'
+                  ? 'text-primary dark:text-primary animate-pulse'
                   : 'text-gray-300 dark:text-gray-700'
               }`}>
                 &gt;&gt;
@@ -321,7 +321,7 @@ export default function TextToPromptPage() {
                     size="sm"
                     variant="outline"
                     onClick={handleCopyResultPrompt}
-                    className="hover:bg-purple-50 dark:hover:bg-purple-900/20 h-8 text-xs px-3"
+                    className="hover:bg-muted dark:hover:bg-muted h-8 text-xs px-3"
                   >
                     <Copy className="h-3 w-3 mr-1.5" />
                     {t("copy")}
@@ -330,7 +330,7 @@ export default function TextToPromptPage() {
               </div>
               <div className="h-[280px] overflow-y-auto p-3 bg-muted/10/50 rounded-lg border border-border transition-all duration-300">
                 {isProcessing ? (
-                  <div className="flex flex-col items-center justify-center h-full text-purple-600 dark:text-purple-400">
+                  <div className="flex flex-col items-center justify-center h-full text-primary dark:text-primary">
                     <Loader2 className="h-10 w-10 mb-3 animate-spin" />
                     <p className="text-sm font-medium">{t("processing_message")}</p>
                     <p className="text-xs text-muted-foreground mt-2">{t("processing_wait")}</p>
@@ -369,7 +369,7 @@ export default function TextToPromptPage() {
                       onClick={() => {
                         router.push(`/${locale}/txt-to-image/nano-banana?prompt=${encodeURIComponent(resultPrompt)}`);
                       }}
-                      className="flex-1 bg-purple-600 hover:bg-purple-700 text-white text-xs h-8 px-3"
+                      className="flex-1 bg-primary hover:bg-primary/90 text-white text-xs h-8 px-3"
                     >
                       {t("generate_image")}
                     </Button>
@@ -389,7 +389,7 @@ export default function TextToPromptPage() {
             </p>
 
             {/* Magic Enhance Section */}
-            <div className="mb-16 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/30 dark:to-pink-950/30 rounded-3xl p-8 md:p-12">
+            <div className="mb-16 bg-gradient-to-br from-muted to-muted dark:from-muted dark:to-muted rounded-3xl p-8 md:p-12">
               <h3 className="text-3xl font-bold mb-4 text-center text-foreground">{t("magic_enhance")}</h3>
               <p className="text-center text-muted-foreground mb-8">
                 {t("magic_enhance_desc")}
@@ -398,15 +398,15 @@ export default function TextToPromptPage() {
               <div className="grid md:grid-cols-2 gap-8 items-center">
                 <div className="bg-card rounded-2xl p-6 shadow-lg">
                   <div className="space-y-4">
-                    <div className="border-2 border-dashed border-purple-200 dark:border-purple-800 rounded-lg p-4">
+                    <div className="border-2 border-dashed border-border dark:border-border rounded-lg p-4">
                       <p className="text-sm font-medium text-muted-foreground mb-2">{t("example_original")}</p>
                       <p className="text-sm">{t("example_input")}</p>
                     </div>
                     <div className="flex justify-center">
-                      <div className="text-2xl text-purple-600">↓</div>
+                      <div className="text-2xl text-primary">-&gt;</div>
                     </div>
-                    <div className="bg-purple-100 dark:bg-purple-900/30 rounded-lg p-4">
-                      <p className="text-xs font-medium text-purple-600 dark:text-purple-400 mb-2">{t("example_after_enhance")}</p>
+                    <div className="bg-primary/10 dark:bg-primary/20 rounded-lg p-4">
+                      <p className="text-xs font-medium text-primary dark:text-primary mb-2">{t("example_after_enhance")}</p>
                       <p className="text-xs leading-relaxed">{t("example_output")}</p>
                     </div>
                   </div>
@@ -414,25 +414,25 @@ export default function TextToPromptPage() {
 
                 <div className="space-y-4">
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">1</div>
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">1</div>
                     <div>
                       <p className="font-medium">{t("step1")}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">2</div>
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">2</div>
                     <div>
                       <p className="font-medium">{t("step2")}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">3</div>
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">3</div>
                     <div>
                       <p className="font-medium">{t("step3")}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold">4</div>
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold">4</div>
                     <div>
                       <p className="font-medium">{t("step4")}</p>
                     </div>
@@ -460,7 +460,7 @@ export default function TextToPromptPage() {
                       </div>
                     </div>
                     <div className="flex justify-center">
-                      <div className="text-2xl text-blue-600">↓</div>
+                      <div className="text-2xl text-blue-600">-&gt;</div>
                     </div>
                     <div className="bg-blue-100 dark:bg-blue-900/30 rounded-lg p-4">
                       <p className="text-xs font-medium text-blue-600 dark:text-blue-400 mb-2">{t("edit_example_after")}</p>
@@ -519,7 +519,7 @@ export default function TextToPromptPage() {
                       <p className="text-xs leading-relaxed">{t("translate_example_input")}</p>
                     </div>
                     <div className="flex justify-center">
-                      <div className="text-2xl text-green-600">↓</div>
+                      <div className="text-2xl text-green-600">-&gt;</div>
                     </div>
                     <div className="bg-green-100 dark:bg-green-900/30 rounded-lg p-4">
                       <p className="text-xs font-medium text-green-600 dark:text-green-400 mb-2">{t("translate_example_after")}</p>
@@ -575,7 +575,7 @@ export default function TextToPromptPage() {
               <details className="group bg-card rounded-xl border border-border">
                 <summary className="font-medium text-base cursor-pointer list-none flex items-center justify-between px-5 py-4 hover:bg-muted/20 transition-colors rounded-xl">
                   {t("faq1_q")}
-                  <span className="ml-2 text-muted-foreground transform group-open:rotate-180 transition-transform">▼</span>
+                  <span className="ml-2 text-muted-foreground transform group-open:rotate-180 transition-transform">v</span>
                 </summary>
                 <div className="px-5 pb-4 pt-2 text-sm text-muted-foreground border-t border-gray-100 dark:border-gray-700">
                   {t("faq1_a")}
@@ -585,7 +585,7 @@ export default function TextToPromptPage() {
               <details className="group bg-card rounded-xl border border-border">
                 <summary className="font-medium text-base cursor-pointer list-none flex items-center justify-between px-5 py-4 hover:bg-muted/20 transition-colors rounded-xl">
                   {t("faq2_q")}
-                  <span className="ml-2 text-muted-foreground transform group-open:rotate-180 transition-transform">▼</span>
+                  <span className="ml-2 text-muted-foreground transform group-open:rotate-180 transition-transform">v</span>
                 </summary>
                 <div className="px-5 pb-4 pt-2 text-sm text-muted-foreground border-t border-gray-100 dark:border-gray-700">
                   {t("faq2_a")}
@@ -595,7 +595,7 @@ export default function TextToPromptPage() {
               <details className="group bg-card rounded-xl border border-border">
                 <summary className="font-medium text-base cursor-pointer list-none flex items-center justify-between px-5 py-4 hover:bg-muted/20 transition-colors rounded-xl">
                   {t("faq3_q")}
-                  <span className="ml-2 text-muted-foreground transform group-open:rotate-180 transition-transform">▼</span>
+                  <span className="ml-2 text-muted-foreground transform group-open:rotate-180 transition-transform">v</span>
                 </summary>
                 <div className="px-5 pb-4 pt-2 text-sm text-muted-foreground border-t border-gray-100 dark:border-gray-700">
                   {t("faq3_a")}
@@ -605,7 +605,7 @@ export default function TextToPromptPage() {
               <details className="group bg-card rounded-xl border border-border">
                 <summary className="font-medium text-base cursor-pointer list-none flex items-center justify-between px-5 py-4 hover:bg-muted/20 transition-colors rounded-xl">
                   {t("faq4_q")}
-                  <span className="ml-2 text-muted-foreground transform group-open:rotate-180 transition-transform">▼</span>
+                  <span className="ml-2 text-muted-foreground transform group-open:rotate-180 transition-transform">v</span>
                 </summary>
                 <div className="px-5 pb-4 pt-2 text-sm text-muted-foreground border-t border-gray-100 dark:border-gray-700">
                   {t("faq4_a")}
@@ -619,7 +619,7 @@ export default function TextToPromptPage() {
             <DialogContent className="sm:max-w-[525px]">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2 text-xl">
-                  <Edit className="h-5 w-5 text-purple-600" />
+                  <Edit className="h-5 w-5 text-primary" />
                   {t("edit_with_ai")}
                 </DialogTitle>
                 <DialogDescription className="text-base pt-2">
@@ -634,7 +634,7 @@ export default function TextToPromptPage() {
                   placeholder={t("edit_instruction_placeholder")}
                   value={editInstruction}
                   onChange={(e) => setEditInstruction(e.target.value)}
-                  className="min-h-[120px] focus:border-purple-500 focus:ring-purple-500"
+                  className="min-h-[120px] focus:border-primary focus:ring-primary"
                   autoFocus
                 />
                 <p className="text-xs text-muted-foreground mt-2">
@@ -655,7 +655,7 @@ export default function TextToPromptPage() {
                 <Button
                   onClick={handleEditWithAI}
                   disabled={!editInstruction.trim()}
-                  className="flex-1 sm:flex-none bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all"
+                  className="flex-1 sm:flex-none bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-white shadow-lg hover:shadow-xl transition-all"
                 >
                   <Wand2 className="h-4 w-4 mr-2" />
                   {t("apply_edit")}
@@ -669,7 +669,7 @@ export default function TextToPromptPage() {
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2 text-xl">
-                  <Globe className="h-5 w-5 text-purple-600" />
+                  <Globe className="h-5 w-5 text-primary" />
                   {t("translate_dialog_title")}
                 </DialogTitle>
                 <DialogDescription className="text-base pt-2">
@@ -681,21 +681,21 @@ export default function TextToPromptPage() {
                   {t("target_language")}
                 </label>
                 <Select value={targetLanguage} onValueChange={setTargetLanguage}>
-                  <SelectTrigger className="w-full h-11 focus:ring-purple-500">
+                  <SelectTrigger className="w-full h-11 focus:ring-primary">
                     <SelectValue placeholder="Select language" />
                   </SelectTrigger>
                   <SelectContent className="max-h-[300px]">
-                    <SelectItem value="en">🇬🇧 English</SelectItem>
-                    <SelectItem value="zh">🇨🇳 中文 (Chinese)</SelectItem>
-                    <SelectItem value="es">🇪🇸 Español (Spanish)</SelectItem>
-                    <SelectItem value="fr">🇫🇷 Français (French)</SelectItem>
-                    <SelectItem value="de">🇩🇪 Deutsch (German)</SelectItem>
-                    <SelectItem value="ja">🇯🇵 日本語 (Japanese)</SelectItem>
-                    <SelectItem value="ko">🇰🇷 한국어 (Korean)</SelectItem>
-                    <SelectItem value="pt">🇵🇹 Português (Portuguese)</SelectItem>
-                    <SelectItem value="ru">🇷🇺 Русский (Russian)</SelectItem>
-                    <SelectItem value="ar">🇸🇦 العربية (Arabic)</SelectItem>
-                    <SelectItem value="it">🇮🇹 Italiano (Italian)</SelectItem>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="zh">Chinese</SelectItem>
+                    <SelectItem value="es">Spanish</SelectItem>
+                    <SelectItem value="fr">French</SelectItem>
+                    <SelectItem value="de">German</SelectItem>
+                    <SelectItem value="ja">Japanese</SelectItem>
+                    <SelectItem value="ko">Korean</SelectItem>
+                    <SelectItem value="pt">Portuguese</SelectItem>
+                    <SelectItem value="ru">Russian</SelectItem>
+                    <SelectItem value="ar">Arabic</SelectItem>
+                    <SelectItem value="it">Italian</SelectItem>
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground mt-2">
@@ -712,7 +712,7 @@ export default function TextToPromptPage() {
                 </Button>
                 <Button
                   onClick={handleTranslate}
-                  className="flex-1 sm:flex-none bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg hover:shadow-xl transition-all"
+                  className="flex-1 sm:flex-none bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-white shadow-lg hover:shadow-xl transition-all"
                 >
                   <Globe className="h-4 w-4 mr-2" />
                   {t("translate")}
@@ -725,7 +725,7 @@ export default function TextToPromptPage() {
           <div className="mt-16 text-center">
             <p className="text-muted-foreground mb-2">
               {t("cta_text")}{" "}
-              <Link href={`/${locale}/image-to-prompt`} className="text-purple-600 hover:underline font-medium">
+              <Link href={`/${locale}/image-to-prompt`} className="text-primary hover:underline font-medium">
                 {t("cta_link")}
               </Link>
             </p>
@@ -745,3 +745,6 @@ export default function TextToPromptPage() {
     </div>
   );
 }
+
+
+

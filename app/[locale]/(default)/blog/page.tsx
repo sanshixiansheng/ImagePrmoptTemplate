@@ -24,31 +24,30 @@ export default function BlogPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-muted/10">
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-5xl mx-auto">
-          {/* Header */}
-          <div className="text-center mb-12">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <BookOpen className="h-8 w-8 text-blue-500" />
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground">{t('title')}</h1>
+    <div className="min-h-screen bg-card">
+      <div className="container py-14 md:py-16 lg:py-20">
+        <div className="mx-auto max-w-5xl">
+          <div className="mb-12 text-center">
+            <div className="mb-4 inline-flex items-center justify-center gap-2 rounded-full bg-muted px-4 py-1.5 text-sm font-medium text-foreground/80">
+              <BookOpen className="h-4 w-4 text-primary" />
+              <span>Blog</span>
             </div>
-            <p className="text-lg text-muted-foreground">
-              {t('subtitle')}
-            </p>
+            <div className="flex items-center justify-center gap-2">
+              <h1 className="font-serif text-4xl font-medium text-foreground md:text-5xl">{t('title')}</h1>
+            </div>
+            <p className="mt-4 text-lg text-foreground/65">{t('subtitle')}</p>
           </div>
 
-          {/* Articles Grid */}
           <div className="grid gap-6">
             {articles.map((article) => (
-              <Card key={article.slug} className="p-8 hover:shadow-lg transition-shadow">
+              <Card key={article.slug} className="rounded-3xl border-border/70 bg-background p-8 shadow-sm transition-shadow hover:shadow-lg">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-3">
-                      <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-sm font-medium rounded-full">
+                      <span className="rounded-full bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
                         {article.category}
                       </span>
-                      <span className="text-sm text-muted-foreground">
+                      <span className="text-sm text-foreground/60">
                         {new Date(article.date).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'long',
@@ -56,12 +55,12 @@ export default function BlogPage() {
                         })}
                       </span>
                     </div>
-                    <h2 className="text-2xl font-bold mb-3 text-foreground">{article.title}</h2>
-                    <p className="text-muted-foreground mb-4">
+                    <h2 className="mb-3 font-serif text-2xl font-medium text-foreground">{article.title}</h2>
+                    <p className="mb-4 text-foreground/70">
                       {article.description}
                     </p>
                   </div>
-                  <Button asChild className="bg-blue-500 hover:bg-blue-600 gap-2">
+                  <Button asChild className="gap-2">
                     <Link href={`/${locale}/blog/${article.slug}`}>
                       {t('read_more')}
                       <ArrowRight className="h-4 w-4" />
@@ -72,8 +71,7 @@ export default function BlogPage() {
             ))}
           </div>
 
-          {/* Empty State for Future Articles */}
-          <div className="mt-12 text-center text-muted-foreground">
+          <div className="mt-12 text-center text-foreground/60">
             <p>{t('more_coming')}</p>
           </div>
         </div>

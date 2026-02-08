@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 /* eslint-disable react/no-unescaped-entities */
 import React from "react";
@@ -108,7 +108,7 @@ export default function WhatIsAnImagePromptPage() {
 
                 <Card className="p-6">
                   <h3 className="text-xl font-semibold mb-3 flex items-center gap-2 text-foreground">
-                    <CheckCircle2 className="h-5 w-5 text-purple-500" />
+                    <CheckCircle2 className="h-5 w-5 text-primary" />
                     {t('components.lighting.title')}
                   </h3>
                   <p className="text-foreground leading-relaxed">
@@ -118,7 +118,7 @@ export default function WhatIsAnImagePromptPage() {
 
                 <Card className="p-6">
                   <h3 className="text-xl font-semibold mb-3 flex items-center gap-2 text-foreground">
-                    <CheckCircle2 className="h-5 w-5 text-pink-500" />
+                    <CheckCircle2 className="h-5 w-5 text-primary" />
                     {t('components.colors.title')}
                   </h3>
                   <p className="text-foreground leading-relaxed">
@@ -158,7 +158,7 @@ export default function WhatIsAnImagePromptPage() {
                     </p>
                   </div>
 
-                  <div className="border-l-4 border-purple-500 pl-4">
+                  <div className="border-l-4 border-primary pl-4">
                     <p className="font-semibold mb-2">{t('examples.advanced.label')}</p>
                     <p className="text-foreground italic">
                       "{t('examples.advanced.prompt')}"
@@ -179,27 +179,27 @@ export default function WhatIsAnImagePromptPage() {
                     <h2 className="text-2xl font-bold mb-4 text-foreground">{t('bestPractices.title')}</h2>
                     <ul className="space-y-3 text-foreground">
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 font-bold">•</span>
+                        <span className="text-primary font-bold">•</span>
                         <span dangerouslySetInnerHTML={{ __html: t.raw('bestPractices.tip1') }} />
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 font-bold">•</span>
+                        <span className="text-primary font-bold">•</span>
                         <span dangerouslySetInnerHTML={{ __html: t.raw('bestPractices.tip2') }} />
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 font-bold">•</span>
+                        <span className="text-primary font-bold">•</span>
                         <span dangerouslySetInnerHTML={{ __html: t.raw('bestPractices.tip3') }} />
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 font-bold">•</span>
+                        <span className="text-primary font-bold">•</span>
                         <span dangerouslySetInnerHTML={{ __html: t.raw('bestPractices.tip4') }} />
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 font-bold">•</span>
+                        <span className="text-primary font-bold">•</span>
                         <span dangerouslySetInnerHTML={{ __html: t.raw('bestPractices.tip5') }} />
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-blue-500 font-bold">•</span>
+                        <span className="text-primary font-bold">•</span>
                         <span dangerouslySetInnerHTML={{ __html: t.raw('bestPractices.tip6') }} />
                       </li>
                     </ul>
@@ -248,3 +248,5 @@ export default function WhatIsAnImagePromptPage() {
     </div>
   );
 }
+
+

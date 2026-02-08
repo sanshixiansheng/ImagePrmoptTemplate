@@ -9,7 +9,7 @@ export default function MarkdownEditor({
   onChange: (value: string) => void;
 }) {
   return (
-    <div className="w-full md:w-[800px]">
+    <div className="w-full rounded-xl border border-border/60 bg-card p-2 shadow-sm md:w-[800px]">
       <MDEditor
         value={value}
         onChange={(val) => onChange(val || "")}

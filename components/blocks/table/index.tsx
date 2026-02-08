@@ -27,7 +27,7 @@ export default function TableComponent({
   }
 
   return (
-    <Table className="w-full">
+    <Table className="w-full rounded-xl border border-border/60 bg-card shadow-sm">
       <TableHeader className="">
         <TableRow className="rounded-md">
           {columns &&
@@ -101,7 +101,7 @@ export default function TableComponent({
         ) : (
           <TableRow className="">
             <TableCell colSpan={columns.length}>
-              <div className="flex w-full justify-center items-center py-8 text-muted-foreground">
+              <div className="flex w-full items-center justify-center py-10 text-muted-foreground">
                 <p>{emptyMessage}</p>
               </div>
             </TableCell>

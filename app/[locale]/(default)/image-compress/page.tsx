@@ -30,7 +30,7 @@ export default function ImageCompressPage() {
   const [progress, setProgress] = useState(0);
   const [currentFile, setCurrentFile] = useState("");
 
-  // 鍓嶇WebP鍘嬬缉
+  // Client-side WebP compression
   const compressImageToWebP = async (file: File): Promise<Blob> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -83,7 +83,7 @@ export default function ImageCompressPage() {
     });
   };
 
-  // 鍚庣API鍘嬬缉锛圥NG/JPEG锛?
+  // Backend API compression (PNG/JPEG)
   const compressImageViaAPI = async (file: File, format: "png" | "jpeg"): Promise<{ blob: Blob; compressedSize: number; compressedUrl: string }> => {
     const reader = new FileReader();
     const base64 = await new Promise<string>((resolve, reject) => {
@@ -112,14 +112,14 @@ export default function ImageCompressPage() {
 
     const result = await response.json();
 
-    // 妫€鏌ヨ繑鍥炵殑鏁版嵁缁撴瀯 (code 1000 琛ㄧず鎴愬姛)
+    // Validate response payload structure (code 1000 means success)
     if (result.code !== 1000 && result.code !== 0) {
       throw new Error(result.message || 'API returned error');
     }
 
     const data = result.data;
 
-    // 鐩存帴涓嬭浇鍘嬬缉鍚庣殑鍥剧墖锛岄€氳繃浠ｇ悊API
+    // Download compressed image through proxy API
     if (data.compressedUrl) {
       const proxyUrl = `/api/image-download?url=${encodeURIComponent(data.compressedUrl)}`;
       const imageResponse = await fetch(proxyUrl);
@@ -143,7 +143,7 @@ export default function ImageCompressPage() {
         compressedUrl: blobUrl
       };
     } else if (data.imageBase64) {
-      // 濡傛灉杩斿洖base64锛岃浆鎹负blob
+      // If API returns base64, convert it to blob
       const base64Data = data.imageBase64.split(',')[1];
       const byteCharacters = atob(base64Data);
       const byteNumbers = new Array(byteCharacters.length);
@@ -164,11 +164,11 @@ export default function ImageCompressPage() {
   };
 
   const compressImage = async (file: File, format: OutputFormat): Promise<{ blob: Blob; compressedSize: number; compressedUrl: string }> => {
-    // 纭畾鐩爣鏍煎紡
+    // Determine target output format
     let targetFormat: "webp" | "png" | "jpeg" = "webp";
 
     if (format === "auto") {
-      // auto妯″紡锛氫繚鎸佸師鏍煎紡
+      // auto mode: keep original format
       if (file.type === "image/png") {
         targetFormat = "png";
       } else if (file.type === "image/jpeg" || file.type === "image/jpg") {
@@ -180,14 +180,14 @@ export default function ImageCompressPage() {
       targetFormat = format as "webp" | "png" | "jpeg";
     }
 
-    // WebP浣跨敤鍓嶇鍘嬬缉
+    // WebP uses client-side compression
     if (targetFormat === "webp") {
       const blob = await compressImageToWebP(file);
       const blobUrl = URL.createObjectURL(blob);
       return { blob, compressedSize: blob.size, compressedUrl: blobUrl };
     }
 
-    // PNG/JPEG浣跨敤鍚庣API鍘嬬缉
+    // PNG/JPEG uses backend API compression
     return await compressImageViaAPI(file, targetFormat);
   };
 
@@ -212,47 +212,47 @@ export default function ImageCompressPage() {
     setProgress(0);
 
     const total = validFiles.length;
-    const minDurationPerFile = 3000; // 姣忎釜鏂囦欢鑷冲皯 3 绉?
-    const maxDurationPerFile = 5000; // 姣忎釜鏂囦欢鏈€澶?5 绉?
+    const minDurationPerFile = 3000; // Minimum 3s per file
+    const maxDurationPerFile = 5000; // Maximum 5s per file
 
     for (let i = 0; i < validFiles.length; i++) {
       const file = validFiles[i];
       setCurrentFile(file.name);
 
-      // 闅忔満閫夋嫨涓€涓寔缁椂闂达紙3-5绉掞級
+      // Random duration per file (3-5 seconds)
       const duration = Math.random() * (maxDurationPerFile - minDurationPerFile) + minDurationPerFile;
       const startTime = Date.now();
 
       try {
-        // 闃舵 1: 0-20% - 璇诲彇鏂囦欢
+        // Phase 1: 0-20% - read file
         setProgress(Math.round(((i) / total) * 100));
         await new Promise(resolve => setTimeout(resolve, duration * 0.2));
         setProgress(Math.round(((i) / total) * 100) + Math.round(20 / total));
 
-        // 闃舵 2: 20-50% - 寮€濮嬪帇缂?
+        // Phase 2: 20-50% - start compression
         const preview = URL.createObjectURL(file);
         await new Promise(resolve => setTimeout(resolve, duration * 0.15));
         setProgress(Math.round(((i) / total) * 100) + Math.round(35 / total));
 
-        // 闃舵 3: 50-80% - 鍘嬬缉澶勭悊涓?
+        // Phase 3: 50-80% - processing compression
         const compressPromise = compressImage(file, outputFormat);
         await new Promise(resolve => setTimeout(resolve, duration * 0.2));
         setProgress(Math.round(((i) / total) * 100) + Math.round(60 / total));
 
         const compressResult = await compressPromise;
 
-        // 闃舵 4: 80-95% - 鐢熸垚棰勮
+        // Phase 4: 80-95% - generate preview
         await new Promise(resolve => setTimeout(resolve, duration * 0.15));
         setProgress(Math.round(((i) / total) * 100) + Math.round(80 / total));
 
-        // 浣跨敤杩斿洖鐨?blob URL 浣滀负棰勮
+        // Use returned blob URL as preview
         const compressedPreview = compressResult.compressedUrl;
 
         const originalSize = file.size;
         const compressedSize = compressResult.compressedSize;
         const savings = Math.round(((originalSize - compressedSize) / originalSize) * 100);
 
-        // 闃舵 5: 95-100% - 瀹屾垚
+        // Phase 5: 95-100% - complete
         await new Promise(resolve => setTimeout(resolve, duration * 0.1));
 
         setImages((prev) => [
@@ -268,13 +268,13 @@ export default function ImageCompressPage() {
           },
         ]);
 
-        // 纭繚鑷冲皯缁忚繃浜嗘寚瀹氱殑鏃堕棿
+        // Ensure at least the target duration has elapsed
         const elapsed = Date.now() - startTime;
         if (elapsed < duration) {
           await new Promise(resolve => setTimeout(resolve, duration - elapsed));
         }
 
-        // 瀹屾垚褰撳墠鏂囦欢
+        // Finish current file
         setProgress(Math.round(((i + 1) / total) * 100));
         await new Promise(resolve => setTimeout(resolve, 300));
       } catch (error: any) {
@@ -316,7 +316,7 @@ export default function ImageCompressPage() {
     const originalName = image.original.name.replace(/\.[^/.]+$/, "");
     let extension = "png";
 
-    // 浠?blob type 鍒ゆ柇鏍煎紡
+    // Detect extension by blob MIME type
     if (image.compressed.type === "image/webp") {
       extension = "webp";
     } else if (image.compressed.type === "image/jpeg" || image.compressed.type === "image/jpg") {
@@ -325,7 +325,7 @@ export default function ImageCompressPage() {
       extension = "png";
     }
 
-    // 鐩存帴浣跨敤宸叉湁鐨?blob URL 涓嬭浇
+    // Directly download with existing blob URL
     const a = document.createElement("a");
     a.href = image.compressedPreview;
     a.download = `${originalName}-compressed.${extension}`;
@@ -348,7 +348,7 @@ export default function ImageCompressPage() {
       const newImages = [...prev];
       const removed = newImages.splice(index, 1)[0];
       URL.revokeObjectURL(removed.preview);
-      // 鍙竻鐞嗘湰鍦?blob URL锛屼笉娓呯悊杩滅▼ URL
+      // Revoke only local blob URLs; keep remote URLs untouched
       if (removed.compressedPreview && removed.compressedPreview.startsWith('blob:')) {
         URL.revokeObjectURL(removed.compressedPreview);
       }
@@ -359,7 +359,7 @@ export default function ImageCompressPage() {
   const clearAll = () => {
     images.forEach((image) => {
       URL.revokeObjectURL(image.preview);
-      // 鍙竻鐞嗘湰鍦?blob URL锛屼笉娓呯悊杩滅▼ URL
+      // Revoke only local blob URLs; keep remote URLs untouched
       if (image.compressedPreview && image.compressedPreview.startsWith('blob:')) {
         URL.revokeObjectURL(image.compressedPreview);
       }

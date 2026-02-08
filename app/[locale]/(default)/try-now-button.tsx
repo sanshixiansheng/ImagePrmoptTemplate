@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -12,10 +12,11 @@ export function TryNowButton({ label }: { label: string }) {
     >
       <Button
         size="lg"
-        className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-6 text-lg rounded-full"
+        className="bg-primary hover:bg-primary/90 text-white px-8 py-6 text-lg rounded-full"
       >
         {label}
       </Button>
     </Link>
   );
 }
+

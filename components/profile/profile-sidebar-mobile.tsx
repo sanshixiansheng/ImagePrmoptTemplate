@@ -41,15 +41,15 @@ export function ProfileSidebarMobile({
     <div className="md:hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-slate-900 border border-slate-800 rounded-lg text-white"
+        className="w-full flex items-center justify-between px-4 py-3 bg-card border border-border rounded-lg text-foreground"
       >
         <div className="flex items-center gap-3">
-          <ActiveIcon className="h-5 w-5 text-violet-400" />
+          <ActiveIcon className="h-5 w-5 text-primary" />
           <span className="font-medium">{activeItem.label}</span>
         </div>
         <ChevronDown
           className={cn(
-            'h-5 w-5 text-slate-300 transition-transform',
+            'h-5 w-5 text-muted-foreground transition-transform',
             isOpen && 'rotate-180'
           )}
         />
@@ -71,8 +71,8 @@ export function ProfileSidebarMobile({
                 className={cn(
                   'w-full flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors',
                   isActive
-                    ? 'bg-slate-800 text-violet-400 border-l-2 border-violet-500'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                    ? 'bg-primary/10 text-primary border-l-2 border-primary'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                 )}
               >
                 <Icon className="h-5 w-5" />

@@ -10,23 +10,23 @@ export default function AffiliatePage() {
   const t = useTranslations("affiliateProgram");
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen bg-card">
+      <div className="container py-14 md:py-16 lg:py-20">
+        <div className="mx-auto max-w-5xl">
           {/* Header */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">{t("title")}</h1>
-            <p className="text-xl text-muted-foreground">
+            <h1 className="mb-4 font-serif text-4xl font-medium text-foreground md:text-5xl">{t("title")}</h1>
+            <p className="text-xl text-foreground/65">
               {t("subtitle")}
             </p>
           </div>
 
           {/* Commission Highlight */}
           <section className="mb-12">
-            <Card className="p-8 text-center">
-              <DollarSign className="h-16 w-16 mx-auto mb-4 text-blue-500" />
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">{t("commission_title")}</h2>
-              <p className="text-xl text-muted-foreground">
+            <Card className="rounded-3xl border-border/70 bg-background p-8 text-center">
+              <DollarSign className="mx-auto mb-4 h-16 w-16 text-primary" />
+              <h2 className="mb-4 font-serif text-3xl font-medium text-foreground md:text-4xl">{t("commission_title")}</h2>
+              <p className="text-xl text-foreground/65">
                 {t("commission_desc")}
               </p>
             </Card>

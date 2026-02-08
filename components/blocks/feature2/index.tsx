@@ -43,9 +43,9 @@ export default function Feature2({ section }: { section: SectionType }) {
   }
 
   return (
-    <section id={section.name} className="py-32">
+    <section id={section.name} className="py-16 md:py-24">
       <div className="container">
-        <div className="mx-auto grid gap-20 lg:grid-cols-2">
+        <div className="mx-auto grid gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
             {section.label && (
               <Badge variant="outline" className="mb-4">
@@ -63,7 +63,6 @@ export default function Feature2({ section }: { section: SectionType }) {
               value={currentAccordion}
               onValueChange={(value) => {
                 setCurrentAccordion(value);
-                console.log(value);
                 api?.scrollTo(+value - 1);
               }}
             >
@@ -71,7 +70,7 @@ export default function Feature2({ section }: { section: SectionType }) {
                 <AccordionItem
                   key={i}
                   value={(i + 1).toString()}
-                  className="border-b-0 border-secondary"
+                  className="rounded-xl border border-border/50 bg-card/50 px-3 mb-3"
                 >
                   <AccordionTrigger className="text-left data-[state=closed]:text-muted-foreground">
                     <div className="flex items-center justify-between gap-2">
@@ -96,7 +95,7 @@ export default function Feature2({ section }: { section: SectionType }) {
                         style={{
                           animationDuration: `${DURATION}ms`,
                         }}
-                      ></div>
+                      />
                     </div>
                   </AccordionContent>
                 </AccordionItem>
@@ -118,7 +117,7 @@ export default function Feature2({ section }: { section: SectionType }) {
                       <img
                         src={item.image?.src}
                         alt={item.image?.alt || item.title}
-                        className="max-h-auto w-full object-cover lg:max-h-none rounded-md"
+                        className="w-full rounded-2xl border border-border/60 object-cover shadow-sm"
                       />
                     </div>
                   </CarouselItem>

@@ -44,9 +44,9 @@ export default function Header({ header }: { header: HeaderType }) {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/70 bg-background/92 backdrop-blur-md">
+    <header className="fixed top-0 left-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/85">
       <div className="container">
-        <div className="flex h-20 items-center gap-4">
+        <div className="flex h-20 items-center gap-6 transition-[padding] duration-200">
           <Link href={(header.brand?.url as any) || "/"} className="flex items-center gap-2">
             {header.brand?.logo?.src ? (
               <Image
@@ -61,14 +61,14 @@ export default function Header({ header }: { header: HeaderType }) {
             )}
           </Link>
 
-          <nav className="hidden flex-1 items-center justify-center gap-1 lg:flex">
+          <nav className="hidden flex-1 items-center justify-center gap-0.5 lg:flex">
             {navItems.map((item, i) => {
               const hasChildren = !!item.children?.length;
               if (hasChildren) {
                 return (
                   <DropdownMenu key={i}>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" className="h-9 rounded-lg px-3 text-sm font-medium text-foreground/80">
+                      <Button variant="ghost" className="h-9 rounded-md px-3 text-sm font-medium text-foreground/80">
                         {item.icon && <Icon name={item.icon} className="mr-1.5 size-4" />}
                         {item.title}
                         <ChevronDown className="ml-1.5 size-4" />
@@ -113,10 +113,10 @@ export default function Header({ header }: { header: HeaderType }) {
                   href={item.url as any}
                   target={item.target}
                   className={cn(
-                    "rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                    "rounded-md px-3 py-2 text-sm font-medium transition-colors",
                     pathname === item.url
-                      ? "bg-primary/10 text-primary"
-                      : "text-foreground/80 hover:bg-accent hover:text-foreground"
+                      ? "font-semibold text-foreground"
+                      : "text-foreground/75 hover:text-foreground"
                   )}
                 >
                   {item.icon && <Icon name={item.icon} className="mr-1.5 inline size-4" />}
@@ -126,14 +126,14 @@ export default function Header({ header }: { header: HeaderType }) {
             })}
           </nav>
 
-          <div className="hidden items-center gap-2 lg:flex">
+          <div className="hidden items-center gap-3 lg:flex">
             {header.show_theme && <ThemeToggle />}
             {header.show_locale && <LocaleToggle />}
 
             {session ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="h-10 w-10 rounded-full p-0">
+                    <Button variant="ghost" className="h-10 w-10 rounded-full p-0">
                     <Avatar className="h-10 w-10 border border-border">
                       <AvatarImage src={session.user?.image || ""} alt={session.user?.name || ""} />
                       <AvatarFallback>
@@ -184,7 +184,7 @@ export default function Header({ header }: { header: HeaderType }) {
           <div className="ml-auto lg:hidden">
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
-                <Button variant="outline" size="icon" aria-label="Open menu">
+                <Button variant="secondary" size="icon" aria-label="Open menu">
                   <Menu className="size-4" />
                 </Button>
               </SheetTrigger>

@@ -8,46 +8,46 @@ export default function Blog({ blog }: { blog: BlogType }) {
   }
 
   return (
-    <section className="w-full py-16">
-      <div className="container flex flex-col items-center gap-8 lg:px-16">
+    <section className="w-full py-16 md:py-24">
+      <div className="container flex flex-col items-center gap-8">
         <div className="text-center">
-          <p className="mb-6 text-xs font-medium uppercase tracking-wider">
+          <p className="mb-4 text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
             {blog.label}
           </p>
-          <h2 className="mb-3 text-pretty text-3xl font-semibold md:mb-4 md:text-4xl lg:mb-6 lg:max-w-3xl lg:text-5xl">
+          <h2 className="mb-3 text-pretty text-3xl font-semibold tracking-tight md:mb-4 md:text-4xl lg:mb-6 lg:max-w-3xl lg:text-5xl">
             {blog.title}
           </h2>
           <p className="mb-8 text-muted-foreground md:text-base lg:max-w-2xl lg:text-lg">
             {blog.description}
           </p>
         </div>
-        <div className="w-full flex flex-wrap items-start">
+        <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {blog.items?.map((item, idx) => (
             <a
               key={idx}
               href={item.url || `/${item.locale}/posts/${item.slug}`}
               target={item.target || "_self"}
-              className="w-full md:w-1/3 p-4"
+              className="group"
             >
-              <div className="flex flex-col overflow-clip rounded-xl border border-border">
+              <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm transition-all group-hover:-translate-y-0.5 group-hover:shadow-md">
                 {item.cover_url && (
                   <div>
                     <img
                       src={item.cover_url}
                       alt={item.title || ""}
-                      className="aspect-16/9 h-full w-full object-cover object-center"
+                      className="aspect-[16/9] h-full w-full object-cover object-center transition-transform duration-300 group-hover:scale-[1.02]"
                     />
                   </div>
                 )}
-                <div className="px-4 py-4 md:px-4 md:py-4 lg:px-4 lg:py-4">
-                  <h3 className="mb-3 text-lg font-semibold md:mb-4 md:text-xl lg:mb-6">
+                <div className="flex flex-1 flex-col px-5 py-5">
+                  <h3 className="mb-3 text-lg font-semibold md:text-xl">
                     {item.title}
                   </h3>
-                  <p className="mb-3 text-muted-foreground md:mb-4 lg:mb-6">
+                  <p className="mb-4 line-clamp-3 text-muted-foreground">
                     {item.description}
                   </p>
                   {blog.read_more_text && (
-                    <p className="flex items-center hover:underline">
+                    <p className="mt-auto flex items-center text-sm font-medium text-foreground group-hover:underline">
                       {blog.read_more_text}
                       <ArrowRight className="ml-2 size-4" />
                     </p>

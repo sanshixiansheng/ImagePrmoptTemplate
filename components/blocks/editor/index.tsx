@@ -5,11 +5,9 @@ import "@/components/blocks/editor/style.css";
 import { Color } from "@tiptap/extension-color";
 import ListItem from "@tiptap/extension-list-item";
 import TextStyle from "@tiptap/extension-text-style";
-import { EditorProvider, useCurrentEditor } from "@tiptap/react";
+import { EditorProvider } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import React from "react";
 import Menubar from "./menubar";
-import { Textarea } from "@/components/ui/textarea";
 
 const extensions = [
   Color.configure({ types: [TextStyle.name, ListItem.name] }),
@@ -34,7 +32,7 @@ export default function Editor({
   onChange: (value: string) => void;
 }) {
   return (
-    <div className="border rounded-md bg-background">
+    <div className="rounded-xl border border-border/60 bg-card shadow-sm">
       <EditorProvider
         slotBefore={<Menubar />}
         extensions={extensions}

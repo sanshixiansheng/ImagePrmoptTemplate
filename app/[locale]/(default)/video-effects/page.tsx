@@ -24,7 +24,7 @@ export default async function VideoEffectsPage({
   const { locale } = await params;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-purple-50 dark:to-purple-950/20">
+    <div className="min-h-screen bg-gradient-to-b from-background to-muted/30">
       {/* Header Section */}
       <section className="border-b border-border bg-background">
         <div className="container mx-auto px-4 py-6">
@@ -45,7 +45,7 @@ export default async function VideoEffectsPage({
               Generate Stunning Videos Online with AI Effects for Free
             </h2>
             <p className="text-lg text-muted-foreground">
-              Transform static images into stunning videos with Pixmind AI's innovative templates. Simply upload your photo, choose a professional AI effect, and create stunning videos in minutes鈥攏o experience needed. Start now!
+              Transform static images into stunning videos with Pixmind AI's innovative templates. Simply upload your photo, choose a professional AI effect, and create stunning videos in minutes - no experience needed. Start now!
             </p>
           </div>
 
@@ -58,7 +58,7 @@ export default async function VideoEffectsPage({
                   Boost Your Social Media Engagement with AI Fun Video Effects
                 </h3>
                 <p className="text-lg text-muted-foreground mb-6">
-                  Easily generate trending content in just minutes! Our AI entertainment effects鈥攊ncluding the AI dance video effect, AI twerk generator, and AI bikini video generator鈥攈elp you transform dull photos into hilarious and unique videos that can boost likes, comments, and follows across any social media platform!
+                  Easily generate trending content in just minutes! Our AI entertainment effects - including the AI dance video effect, AI twerk generator, and AI bikini video generator - help you transform dull photos into hilarious and unique videos that can boost likes, comments, and follows across any social media platform!
                 </p>
                 <Link href={`/${locale}/video-effects`}>
                   <Button size="lg" className="rounded-full px-8">
@@ -167,7 +167,7 @@ export default async function VideoEffectsPage({
       </section>
 
       {/* How It Works Section */}
-      <section className="py-16 bg-card/30">
+      <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-12">
             <h2 className="text-4xl font-semibold mb-6 text-foreground">
@@ -264,4 +264,5 @@ export default async function VideoEffectsPage({
     </div>
   );
 }
+
 

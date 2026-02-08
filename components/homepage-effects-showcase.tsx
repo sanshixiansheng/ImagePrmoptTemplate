@@ -57,7 +57,7 @@ export function HomepageEffectsShowcase({ locale }: { locale: string }) {
       const data = await response.json()
 
       if (data.effect_items) {
-        // 鍙彇鍓?涓壒鏁?
+        // Keep the first 8 effects for homepage.
         setEffects(data.effect_items.slice(0, 8))
       }
     } catch (error) {
@@ -133,7 +133,7 @@ export function HomepageEffectsShowcase({ locale }: { locale: string }) {
                     loading="lazy"
                   />
 
-                  {/* HOT 鏍囩 */}
+                  {/* HOT tag */}
                   {effect.marker === 'hot' && (
                     <span className="absolute top-2 left-2 text-white text-xs font-semibold px-2 py-0.5 rounded bg-red-500 shadow-sm z-10">
                       HOT
@@ -153,7 +153,7 @@ export function HomepageEffectsShowcase({ locale }: { locale: string }) {
                   <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-20">
                     <button
                       onClick={(e) => handleGoCreate(effect, e)}
-                      className="w-full py-1.5 px-3 bg-purple-600/60 hover:bg-purple-700/70 backdrop-blur-sm text-white text-xs font-medium rounded-md shadow-md transition-all hover:scale-105"
+                      className="w-full rounded-md bg-primary/85 px-3 py-1.5 text-xs font-medium text-white shadow-md backdrop-blur-sm transition-all hover:scale-105 hover:bg-primary"
                     >
                       {locale === 'zh' ? '开始创作' : 'Go Create'}
                     </button>
@@ -173,9 +173,9 @@ export function HomepageEffectsShowcase({ locale }: { locale: string }) {
           <Button
             size="lg"
             variant="outline"
-            className="px-8 py-6 text-lg rounded-full border-2"
+            className="rounded-full border-2 px-8 py-6 text-lg"
           >
-            Explore More AI Video Effects 鈫?
+            {locale === 'zh' ? '探索更多 AI 视频特效' : 'Explore More AI Video Effects ->'}
           </Button>
         </Link>
       </div>

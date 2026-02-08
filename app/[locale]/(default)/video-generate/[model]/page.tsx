@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 /* eslint-disable @next/next/no-img-element */
 
 import { useState, useEffect } from "react";
@@ -31,7 +31,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
-// Google 登录处理组件
+// Google auth handler
 function GoogleAuthHandler() {
   const [searchParams] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -41,7 +41,7 @@ function GoogleAuthHandler() {
   });
 
   useEffect(() => {
-    // 清除所有 Google OAuth 和登录相关的标志
+    // Clear all Google OAuth/login related flags
     sessionStorage.removeItem('google_oauth_in_progress');
     sessionStorage.removeItem('user_opened_sign_modal');
     
@@ -59,7 +59,7 @@ function GoogleAuthHandler() {
         loginTime: Date.now()
       }));
 
-      toast.success('登录成功！');
+      toast.success('Login successful');
 
       const newUrl = new URL(window.location.href);
       newUrl.searchParams.delete('auth_token');
@@ -105,15 +105,15 @@ interface VideoModel {
 
 export default function VideoGeneratePage() {
   const params = useParams();
-  const routeModel = params?.model as string || 'all'; // 获取路由中的模型参数
+  const routeModel = params?.model as string || 'all'; // route model param
   const t = useTranslations('video-generate');
   const { getCredits } = useConsumptionItems();
   const { data: session, status } = useSession();
 
-  // 通用状态
+  // 閫氱敤鐘舵€?
   const [isMounted, setIsMounted] = useState(false);
 
-  // Text to Video 状态
+  // Text to Video 鐘舵€?
   const [t2vPrompt, setT2vPrompt] = useState("");
   const [t2vModel, setT2vModel] = useState("");
   const [t2vDuration, setT2vDuration] = useState("5");
@@ -128,7 +128,7 @@ export default function VideoGeneratePage() {
   const [t2vTargetLanguage, setT2vTargetLanguage] = useState("en");
   const [isT2vProcessing, setIsT2vProcessing] = useState(false);
 
-  // Image to Video 状态
+  // Image to Video 鐘舵€?
   const [i2vPrompt, setI2vPrompt] = useState("");
   const [referenceImage, setReferenceImage] = useState<File | null>(null);
   const [referenceImagePreview, setReferenceImagePreview] = useState<string | null>(null);
@@ -148,17 +148,17 @@ export default function VideoGeneratePage() {
   const [i2vTargetLanguage, setI2vTargetLanguage] = useState("en");
   const [isI2vProcessing, setIsI2vProcessing] = useState(false);
 
-  // Video models 状态
+  // Video models 鐘舵€?
   const [videoModels, setVideoModels] = useState<VideoModel[]>([]);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
 
-  // 计算积分的辅助函数
+  // 璁＄畻绉垎鐨勮緟鍔╁嚱鏁?
   const calculateCredits = (model: string, duration: string, resolution: string, enableAudio: boolean) => {
     if (!model) return 0;
 
     const consumptionType = mapVideoModelToConsumptionType(model);
     if (!consumptionType) {
-      console.warn('[Credits] 未找到模型映射:', model);
+      console.warn('[Credits] model config not found:', model);
       return 0;
     }
 
@@ -171,16 +171,16 @@ export default function VideoGeneratePage() {
     return credits;
   };
 
-  // 根据路由参数过滤模型
+  // Filter models by route param
   const filteredVideoModels = videoModels.filter(m => {
-    if (routeModel === 'all') return true; // 'all' 显示所有模型
+    if (routeModel === 'all') return true; // 'all' shows all models
 
-    // doubao-seedance 页面：只显示 Seedance 相关模型
+    // doubao-seedance page: only show Seedance models
     if (routeModel === 'doubao-seedance') {
       return m.id.toLowerCase().includes('seedance');
     }
 
-    // veo/google-veo/veo-3 页面：显示所有 Evolink 视频模型
+    // veo/google-veo/veo-3 page: show Evolink video models
     if (routeModel === 'veo' || routeModel === 'google-veo' || routeModel === 'veo-3') {
       return m.id.toLowerCase().includes('sora') ||
              m.id.toLowerCase().includes('veo') ||
@@ -188,7 +188,7 @@ export default function VideoGeneratePage() {
              m.provider === 'evolink';
     }
 
-    // 其他路由：匹配模型 id 或 name 字段
+    // Other routes: match by model id or name
     return m.id.toLowerCase().includes(routeModel.toLowerCase()) ||
            m.name.toLowerCase().includes(routeModel.toLowerCase());
   });
@@ -197,37 +197,37 @@ export default function VideoGeneratePage() {
     setIsMounted(true);
   }, []);
 
-  // 获取视频模型列表
+  // Fetch video model list
   useEffect(() => {
     const fetchVideoModels = async () => {
       try {
         setIsLoadingModels(true);
-        console.log('[VideoModels] 开始获取模型列表');
+        console.log('[VideoModels] start fetching model list');
 
         const response = await fetch('/api/ai/video-models');
 
-        console.log('[VideoModels] API 响应状态:', response.status);
+        console.log('[VideoModels] API 鍝嶅簲鐘舵€?', response.status);
 
         if (!response.ok) {
-          console.error('[VideoModels] API 返回错误:', response.status, response.statusText);
+          console.error('[VideoModels] API 杩斿洖閿欒:', response.status, response.statusText);
           if (response.status === 401) {
-            console.error('[VideoModels] 需要登录才能获取模型列表');
+            console.error('[VideoModels] login required to fetch model list');
             return;
           }
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
         const result = await response.json();
-        console.log('[VideoModels] API 响应数据:', result);
+        console.log('[VideoModels] API 鍝嶅簲鏁版嵁:', result);
 
         if (result.code === 1000 && result.data && Array.isArray(result.data)) {
-          console.log('[VideoModels] 成功获取模型列表，数量:', result.data.length);
+          console.log('[VideoModels] model list fetched, count:', result.data.length);
           setVideoModels(result.data);
         } else {
-          console.error('[VideoModels] 获取模型列表失败:', result.message);
+          console.error('[VideoModels] failed to fetch model list:', result.message);
         }
       } catch (error) {
-        console.error('[VideoModels] 获取模型列表异常:', error);
+        console.error('[VideoModels] fetch model list exception:', error);
       } finally {
         setIsLoadingModels(false);
       }
@@ -236,35 +236,35 @@ export default function VideoGeneratePage() {
     fetchVideoModels();
   }, []);
 
-  // 当过滤后的模型列表变化时，设置默认选中第一个模型
+  // When filtered model list changes, set default selected model
   useEffect(() => {
     if (filteredVideoModels.length > 0 && !t2vModel && !i2vModel) {
       const defaultModelId = filteredVideoModels[0].id;
-      console.log('[VideoModels] 设置默认模型（过滤后）:', defaultModelId);
+      console.log('[VideoModels] default model set (filtered):', defaultModelId);
       setT2vModel(defaultModelId);
       setI2vModel(defaultModelId);
     }
   }, [filteredVideoModels, t2vModel, i2vModel]);
 
-  // 当 T2V 模型变化时，设置默认 duration
+  // When T2V model changes, set default duration
   useEffect(() => {
     if (t2vModel && videoModels.length > 0) {
       const model = videoModels.find(m => m.id === t2vModel);
       if (model?.supportedAspectDuration && model.supportedAspectDuration.length > 0) {
         const defaultDuration = String(model.supportedAspectDuration[0]);
-        console.log('[T2V] 设置默认 duration:', defaultDuration);
+        console.log('[T2V] 璁剧疆榛樿 duration:', defaultDuration);
         setT2vDuration(defaultDuration);
       }
     }
   }, [t2vModel, videoModels]);
 
-  // 当 I2V 模型变化时，设置默认 duration
+  // When I2V model changes, set default duration
   useEffect(() => {
     if (i2vModel && videoModels.length > 0) {
       const model = videoModels.find(m => m.id === i2vModel);
       if (model?.supportedAspectDuration && model.supportedAspectDuration.length > 0) {
         const defaultDuration = String(model.supportedAspectDuration[0]);
-        console.log('[I2V] 设置默认 duration:', defaultDuration);
+        console.log('[I2V] 璁剧疆榛樿 duration:', defaultDuration);
         setI2vDuration(defaultDuration);
       }
     }
@@ -290,7 +290,7 @@ export default function VideoGeneratePage() {
       return;
     }
 
-    // 先显示预览
+    // Show preview first
     setReferenceImage(file);
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -298,33 +298,33 @@ export default function VideoGeneratePage() {
     };
     reader.readAsDataURL(file);
 
-    // 上传到 COS
+    // 涓婁紶鍒?COS
     try {
       setIsUploadingImage(true);
       setUploadProgress(0);
       
-      console.log('[I2V] 开始上传图片到 COS...');
+      console.log('[I2V] start uploading image to COS...');
       const imageUrl = await cosUploadService.uploadFileWithRetry(
         file,
-        'video-generation/audio', // 使用视频生成音频驱动类型
+        'video-generation/audio', // use audio-driven video generation type
         {
           onProgress: (progress) => {
             setUploadProgress(progress);
-            console.log('[I2V] 上传进度:', progress + '%');
+            console.log('[I2V] 涓婁紶杩涘害:', progress + '%');
           },
           onError: (error) => {
-            console.error('[I2V] 上传错误:', error);
+            console.error('[I2V] 涓婁紶閿欒:', error);
           }
         }
       );
 
       setReferenceImageUrl(imageUrl);
-      console.log('[I2V] 图片上传成功:', imageUrl);
+      console.log('[I2V] image upload successful:', imageUrl);
       toast.success(t('toast.imageUploadSuccess'));
     } catch (error) {
-      console.error('[I2V] 图片上传失败:', error);
+      console.error('[I2V] image upload failed:', error);
       toast.error(error instanceof Error ? error.message : t('toast.imageUploadFailed'));
-      // 上传失败时清除图片
+      // Clear image preview if upload fails
       setReferenceImage(null);
       setReferenceImagePreview(null);
       setReferenceImageUrl(null);
@@ -343,7 +343,7 @@ export default function VideoGeneratePage() {
   // Text to Video - Magic Enhance
   const handleT2vMagicEnhance = async () => {
     if (!t2vPrompt.trim()) {
-      toast.error("请先输入提示词");
+      toast.error("Please enter a prompt first");
       return;
     }
 
@@ -362,20 +362,20 @@ export default function VideoGeneratePage() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "增强失败");
+        throw new Error(error.error || 'Enhance failed');
       }
 
       const result = await response.json();
 
       if (result.success && result.enhancedPrompt) {
         setT2vPrompt(result.enhancedPrompt);
-        toast.success("提示词增强成功！");
+        toast.success('Prompt enhanced successfully');
       } else {
-        throw new Error("服务器响应无效");
+        throw new Error("Invalid server response");
       }
     } catch (error) {
       console.error("Error enhancing prompt:", error);
-      toast.error(error instanceof Error ? error.message : "增强失败，请重试");
+      toast.error(error instanceof Error ? error.message : 'Enhance failed, please try again');
     } finally {
       setIsT2vProcessing(false);
     }
@@ -384,7 +384,7 @@ export default function VideoGeneratePage() {
   // Text to Video - Translate
   const handleT2vTranslate = async () => {
     if (!t2vPrompt.trim()) {
-      toast.error("请先输入提示词");
+      toast.error("Please enter a prompt first");
       return;
     }
 
@@ -405,20 +405,20 @@ export default function VideoGeneratePage() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "翻译失败");
+        throw new Error(error.error || 'Translation failed');
       }
 
       const result = await response.json();
 
       if (result.success && result.translatedPrompt) {
         setT2vPrompt(result.translatedPrompt);
-        toast.success("翻译成功！");
+        toast.success("Translation successful");
       } else {
-        throw new Error("服务器响应无效");
+        throw new Error("Invalid server response");
       }
     } catch (error) {
       console.error("Error translating prompt:", error);
-      toast.error(error instanceof Error ? error.message : "翻译失败，请重试");
+      toast.error(error instanceof Error ? error.message : 'Translation failed, please try again');
     } finally {
       setIsT2vProcessing(false);
     }
@@ -427,7 +427,7 @@ export default function VideoGeneratePage() {
   // Image to Video - Translate
   const handleI2vTranslate = async () => {
     if (!i2vPrompt.trim()) {
-      toast.error("请先输入提示词");
+      toast.error("Please enter a prompt first");
       return;
     }
 
@@ -448,64 +448,64 @@ export default function VideoGeneratePage() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || "翻译失败");
+        throw new Error(error.error || 'Translation failed');
       }
 
       const result = await response.json();
 
       if (result.success && result.translatedPrompt) {
         setI2vPrompt(result.translatedPrompt);
-        toast.success("翻译成功！");
+        toast.success("Translation successful");
       } else {
-        throw new Error("服务器响应无效");
+        throw new Error("Invalid server response");
       }
     } catch (error) {
       console.error("Error translating prompt:", error);
-      toast.error(error instanceof Error ? error.message : "翻译失败，请重试");
+      toast.error(error instanceof Error ? error.message : 'Translation failed, please try again');
     } finally {
       setIsI2vProcessing(false);
     }
   };
 
-  // Text to Video 轮询任务状态
+  // Text to Video 杞浠诲姟鐘舵€?
   const pollT2VTaskStatus = async (taskId: string) => {
     const maxAttempts = 60;
     let attempts = 0;
-    let currentProgress = 10; // 初始进度10%
+    let currentProgress = 10; // 鍒濆杩涘害10%
 
     const poll = async () => {
       try {
         const response = await fetch(`/api/ai/video-generate/task-status?taskId=${taskId}`);
 
         const result = await response.json();
-        console.log('[T2V] 任务状态:', result);
+        console.log('[T2V] 浠诲姟鐘舵€?', result);
         console.log('[T2V] status:', result.data?.status, 'videoUrl:', result.data?.videoUrl);
 
         if (result.code === 1000 && result.data) {
           const { status, videoUrl, progress: taskProgress } = result.data;
 
-          // 模拟进度：如果后端返回了进度则使用后端进度，否则根据轮询次数模拟
+          // Progress simulation: use backend progress when available; otherwise simulate by polling count
           if (taskProgress !== null && taskProgress !== undefined) {
             setT2vProgress(taskProgress);
           } else {
-            // 模拟进度增长：每次随机增长0.5%-3%，确保进度平滑且不超过95%
-            const randomIncrement = 0.5 + Math.random() * 2.5; // 0.5-3之间的随机增长
+            // Simulated increment: random 0.5%-3%, smooth and capped under 95%
+            const randomIncrement = 0.5 + Math.random() * 2.5; // random increment between 0.5 and 3
             currentProgress = Math.min(currentProgress + randomIncrement, 95);
             setT2vProgress(Math.round(currentProgress));
           }
 
           if (status === 'success' && videoUrl) {
-            console.log('[T2V] ✅ 视频生成成功，设置结果...');
-            setT2vProgress(100); // 成功时设置为100%
+            console.log('[T2V] video generated successfully, setting result...');
+            setT2vProgress(100); // set to 100% on success
             setGeneratedT2VVideo(videoUrl);
             setIsGeneratingT2V(false);
             toast.success(t('toast.videoGenerateSuccess'));
             return;
           } else if (status === 'failed') {
-            console.log('[T2V] ❌ 视频生成失败, error:', result.data.error);
+            console.log('[T2V] video generation failed, error:', result.data.error);
             setIsGeneratingT2V(false);
-            // 优先使用 error 字段，如果没有则使用 errorMessage，最后使用默认消息
-            // error 可能是对象 {code, message} 或字符串
+            // Prefer error field; fallback to errorMessage; then default message
+            // error may be object {code, message} or plain string
             let errorMsg = t('toast.videoGenerateFailed');
             if (result.data.error) {
               if (typeof result.data.error === 'string') {
@@ -519,7 +519,7 @@ export default function VideoGeneratePage() {
             toast.error(errorMsg);
             return;
           } else if (status === 'processing' || status === 'pending') {
-            console.log('[T2V] ⏳ 继续轮询...', `attempts: ${attempts + 1}/${maxAttempts}`);
+            console.log('[T2V] 鈴?缁х画杞...', `attempts: ${attempts + 1}/${maxAttempts}`);
             attempts++;
             if (attempts < maxAttempts) {
               setTimeout(poll, 5000);
@@ -528,18 +528,18 @@ export default function VideoGeneratePage() {
               toast.error(t('toast.generateTimeout'));
             }
           } else {
-            // 未知状态，停止轮询
-            console.log('[T2V] ⚠️ 未知状态:', status);
+            // Unknown status, stop polling
+            console.log('[T2V] unknown status:', status);
             setIsGeneratingT2V(false);
             toast.error(`${t('toast.unknownTaskStatus')}: ${status}`);
           }
         } else {
-          console.log('[T2V] ❌ API 返回错误');
+          console.log('[T2V] 鉂?API 杩斿洖閿欒');
           setIsGeneratingT2V(false);
           toast.error(result.message || t('toast.queryStatusFailed'));
         }
       } catch (error) {
-        console.error('[T2V] 查询状态异常:', error);
+        console.error('[T2V] 鏌ヨ鐘舵€佸紓甯?', error);
         attempts++;
         if (attempts < maxAttempts) {
           setTimeout(poll, 5000);
@@ -553,45 +553,45 @@ export default function VideoGeneratePage() {
     poll();
   };
 
-  // Image to Video 轮询任务状态
+  // Image to Video 杞浠诲姟鐘舵€?
   const pollI2VTaskStatus = async (taskId: string) => {
     const maxAttempts = 60;
     let attempts = 0;
-    let currentProgress = 10; // 初始进度10%
+    let currentProgress = 10; // 鍒濆杩涘害10%
 
     const poll = async () => {
       try {
         const response = await fetch(`/api/ai/video-generate/task-status?taskId=${taskId}`);
 
         const result = await response.json();
-        console.log('[I2V] 任务状态:', result);
+        console.log('[I2V] 浠诲姟鐘舵€?', result);
         console.log('[I2V] status:', result.data?.status, 'videoUrl:', result.data?.videoUrl);
 
         if (result.code === 1000 && result.data) {
           const { status, videoUrl, progress: taskProgress } = result.data;
 
-          // 模拟进度：如果后端返回了进度则使用后端进度，否则根据轮询次数模拟
+          // Progress simulation: use backend progress when available; otherwise simulate by polling count
           if (taskProgress !== null && taskProgress !== undefined) {
             setI2vProgress(taskProgress);
           } else {
-            // 模拟进度增长：每次随机增长0.5%-3%，确保进度平滑且不超过95%
-            const randomIncrement = 0.5 + Math.random() * 2.5; // 0.5-3之间的随机增长
+            // Simulated increment: random 0.5%-3%, smooth and capped under 95%
+            const randomIncrement = 0.5 + Math.random() * 2.5; // random increment between 0.5 and 3
             currentProgress = Math.min(currentProgress + randomIncrement, 95);
             setI2vProgress(Math.round(currentProgress));
           }
 
           if (status === 'success' && videoUrl) {
-            console.log('[I2V] ✅ 视频生成成功，设置结果...');
-            setI2vProgress(100); // 成功时设置为100%
+            console.log('[I2V] video generated successfully, setting result...');
+            setI2vProgress(100); // set to 100% on success
             setGeneratedI2VVideo(videoUrl);
             setIsGeneratingI2V(false);
             toast.success(t('toast.videoGenerateSuccess'));
             return;
           } else if (status === 'failed') {
-            console.log('[I2V] ❌ 视频生成失败, error:', result.data.error);
+            console.log('[I2V] video generation failed, error:', result.data.error);
             setIsGeneratingI2V(false);
-            // 优先使用 error 字段，如果没有则使用 errorMessage，最后使用默认消息
-            // error 可能是对象 {code, message} 或字符串
+            // Prefer error field; fallback to errorMessage; then default message
+            // error may be object {code, message} or plain string
             let errorMsg = t('toast.videoGenerateFailed');
             if (result.data.error) {
               if (typeof result.data.error === 'string') {
@@ -605,7 +605,7 @@ export default function VideoGeneratePage() {
             toast.error(errorMsg);
             return;
           } else if (status === 'processing' || status === 'pending') {
-            console.log('[I2V] ⏳ 继续轮询...', `attempts: ${attempts + 1}/${maxAttempts}`);
+            console.log('[I2V] 鈴?缁х画杞...', `attempts: ${attempts + 1}/${maxAttempts}`);
             attempts++;
             if (attempts < maxAttempts) {
               setTimeout(poll, 5000);
@@ -614,18 +614,18 @@ export default function VideoGeneratePage() {
               toast.error(t('toast.generateTimeout'));
             }
           } else {
-            // 未知状态，停止轮询
-            console.log('[I2V] ⚠️ 未知状态:', status);
+            // Unknown status, stop polling
+            console.log('[I2V] unknown status:', status);
             setIsGeneratingI2V(false);
             toast.error(`${t('toast.unknownTaskStatus')}: ${status}`);
           }
         } else {
-          console.log('[I2V] ❌ API 返回错误');
+          console.log('[I2V] 鉂?API 杩斿洖閿欒');
           setIsGeneratingI2V(false);
           toast.error(result.message || t('toast.queryStatusFailed'));
         }
       } catch (error) {
-        console.error('[I2V] 查询状态异常:', error);
+        console.error('[I2V] 鏌ヨ鐘舵€佸紓甯?', error);
         attempts++;
         if (attempts < maxAttempts) {
           setTimeout(poll, 5000);
@@ -639,7 +639,7 @@ export default function VideoGeneratePage() {
     poll();
   };
 
-  // Text to Video 生成
+  // Text to Video 鐢熸垚
   const handleT2VGenerate = async () => {
     if (status !== 'authenticated' || !session?.user) {
       saveRedirectUrl();
@@ -662,7 +662,7 @@ export default function VideoGeneratePage() {
     setT2vProgress(0);
 
     try {
-      console.log('[T2V] 开始生成视频:', {
+      console.log('[T2V] start video generation', {
         prompt: t2vPrompt,
         model: t2vModel,
         duration: t2vDuration,
@@ -686,7 +686,7 @@ export default function VideoGeneratePage() {
       });
 
       const result = await response.json();
-      console.log('[T2V] API 响应:', result);
+      console.log('[T2V] API 鍝嶅簲:', result);
 
       if (result.code === 1000 && result.data?.taskId) {
         const taskId = result.data.taskId;
@@ -698,13 +698,13 @@ export default function VideoGeneratePage() {
         toast.error(result.message || t('toast.taskCreateFailed'));
       }
     } catch (error) {
-      console.error('[T2V] 生成异常:', error);
+      console.error('[T2V] 鐢熸垚寮傚父:', error);
       setIsGeneratingT2V(false);
       toast.error(t('toast.generateFailed'));
     }
   };
 
-  // Image to Video 生成
+  // Image to Video 鐢熸垚
   const handleI2VGenerate = async () => {
     if (status !== 'authenticated' || !session?.user) {
       saveRedirectUrl();
@@ -732,7 +732,7 @@ export default function VideoGeneratePage() {
     setI2vProgress(0);
 
     try {
-      console.log('[I2V] 开始生成视频:', {
+      console.log('[I2V] start video generation', {
         prompt: i2vPrompt,
         imageUrl: referenceImageUrl,
         model: i2vModel,
@@ -758,7 +758,7 @@ export default function VideoGeneratePage() {
       });
 
       const result = await response.json();
-      console.log('[I2V] API 响应:', result);
+      console.log('[I2V] API 鍝嶅簲:', result);
 
       if (result.code === 1000 && result.data?.taskId) {
         const taskId = result.data.taskId;
@@ -770,7 +770,7 @@ export default function VideoGeneratePage() {
         toast.error(result.message || t('toast.taskCreateFailed'));
       }
     } catch (error) {
-      console.error('[I2V] 生成异常:', error);
+      console.error('[I2V] 鐢熸垚寮傚父:', error);
       setIsGeneratingI2V(false);
       toast.error(t('toast.generateFailed'));
     }
@@ -831,13 +831,13 @@ export default function VideoGeneratePage() {
               <TabsList className="mb-8 bg-white/80 dark:bg-card/80 backdrop-blur-sm p-1.5 border border-gray-200 dark:border-border shadow-sm rounded-lg">
                 <TabsTrigger
                   value="text-to-video"
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-purple-700 data-[state=active]:text-white data-[state=active]:shadow-md px-8 py-3 rounded-md transition-all font-medium"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary data-[state=active]:text-white data-[state=active]:shadow-md px-8 py-3 rounded-md transition-all font-medium"
                 >
                   {t('tabs.textToVideo')}
                 </TabsTrigger>
                 <TabsTrigger
                   value="image-to-video"
-                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-purple-700 data-[state=active]:text-white data-[state=active]:shadow-md px-8 py-3 rounded-md transition-all font-medium"
+                  className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary data-[state=active]:text-white data-[state=active]:shadow-md px-8 py-3 rounded-md transition-all font-medium"
                 >
                   {t('tabs.imageToVideo')}
                 </TabsTrigger>
@@ -850,7 +850,7 @@ export default function VideoGeneratePage() {
                   <div className="space-y-6 bg-white dark:bg-card p-8 rounded-2xl shadow-lg border border-gray-100 dark:border-border">
                     <div>
                       <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-foreground flex items-center gap-2">
-                        <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 16h4m10 0h4" />
                         </svg>
                         {t('textToVideo.title')}
@@ -864,19 +864,19 @@ export default function VideoGeneratePage() {
                           value={t2vPrompt}
                           onChange={(e) => setT2vPrompt(e.target.value)}
                           maxLength={2048}
-                          className="min-h-[140px] resize-none border-gray-200 dark:border-border focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900/50 transition-all rounded-lg"
+                          className="min-h-[140px] resize-none border-gray-200 dark:border-border focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all rounded-lg"
                         />
                         <div className="absolute bottom-3 right-3 text-xs text-gray-500 dark:text-muted-foreground bg-white/90 dark:bg-background/90 px-2 py-1 rounded-md backdrop-blur-sm">
                           {t2vPrompt.length}/2048
                         </div>
                       </div>
 
-                      {/* Prompt Enhancement Buttons - 暂时隐藏 */}
+                      {/* Prompt Enhancement Buttons - 鏆傛椂闅愯棌 */}
                       {/* <div className="flex flex-wrap gap-2 mt-3">
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-purple-300 dark:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                          className="border-border dark:border-border hover:bg-muted dark:hover:bg-muted"
                           onClick={handleT2vMagicEnhance}
                           disabled={isT2vProcessing || !t2vPrompt.trim()}
                         >
@@ -886,7 +886,7 @@ export default function VideoGeneratePage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-purple-300 dark:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                          className="border-border dark:border-border hover:bg-muted dark:hover:bg-muted"
                           onClick={() => setIsT2vTranslateDialogOpen(true)}
                           disabled={isT2vProcessing || !t2vPrompt.trim()}
                         >
@@ -901,7 +901,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('textToVideo.model')}</label>
                           <Select value={t2vModel} onValueChange={setT2vModel} disabled={isLoadingModels || filteredVideoModels.length === 0}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-purple-400 dark:hover:border-purple-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900/50 transition-all">
+                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue>
                                 {t2vModel ? filteredVideoModels.find(m => m.id === t2vModel)?.name :
                                   (isLoadingModels ? t('common.loading') : t('common.selectModel'))}
@@ -929,7 +929,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('textToVideo.aspectRatio')}</label>
                           <Select value={t2vAspectRatio} onValueChange={setT2vAspectRatio}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-purple-400 dark:hover:border-purple-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900/50 transition-all">
+                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -953,7 +953,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('textToVideo.duration')}</label>
                           <Select value={t2vDuration} onValueChange={setT2vDuration}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-purple-400 dark:hover:border-purple-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900/50 transition-all">
+                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -975,7 +975,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('textToVideo.resolution')}</label>
                           <Select value={t2vResolution} onValueChange={setT2vResolution}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-purple-400 dark:hover:border-purple-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900/50 transition-all">
+                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -995,7 +995,7 @@ export default function VideoGeneratePage() {
                         </div>
                       </div>
 
-                      {/* 音频开关 - Seedance models don't support audio */}
+                      {/* Audio toggle - Seedance models don't support audio */}
                       {!t2vModel?.toLowerCase().includes('seedance') && (
                         <div className="flex items-center justify-between p-4 bg-muted/20 rounded-lg">
                           <div className="flex-1">
@@ -1013,20 +1013,20 @@ export default function VideoGeneratePage() {
                     <Button
                       onClick={handleT2VGenerate}
                       disabled={!t2vPrompt || isGeneratingT2V}
-                      className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 disabled:from-gray-400 disabled:to-gray-500 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none transition-all rounded-lg font-medium"
+                      className="w-full bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary disabled:from-gray-400 disabled:to-gray-500 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none transition-all rounded-lg font-medium"
                       size="lg"
                     >
                       {isGeneratingT2V ? `${t('textToVideo.generating')} ${t2vProgress}%` : t('textToVideo.generateButton')}
                     </Button>
 
-                    {/* 积分显示 */}
+                    {/* 绉垎鏄剧ず */}
                     {t2vModel && (() => {
                       const credits = calculateCredits(t2vModel, t2vDuration, t2vResolution, t2vEnableAudio);
                       if (credits > 0) {
                         return (
                           <div className="flex items-center justify-between text-sm pt-2 border-t border-border">
                             <div className="text-muted-foreground font-medium">
-                              Credits: {credits} ⚡
+                              Credits: {credits} 鈿?
                             </div>
                           </div>
                         );
@@ -1044,11 +1044,11 @@ export default function VideoGeneratePage() {
                   </div>
 
                   {/* Right Panel */}
-                  <div className="bg-gradient-to-br from-gray-50 to-purple-50/30 dark:from-gray-900/30 dark:to-purple-900/10 rounded-2xl p-12 flex items-center justify-center min-h-[500px] border-2 border-dashed border-gray-300 dark:border-gray-700">
+                  <div className="bg-gradient-to-br from-gray-50 to-muted/30 dark:from-gray-900/30 dark:to-muted/30 rounded-2xl p-12 flex items-center justify-center min-h-[500px] border-2 border-dashed border-gray-300 dark:border-gray-700">
                     {isGeneratingT2V ? (
                       <div className="text-center">
                         <div className="relative w-20 h-20 mx-auto mb-6">
-                          <div className="absolute inset-0 border-4 border-purple-200 dark:border-purple-900 rounded-full"></div>
+                          <div className="absolute inset-0 border-4 border-border dark:border-border rounded-full"></div>
                           <div className="absolute inset-0 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
                         </div>
                         <p className="text-gray-700 dark:text-gray-300 mb-2 font-medium">{t('common.generatingMessage')}</p>
@@ -1057,7 +1057,7 @@ export default function VideoGeneratePage() {
                           <div className="mt-4">
                             <div className="w-48 mx-auto bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
                               <div
-                                className="bg-gradient-to-r from-purple-500 to-purple-600 h-2.5 rounded-full transition-all duration-300 shadow-sm"
+                                className="bg-gradient-to-r from-primary to-primary h-2.5 rounded-full transition-all duration-300 shadow-sm"
                                 style={{ width: `${t2vProgress}%` }}
                               ></div>
                             </div>
@@ -1077,7 +1077,7 @@ export default function VideoGeneratePage() {
                             onClick={() => window.open(generatedT2VVideo, '_blank')}
                             variant="outline"
                             size="sm"
-                            className="hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
+                            className="hover:bg-muted dark:hover:bg-muted transition-colors"
                           >
                             {t('common.openFullSize')}
                           </Button>
@@ -1089,7 +1089,7 @@ export default function VideoGeneratePage() {
                               link.click();
                             }}
                             size="sm"
-                            className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 shadow-md hover:shadow-lg transition-all"
+                            className="bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary shadow-md hover:shadow-lg transition-all"
                           >
                             {t('common.download')}
                           </Button>
@@ -1125,7 +1125,7 @@ export default function VideoGeneratePage() {
                     {/* Reference Image Upload */}
                     <div>
                       <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-foreground flex items-center gap-2">
-                        <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
                         {t('imageToVideo.referenceImage')}
@@ -1135,7 +1135,7 @@ export default function VideoGeneratePage() {
                       </p>
                       
                       {!referenceImagePreview ? (
-                        <label className="block border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-10 text-center cursor-pointer hover:border-purple-500 hover:bg-purple-50/50 dark:hover:bg-purple-900/10 transition-all group">
+                        <label className="block border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-10 text-center cursor-pointer hover:border-purple-500 hover:bg-muted/50 dark:hover:bg-purple-900/10 transition-all group">
                           <input
                             type="file"
                             accept="image/*"
@@ -1193,7 +1193,7 @@ export default function VideoGeneratePage() {
 
                     <div>
                       <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-foreground flex items-center gap-2">
-                        <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 16h4m10 0h4" />
                         </svg>
                         {t('imageToVideo.title')}
@@ -1207,19 +1207,19 @@ export default function VideoGeneratePage() {
                           value={i2vPrompt}
                           onChange={(e) => setI2vPrompt(e.target.value)}
                           maxLength={2048}
-                          className="min-h-[140px] resize-none border-gray-200 dark:border-border focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900/50 transition-all rounded-lg"
+                          className="min-h-[140px] resize-none border-gray-200 dark:border-border focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all rounded-lg"
                         />
                         <div className="absolute bottom-3 right-3 text-xs text-gray-500 dark:text-muted-foreground bg-white/90 dark:bg-background/90 px-2 py-1 rounded-md backdrop-blur-sm">
                           {i2vPrompt.length}/2048
                         </div>
                       </div>
 
-                      {/* Prompt Enhancement Buttons - 暂时隐藏 */}
+                      {/* Prompt Enhancement Buttons - 鏆傛椂闅愯棌 */}
                       {/* <div className="flex flex-wrap gap-2 mt-3">
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border-purple-300 dark:border-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/20"
+                          className="border-border dark:border-border hover:bg-muted dark:hover:bg-muted"
                           onClick={() => setIsI2vTranslateDialogOpen(true)}
                           disabled={isI2vProcessing || !i2vPrompt.trim()}
                         >
@@ -1234,7 +1234,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('imageToVideo.model')}</label>
                           <Select value={i2vModel} onValueChange={setI2vModel} disabled={isLoadingModels || filteredVideoModels.length === 0}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-purple-400 dark:hover:border-purple-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900/50 transition-all">
+                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue>
                                 {i2vModel ? filteredVideoModels.find(m => m.id === i2vModel)?.name :
                                   (isLoadingModels ? t('common.loading') : t('common.selectModel'))}
@@ -1262,7 +1262,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('imageToVideo.aspectRatio')}</label>
                           <Select value={i2vAspectRatio} onValueChange={setI2vAspectRatio}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-purple-400 dark:hover:border-purple-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900/50 transition-all">
+                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -1287,7 +1287,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('imageToVideo.duration')}</label>
                           <Select value={i2vDuration} onValueChange={setI2vDuration}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-purple-400 dark:hover:border-purple-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900/50 transition-all">
+                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -1309,7 +1309,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('imageToVideo.resolution')}</label>
                           <Select value={i2vResolution} onValueChange={setI2vResolution}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-purple-400 dark:hover:border-purple-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-900/50 transition-all">
+                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -1329,7 +1329,7 @@ export default function VideoGeneratePage() {
                         </div>
                       </div>
 
-                      {/* 音频开关 - Seedance models don't support audio */}
+                      {/* Audio toggle - Seedance models don't support audio */}
                       {!i2vModel?.toLowerCase().includes('seedance') && (
                         <div className="flex items-center justify-between p-4 bg-muted/20 rounded-lg">
                           <div className="flex-1">
@@ -1347,20 +1347,20 @@ export default function VideoGeneratePage() {
                     <Button
                       onClick={handleI2VGenerate}
                       disabled={!i2vPrompt || !referenceImageUrl || isGeneratingI2V || isUploadingImage}
-                      className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 disabled:from-gray-400 disabled:to-gray-500 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none transition-all rounded-lg font-medium"
+                      className="w-full bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary disabled:from-gray-400 disabled:to-gray-500 text-white shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none transition-all rounded-lg font-medium"
                       size="lg"
                     >
                       {isUploadingImage ? `${t('imageToVideo.uploading')} ${uploadProgress}%` : isGeneratingI2V ? `${t('imageToVideo.generating')} ${i2vProgress}%` : t('imageToVideo.generateButton')}
                     </Button>
 
-                    {/* 积分显示 */}
+                    {/* 绉垎鏄剧ず */}
                     {i2vModel && (() => {
                       const credits = calculateCredits(i2vModel, i2vDuration, i2vResolution, i2vEnableAudio);
                       if (credits > 0) {
                         return (
                           <div className="flex items-center justify-between text-sm pt-2 border-t border-border">
                             <div className="text-muted-foreground font-medium">
-                              Credits: {credits} ⚡
+                              Credits: {credits} 鈿?
                             </div>
                           </div>
                         );
@@ -1378,11 +1378,11 @@ export default function VideoGeneratePage() {
                   </div>
 
                   {/* Right Panel */}
-                  <div className="bg-gradient-to-br from-gray-50 to-purple-50/30 dark:from-gray-900/30 dark:to-purple-900/10 rounded-2xl p-12 flex items-center justify-center min-h-[500px] border-2 border-dashed border-gray-300 dark:border-gray-700">
+                  <div className="bg-gradient-to-br from-gray-50 to-muted/30 dark:from-gray-900/30 dark:to-muted/30 rounded-2xl p-12 flex items-center justify-center min-h-[500px] border-2 border-dashed border-gray-300 dark:border-gray-700">
                     {isGeneratingI2V ? (
                       <div className="text-center">
                         <div className="relative w-20 h-20 mx-auto mb-6">
-                          <div className="absolute inset-0 border-4 border-purple-200 dark:border-purple-900 rounded-full"></div>
+                          <div className="absolute inset-0 border-4 border-border dark:border-border rounded-full"></div>
                           <div className="absolute inset-0 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
                         </div>
                         <p className="text-gray-700 dark:text-gray-300 mb-2 font-medium">{t('common.generatingMessage')}</p>
@@ -1391,7 +1391,7 @@ export default function VideoGeneratePage() {
                           <div className="mt-4">
                             <div className="w-48 mx-auto bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 overflow-hidden">
                               <div
-                                className="bg-gradient-to-r from-purple-500 to-purple-600 h-2.5 rounded-full transition-all duration-300 shadow-sm"
+                                className="bg-gradient-to-r from-primary to-primary h-2.5 rounded-full transition-all duration-300 shadow-sm"
                                 style={{ width: `${i2vProgress}%` }}
                               ></div>
                             </div>
@@ -1411,7 +1411,7 @@ export default function VideoGeneratePage() {
                             onClick={() => window.open(generatedI2VVideo, '_blank')}
                             variant="outline"
                             size="sm"
-                            className="hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors"
+                            className="hover:bg-muted dark:hover:bg-muted transition-colors"
                           >
                             {t('common.openFullSize')}
                           </Button>
@@ -1423,7 +1423,7 @@ export default function VideoGeneratePage() {
                               link.click();
                             }}
                             size="sm"
-                            className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 shadow-md hover:shadow-lg transition-all"
+                            className="bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary shadow-md hover:shadow-lg transition-all"
                           >
                             {t('common.download')}
                           </Button>
@@ -1459,7 +1459,7 @@ export default function VideoGeneratePage() {
           <>
             {/* Feature 1: Advanced Physics Understanding */}
             <section className="relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-blue-950/20 dark:via-background dark:to-purple-950/20"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-muted via-background to-muted dark:from-muted dark:via-background dark:to-muted"></div>
               <div className="container mx-auto px-4 py-20 relative">
               <div className="max-w-6xl mx-auto">
                 <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 text-gray-900 dark:text-foreground">
@@ -1484,7 +1484,7 @@ export default function VideoGeneratePage() {
                   </div>
                   <div className="bg-white dark:bg-card rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 border border-gray-100 dark:border-border">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
+                      <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
                         <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
@@ -1502,7 +1502,7 @@ export default function VideoGeneratePage() {
 
             {/* Feature 2: Native Audio Generation */}
             <section className="relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-purple-950/20 dark:via-background dark:to-blue-950/20"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-muted via-background to-muted dark:from-muted dark:via-background dark:to-muted"></div>
               <div className="container mx-auto px-4 py-20 relative">
               <div className="max-w-6xl mx-auto">
                 <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 text-gray-900 dark:text-foreground">
@@ -1540,7 +1540,7 @@ export default function VideoGeneratePage() {
                   </div>
                   <div className="bg-white dark:bg-card rounded-xl p-6 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 border border-gray-100 dark:border-border">
                     <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 bg-purple-600 rounded-lg flex items-center justify-center">
+                      <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                         </svg>
@@ -1558,7 +1558,7 @@ export default function VideoGeneratePage() {
 
             {/* Feature 3: Professional Editing and Creative Control */}
             <section className="relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-pink-50 via-white to-purple-50 dark:from-pink-950/20 dark:via-background dark:to-purple-950/20"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-muted via-background to-muted dark:from-muted dark:via-background dark:to-muted"></div>
               <div className="container mx-auto px-4 py-20 relative">
               <div className="max-w-6xl mx-auto">
                 <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 text-gray-900 dark:text-foreground">
@@ -1569,7 +1569,7 @@ export default function VideoGeneratePage() {
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="text-center p-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary rounded-full flex items-center justify-center mx-auto mb-4">
                       <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
                       </svg>
@@ -1580,7 +1580,7 @@ export default function VideoGeneratePage() {
                     </p>
                   </div>
                   <div className="text-center p-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
                       <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -1612,7 +1612,7 @@ export default function VideoGeneratePage() {
         {/* Seedance Model Features - Only show for doubao-seedance route */}
         {routeModel === 'doubao-seedance' && (
           <>
-            {/* Feature 1: 指令深度解析 */}
+            {/* Feature 1: Prompt depth analysis */}
             <section className="container mx-auto px-4 py-16 bg-card">
               <div className="max-w-6xl mx-auto">
                 <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 text-gray-900 dark:text-foreground">
@@ -1650,7 +1650,7 @@ export default function VideoGeneratePage() {
               </div>
             </section>
 
-            {/* Feature 2: 多镜头叙事 */}
+            {/* Feature 2: Multi-shot narrative */}
             <section className="container mx-auto px-4 py-16 bg-muted/20">
               <div className="max-w-6xl mx-auto">
                 <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 text-gray-900 dark:text-foreground">
@@ -1688,7 +1688,7 @@ export default function VideoGeneratePage() {
               </div>
             </section>
 
-            {/* Feature 3: 细节表现与风格保持 */}
+            {/* Feature 3: 缁嗚妭琛ㄧ幇涓庨鏍间繚鎸?*/}
             <section className="container mx-auto px-4 py-16 bg-card">
               <div className="max-w-6xl mx-auto">
                 <h2 className="text-3xl md:text-5xl font-bold text-center mb-6 text-gray-900 dark:text-foreground">
@@ -1708,25 +1708,25 @@ export default function VideoGeneratePage() {
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-900 dark:text-foreground">{t('howToUse.title')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
               <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-5 text-xl font-bold shadow-lg transform hover:scale-110 transition-transform">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary text-white rounded-full flex items-center justify-center mx-auto mb-5 text-xl font-bold shadow-lg transform hover:scale-110 transition-transform">
                   1
                 </div>
                 <p className="text-sm">{t('howToUse.step1')}</p>
               </div>
               <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-5 text-xl font-bold shadow-lg transform hover:scale-110 transition-transform">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary text-white rounded-full flex items-center justify-center mx-auto mb-5 text-xl font-bold shadow-lg transform hover:scale-110 transition-transform">
                   2
                 </div>
                 <p className="text-sm">{t('howToUse.step2')}</p>
               </div>
               <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-5 text-xl font-bold shadow-lg transform hover:scale-110 transition-transform">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary text-white rounded-full flex items-center justify-center mx-auto mb-5 text-xl font-bold shadow-lg transform hover:scale-110 transition-transform">
                   3
                 </div>
                 <p className="text-sm">{t('howToUse.step3')}</p>
               </div>
               <div className="text-center">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-5 text-xl font-bold shadow-lg transform hover:scale-110 transition-transform">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary text-white rounded-full flex items-center justify-center mx-auto mb-5 text-xl font-bold shadow-lg transform hover:scale-110 transition-transform">
                   4
                 </div>
                 <p className="text-sm">{t('howToUse.step4')}</p>
@@ -1907,15 +1907,15 @@ export default function VideoGeneratePage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="en">English</SelectItem>
-                    <SelectItem value="zh">中文</SelectItem>
-                    <SelectItem value="ja">日本語</SelectItem>
-                    <SelectItem value="ko">한국어</SelectItem>
-                    <SelectItem value="es">Español</SelectItem>
-                    <SelectItem value="fr">Français</SelectItem>
-                    <SelectItem value="de">Deutsch</SelectItem>
-                    <SelectItem value="it">Italiano</SelectItem>
-                    <SelectItem value="pt">Português</SelectItem>
-                    <SelectItem value="ru">Русский</SelectItem>
+                    <SelectItem value="zh">Chinese</SelectItem>
+                    <SelectItem value="ja">Japanese</SelectItem>
+                    <SelectItem value="ko">Korean</SelectItem>
+                    <SelectItem value="es">Spanish</SelectItem>
+                    <SelectItem value="fr">French</SelectItem>
+                    <SelectItem value="de">German</SelectItem>
+                    <SelectItem value="it">Italian</SelectItem>
+                    <SelectItem value="pt">Portuguese</SelectItem>
+                    <SelectItem value="ru">Russian</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -1929,7 +1929,7 @@ export default function VideoGeneratePage() {
               </Button>
               <Button
                 onClick={handleT2vTranslate}
-                className="bg-purple-600 hover:bg-purple-700"
+                className="bg-primary hover:bg-primary/90"
               >
                 <Languages className="h-4 w-4 mr-2" />
                 Translate
@@ -1956,15 +1956,15 @@ export default function VideoGeneratePage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="en">English</SelectItem>
-                    <SelectItem value="zh">中文</SelectItem>
-                    <SelectItem value="ja">日本語</SelectItem>
-                    <SelectItem value="ko">한국어</SelectItem>
-                    <SelectItem value="es">Español</SelectItem>
-                    <SelectItem value="fr">Français</SelectItem>
-                    <SelectItem value="de">Deutsch</SelectItem>
-                    <SelectItem value="it">Italiano</SelectItem>
-                    <SelectItem value="pt">Português</SelectItem>
-                    <SelectItem value="ru">Русский</SelectItem>
+                    <SelectItem value="zh">Chinese</SelectItem>
+                    <SelectItem value="ja">Japanese</SelectItem>
+                    <SelectItem value="ko">Korean</SelectItem>
+                    <SelectItem value="es">Spanish</SelectItem>
+                    <SelectItem value="fr">French</SelectItem>
+                    <SelectItem value="de">German</SelectItem>
+                    <SelectItem value="it">Italian</SelectItem>
+                    <SelectItem value="pt">Portuguese</SelectItem>
+                    <SelectItem value="ru">Russian</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -1978,7 +1978,7 @@ export default function VideoGeneratePage() {
               </Button>
               <Button
                 onClick={handleI2vTranslate}
-                className="bg-purple-600 hover:bg-purple-700"
+                className="bg-primary hover:bg-primary/90"
               >
                 <Languages className="h-4 w-4 mr-2" />
                 Translate
@@ -1990,3 +1990,4 @@ export default function VideoGeneratePage() {
     </>
   );
 }
+

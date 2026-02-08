@@ -17,7 +17,7 @@ export default function SidebarNav({
   const pathname = usePathname();
 
   return (
-    <nav className={cn("rounded-2xl border border-border/70 bg-background p-2", className)} {...props}>
+    <nav className={cn("rounded-2xl border border-border/70 bg-background p-2.5", className)} {...props}>
       <ul className="space-y-1">
         {items.map((item, index) => {
           const active = !!item.url && pathname.includes(item.url as any);
@@ -28,8 +28,8 @@ export default function SidebarNav({
                 className={cn(
                   "flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
                   active
-                    ? "bg-primary text-primary-foreground"
-                    : "text-foreground/80 hover:bg-accent hover:text-foreground"
+                    ? "bg-primary/10 text-primary"
+                    : "text-foreground/75 hover:bg-accent hover:text-foreground"
                 )}
               >
                 {item.icon && <Icon name={item.icon} className="h-4 w-4" />}

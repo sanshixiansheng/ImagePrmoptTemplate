@@ -5,7 +5,7 @@ import { Link } from "@/i18n/routing";
 
 export default function Toolbar({ items }: { items?: ButtonType[] }) {
   return (
-    <div className="flex space-x-4 mb-8">
+    <div className="mb-8 flex flex-wrap gap-3">
       {items?.map((item, idx) => (
         <Button
           key={idx}
@@ -16,9 +16,9 @@ export default function Toolbar({ items }: { items?: ButtonType[] }) {
           <Link
             href={item.url as any}
             target={item.target}
-            className="flex items-center gap-1"
+            className="flex items-center gap-1.5"
           >
-            {item.icon && <Icon name={item.icon} />}
+            {item.icon && <Icon name={item.icon} className="size-4" />}
             {item.title}
           </Link>
         </Button>

@@ -1,9 +1,9 @@
-﻿/* eslint-disable @next/next/no-img-element */
+/* eslint-disable @next/next/no-img-element */
 /**
- * 鏂囦欢涓婁紶缁勪欢浣跨敤绀轰緥
- * 
- * 杩欎釜鏂囦欢灞曠ず浜嗗浣曞湪 React 缁勪欢涓娇鐢ㄤ笂浼?API
- * 澶嶅埗鐩稿叧浠ｇ爜鍒颁綘鐨勫疄闄呯粍浠朵腑浣跨敤
+ * File Upload Component Usage Example
+ *
+ * This file demonstrates how to use the upload API in a React component.
+ * Copy the relevant parts into your actual component as needed.
  */
 
 "use client";
@@ -17,46 +17,44 @@ export default function FileUploadExample() {
   const [uploadedUrl, setUploadedUrl] = useState<string>("");
 
   /**
-   * 澶勭悊鏂囦欢閫夋嫨
+   * Handle file selection.
    */
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      // 楠岃瘉鏂囦欢澶у皬
-      const maxSize = 10 * 1024 * 1024; // 10MB
-      if (selectedFile.size > maxSize) {
-        toast.error("鏂囦欢澶у皬涓嶈兘瓒呰繃 10MB");
-        return;
-      }
+    if (!selectedFile) return;
 
-      // 楠岃瘉鏂囦欢绫诲瀷
-      const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
-      if (!allowedTypes.includes(selectedFile.type)) {
-        toast.error("浠呮敮鎸?JPG銆丳NG銆丟IF銆乄ebP 鏍煎紡");
-        return;
-      }
-
-      setFile(selectedFile);
+    // Validate file size.
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (selectedFile.size > maxSize) {
+      toast.error("File size cannot exceed 10MB");
+      return;
     }
+
+    // Validate file type.
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp"];
+    if (!allowedTypes.includes(selectedFile.type)) {
+      toast.error("Only JPG, PNG, GIF, and WebP are supported");
+      return;
+    }
+
+    setFile(selectedFile);
   };
 
   /**
-   * 涓婁紶鏂囦欢鍒版湇鍔″櫒
+   * Upload file to server.
    */
   const handleUpload = async () => {
     if (!file) {
-      toast.error("璇峰厛閫夋嫨鏂囦欢");
+      toast.error("Please select a file first");
       return;
     }
 
     setUploading(true);
 
     try {
-      // 鍒涘缓 FormData
       const formData = new FormData();
       formData.append("file", file);
 
-      // 璋冪敤涓婁紶 API
       const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
@@ -65,34 +63,29 @@ export default function FileUploadExample() {
       const result = await response.json();
 
       if (result.code === 1000) {
-        // 涓婁紶鎴愬姛
-        toast.success("File uploaded successfully");
+        toast.success("Upload successful");
         setUploadedUrl(result.data.fileUrl);
-        console.log("涓婁紶缁撴灉:", result.data);
+        console.log("Upload result:", result.data);
       } else if (result.code === 401) {
-        // 鏈櫥褰?
-        toast.error("璇峰厛鐧诲綍");
+        toast.error("Please log in first");
       } else {
-        // 鍏朵粬閿欒
-        toast.error(result.message || "涓婁紶澶辫触");
+        toast.error(result.message || "Upload failed");
       }
-    } catch (error: any) {
-      console.error("涓婁紶閿欒:", error);
-      toast.error("涓婁紶澶辫触锛岃绋嶅悗閲嶈瘯");
+    } catch (error) {
+      console.error("Upload error:", error);
+      toast.error("Upload failed, please try again later");
     } finally {
       setUploading(false);
     }
   };
 
   /**
-   * 鎷栨嫿涓婁紶锛堝彲閫夊姛鑳斤級
+   * Drag-and-drop upload (optional).
    */
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const droppedFile = e.dataTransfer.files[0];
-    if (droppedFile) {
-      setFile(droppedFile);
-    }
+    if (droppedFile) setFile(droppedFile);
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
@@ -101,9 +94,9 @@ export default function FileUploadExample() {
 
   return (
     <div className="max-w-md mx-auto p-6 space-y-4">
-      <h2 className="text-2xl font-bold">鏂囦欢涓婁紶绀轰緥</h2>
+      <h2 className="text-2xl font-bold">File Upload Example</h2>
 
-      {/* 鎷栨嫿涓婁紶鍖哄煙 */}
+      {/* Drag-and-drop area */}
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -119,49 +112,43 @@ export default function FileUploadExample() {
         <label htmlFor="file-input" className="cursor-pointer">
           {file ? (
             <div>
-              <p className="text-sm text-gray-600">宸查€夋嫨鏂囦欢:</p>
+              <p className="text-sm text-gray-600">Selected file:</p>
               <p className="font-medium">{file.name}</p>
-              <p className="text-xs text-gray-500">
-                {(file.size / 1024).toFixed(2)} KB
-              </p>
+              <p className="text-xs text-gray-500">{(file.size / 1024).toFixed(2)} KB</p>
             </div>
           ) : (
             <div>
-              <p className="text-gray-600">鐐瑰嚮閫夋嫨鏂囦欢鎴栨嫋鎷藉埌姝ゅ</p>
+              <p className="text-gray-600">Click to select a file or drag it here</p>
               <p className="text-xs text-gray-500 mt-2">
-                鏀寔 JPG銆丳NG銆丟IF銆乄ebP锛屾渶澶?10MB
+                Supports JPG/PNG/GIF/WebP, up to 10MB
               </p>
             </div>
           )}
         </label>
       </div>
 
-      {/* 涓婁紶鎸夐挳 */}
+      {/* Upload button */}
       <button
         onClick={handleUpload}
         disabled={!file || uploading}
         className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
       >
-        {uploading ? "涓婁紶涓?.." : "涓婁紶鏂囦欢"}
+        {uploading ? "Uploading..." : "Upload file"}
       </button>
 
-      {/* 鏄剧ず涓婁紶缁撴灉 */}
+      {/* Upload result */}
       {uploadedUrl && (
         <div className="space-y-2">
           <p className="text-sm font-medium text-green-600">Upload successful</p>
           <div className="border rounded-lg p-4 space-y-2">
-            <p className="text-xs text-gray-600">鏂囦欢 URL:</p>
+            <p className="text-xs text-gray-600">File URL:</p>
             <input
               type="text"
               value={uploadedUrl}
               readOnly
               className="w-full text-xs p-2 border rounded bg-gray-50"
             />
-            <img
-              src={uploadedUrl}
-              alt="Uploaded"
-              className="w-full rounded-lg"
-            />
+            <img src={uploadedUrl} alt="Uploaded" className="w-full rounded-lg" />
           </div>
         </div>
       )}
@@ -171,11 +158,11 @@ export default function FileUploadExample() {
 
 /**
  * ==========================================
- * 绠€鍖栫増浣跨敤绀轰緥锛堝鍒跺埌浣犵殑缁勪欢涓級
+ * Simplified usage example (copy into your component)
  * ==========================================
  */
 
-// 1. 鍩虹涓婁紶鍑芥暟
+// 1. Basic upload helper.
 async function uploadFile(file: File) {
   const formData = new FormData();
   formData.append("file", file);
@@ -189,16 +176,15 @@ async function uploadFile(file: File) {
   return result;
 }
 
-// 2. 鍦ㄧ粍浠朵腑浣跨敤
+// 2. Use inside your component.
 // const handleUpload = async () => {
 //   try {
 //     const result = await uploadFile(selectedFile);
 //     if (result.code === 1000) {
-//       console.log("鏂囦欢 URL:", result.data.fileUrl);
-//       toast.success("涓婁紶鎴愬姛锛?);
+//       console.log("File URL:", result.data.fileUrl);
+//       toast.success("Upload successful");
 //     }
 //   } catch (error) {
-//     toast.error("涓婁紶澶辫触");
+//     toast.error("Upload failed");
 //   }
 // };
-

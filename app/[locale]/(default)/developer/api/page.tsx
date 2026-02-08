@@ -11,26 +11,26 @@ export default function APIDocsPage() {
   const t = useTranslations("developerApi");
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-16">
-        <div className="max-w-5xl mx-auto">
+    <div className="min-h-screen bg-card">
+      <div className="container py-14 md:py-16 lg:py-20">
+        <div className="mx-auto max-w-5xl">
           {/* Header */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-400 px-4 py-2 rounded-full text-sm font-medium mb-4">
+          <div className="mb-12 text-center">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-yellow-100 px-4 py-2 text-sm font-medium text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
               <AlertCircle className="h-4 w-4" />
               {t("testing_phase")}
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">{t("title")}</h1>
-            <p className="text-lg text-muted-foreground">
+            <h1 className="mb-4 font-serif text-4xl font-medium text-foreground md:text-5xl">{t("title")}</h1>
+            <p className="text-lg text-foreground/65">
               {t("subtitle")}
             </p>
           </div>
 
           {/* Overview */}
           <section className="mb-12">
-            <Card className="p-8">
+            <Card className="rounded-3xl border-border/70 bg-background p-8">
               <h2 className="text-2xl font-bold mb-4 text-foreground">{t("overview_title")}</h2>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="leading-relaxed text-foreground/70">
                 {t("overview_desc")}
               </p>
             </Card>
@@ -41,10 +41,10 @@ export default function APIDocsPage() {
             <h2 className="text-2xl font-bold mb-6 text-foreground">{t("available_apis_title")}</h2>
             <div className="grid md:grid-cols-2 gap-6">
               {/* Image to Prompt API */}
-              <Card className="p-6 hover:shadow-lg transition-shadow">
+              <Card className="rounded-3xl border-border/70 bg-background p-6 transition-shadow hover:shadow-lg">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Code className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                    <Code className="h-6 w-6 text-primary" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold mb-2 text-foreground">{t("image_to_prompt_title")}</h3>
@@ -61,10 +61,10 @@ export default function APIDocsPage() {
               </Card>
 
               {/* Magic Enhance API */}
-              <Card className="p-6 hover:shadow-lg transition-shadow">
+              <Card className="rounded-3xl border-border/70 bg-background p-6 transition-shadow hover:shadow-lg">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Zap className="h-6 w-6 text-green-600 dark:text-green-400" />
+                  <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                    <Zap className="h-6 w-6 text-primary" />
                   </div>
                   <div>
                     <h3 className="text-xl font-semibold mb-2 text-foreground">{t("magic_enhance_title")}</h3>
@@ -84,7 +84,7 @@ export default function APIDocsPage() {
 
           {/* How to Join Testing */}
           <section className="mb-12">
-            <Card className="p-8">
+            <Card className="rounded-3xl border-border/70 bg-background p-8">
               <h2 className="text-2xl font-bold mb-4 text-foreground">{t("how_to_join_title")}</h2>
               <p className="text-muted-foreground mb-6">
                 {t("how_to_join_desc")}
@@ -126,7 +126,7 @@ export default function APIDocsPage() {
 
           {/* Important Terms */}
           <section>
-            <Card className="p-8">
+            <Card className="rounded-3xl border-border/70 bg-background p-8">
               <div className="flex items-start gap-4">
                 <AlertCircle className="h-6 w-6 text-yellow-600 dark:text-yellow-400 flex-shrink-0 mt-1" />
                 <div>
@@ -143,7 +143,7 @@ export default function APIDocsPage() {
           </section>
 
           {/* Footer Note */}
-          <div className="mt-12 text-center text-muted-foreground text-sm">
+          <div className="mt-12 text-center text-sm text-foreground/60">
             <p>{t("footer_note")}</p>
           </div>
         </div>

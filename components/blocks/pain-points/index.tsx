@@ -1,10 +1,10 @@
-'use client';
+﻿"use client";
 
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { ArrowRight, AlertCircle } from 'lucide-react';
-import Link from 'next/link';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight, AlertCircle } from "lucide-react";
+import Link from "next/link";
 
 export interface PainPointProblem {
   icon: string;
@@ -46,89 +46,64 @@ export function PainPoints({ section }: PainPointsProps) {
   const problems = section.problems;
 
   return (
-    <section className="py-20 lg:py-32 bg-gradient-to-b from-gray-50 to-white dark:from-gray-950 dark:to-black">
+    <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
-        {/* 头部引导 */}
-        <div className="max-w-4xl mx-auto text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-100 dark:bg-red-950 rounded-full mb-6">
-            <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400" />
-            <span className="text-sm font-medium text-red-600 dark:text-red-400">
-              {section.subtitle}
-            </span>
+        <div className="mx-auto mb-14 max-w-4xl text-center">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border/70 bg-card px-4 py-2">
+            <AlertCircle className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium text-muted-foreground">{section.subtitle}</span>
           </div>
 
-          <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="mb-6 text-4xl font-semibold tracking-tight text-foreground lg:text-5xl">
             {section.title}
           </h2>
 
-          <p className="text-xl text-gray-600 dark:text-gray-400 italic">
-            {section.description}
-          </p>
+          <p className="text-xl text-muted-foreground">{section.description}</p>
         </div>
 
-        {/* 痛点卡片 */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-20">
+        <div className="mb-16 grid grid-cols-1 gap-6 lg:grid-cols-3">
           {problems.map((problem, index) => (
             <Card
               key={index}
-              className="relative overflow-hidden border-2 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 group"
+              className="relative overflow-hidden rounded-2xl border border-border/60 bg-card shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
             >
               <CardContent className="p-8">
-                {/* 图标和统计 */}
-                <div className="flex justify-between items-start mb-6">
-                  <div className="text-5xl">{problem.icon}</div>
+                <div className="mb-6 flex items-start justify-between">
+                  <div className="text-4xl">{problem.icon}</div>
                   <div className="text-right">
-                    <div className="text-3xl font-bold text-red-500 dark:text-red-400">
-                      {problem.stat}
-                    </div>
-                    <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {problem.statLabel}
-                    </div>
+                    <div className="text-3xl font-bold text-primary">{problem.stat}</div>
+                    <div className="text-sm text-muted-foreground">{problem.statLabel}</div>
                   </div>
                 </div>
 
-                {/* 标题和描述 */}
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                  {problem.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
-                  {problem.description}
-                </p>
+                <h3 className="mb-3 text-2xl font-semibold text-foreground">{problem.title}</h3>
+                <p className="mb-6 text-muted-foreground">{problem.description}</p>
 
-                {/* 详细痛点 */}
                 <ul className="space-y-2">
                   {problem.details.map((detail, idx) => (
                     <li
                       key={idx}
-                      className="flex items-start gap-2 text-sm text-gray-500 dark:text-gray-400"
+                      className="flex items-start gap-2 text-sm text-muted-foreground"
                     >
-                      <span className="text-red-400 mt-1">✗</span>
+                      <span className="mt-0.5 text-primary">✓</span>
                       <span>{detail}</span>
                     </li>
                   ))}
                 </ul>
-
-                {/* 背景装饰 */}
-                <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-gradient-to-br from-red-100 to-red-50 dark:from-red-950 dark:to-red-900 rounded-full opacity-20 group-hover:scale-150 transition-transform duration-500" />
               </CardContent>
             </Card>
           ))}
         </div>
 
-        {/* 解决方案引导 */}
-        <div className="max-w-3xl mx-auto text-center">
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-transparent bg-clip-text">
-            <h3 className="text-3xl lg:text-4xl font-bold mb-4">
-              {section.solution.title}
-            </h3>
-          </div>
-          <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
-            {section.solution.description}
-          </p>
+        <div className="mx-auto max-w-3xl text-center">
+          <h3 className="mb-4 text-3xl font-semibold tracking-tight text-foreground lg:text-4xl">
+            {section.solution.title}
+          </h3>
+          <p className="mb-8 text-xl text-muted-foreground">{section.solution.description}</p>
           <Link href="/">
             <Button
               size="lg"
-              className="px-8 py-4 text-lg font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white border-0 shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl"
+              className="px-8 py-4 text-lg font-semibold"
             >
               {section.solution.cta}
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -136,23 +111,22 @@ export function PainPoints({ section }: PainPointsProps) {
           </Link>
         </div>
 
-        {/* 底部统计对比 */}
         {section.comparison && (
-          <div className="mt-20 grid grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="mt-20 grid grid-cols-2 gap-8 lg:grid-cols-4">
             <div className="text-center">
-              <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">{section.comparison.traditional_method}</div>
+              <div className="mb-2 text-sm text-muted-foreground">{section.comparison.traditional_method}</div>
               <div className="text-2xl font-bold text-red-500 line-through">{section.comparison.time_72h}</div>
             </div>
             <div className="text-center">
-              <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">{section.comparison.deep_video}</div>
+              <div className="mb-2 text-sm text-muted-foreground">{section.comparison.deep_video}</div>
               <div className="text-2xl font-bold text-green-500">{section.comparison.time_5min}</div>
             </div>
             <div className="text-center">
-              <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">{section.comparison.traditional_cost}</div>
+              <div className="mb-2 text-sm text-muted-foreground">{section.comparison.traditional_cost}</div>
               <div className="text-2xl font-bold text-red-500 line-through">{section.comparison.cost_5000}</div>
             </div>
             <div className="text-center">
-              <div className="text-sm text-gray-500 dark:text-gray-400 mb-2">{section.comparison.deep_video}</div>
+              <div className="mb-2 text-sm text-muted-foreground">{section.comparison.deep_video}</div>
               <div className="text-2xl font-bold text-green-500">{section.comparison.cost_5}</div>
             </div>
           </div>

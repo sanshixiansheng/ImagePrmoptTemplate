@@ -9,9 +9,9 @@ export default function Footer({ footer }: { footer: FooterType }) {
   }
 
   return (
-    <footer id={footer.name} className="border-t border-border/70 bg-card/40">
-      <div className="container py-14 md:py-16">
-        <div className="grid gap-10 md:grid-cols-[1.2fr_2fr]">
+    <footer id={footer.name} className="border-t py-8 text-foreground/70">
+      <div className="container py-6 md:py-8">
+        <div className="grid gap-8 md:grid-cols-[1.2fr_2fr]">
           <div className="space-y-5">
             <Link href={(footer.brand?.url as any) || "/"} className="inline-flex items-center gap-2">
               {footer.brand?.logo?.src ? (
@@ -23,12 +23,12 @@ export default function Footer({ footer }: { footer: FooterType }) {
                   className="h-10 w-auto"
                 />
               ) : (
-                <span className="font-serif text-2xl font-semibold">{footer.brand?.title}</span>
+                <span className="font-serif text-2xl font-semibold opacity-80">{footer.brand?.title}</span>
               )}
             </Link>
 
             {footer.brand?.description && (
-              <p className="max-w-md text-sm leading-6 text-muted-foreground">
+              <p className="max-w-md text-sm leading-6 text-foreground/60">
                 {footer.brand.description}
               </p>
             )}
@@ -41,7 +41,7 @@ export default function Footer({ footer }: { footer: FooterType }) {
                       href={item.url}
                       target={item.target}
                       rel="noreferrer"
-                      className="inline-flex size-9 items-center justify-center rounded-full border border-border/80 text-muted-foreground transition-colors hover:text-foreground"
+                      className="inline-flex size-9 items-center justify-center rounded-full border border-border/70 text-foreground/60 transition-colors hover:text-foreground"
                     >
                       {item.icon && <Icon name={item.icon} className="size-4" />}
                     </a>
@@ -54,7 +54,7 @@ export default function Footer({ footer }: { footer: FooterType }) {
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {footer.nav?.items?.map((item, i) => (
               <div key={i}>
-                <p className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                <p className="mb-4 text-sm font-semibold uppercase tracking-wide text-foreground/50">
                   {item.title}
                 </p>
                 <ul className="space-y-2.5 text-sm">
@@ -64,7 +64,7 @@ export default function Footer({ footer }: { footer: FooterType }) {
                         href={child.url}
                         target={child.target}
                         rel="noreferrer"
-                        className="text-foreground/80 transition-colors hover:text-foreground"
+                        className="text-foreground/70 transition-colors hover:text-foreground"
                       >
                         {child.title}
                       </a>
@@ -76,7 +76,7 @@ export default function Footer({ footer }: { footer: FooterType }) {
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col gap-3 border-t border-border/70 pt-6 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
+        <div className="mt-8 flex flex-col gap-3 border-t border-border/70 pt-6 text-sm text-foreground/55 md:flex-row md:items-center md:justify-between">
           <p>{footer.copyright}</p>
           {!!footer.agreement?.items?.length && (
             <ul className="flex flex-wrap items-center gap-3 md:justify-end">

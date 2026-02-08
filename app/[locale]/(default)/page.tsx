@@ -23,150 +23,148 @@ export default async function LandingPage({
   const t = await getTranslations("homepage");
 
   return (
-    <div className="bg-background text-foreground">
-      <section className="relative overflow-hidden border-b border-border/70">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(56,117,200,0.16),_transparent_45%)]" />
-        <div className="container relative py-24 md:py-28 lg:py-32">
-          <div className="mx-auto max-w-4xl text-center">
-            <h1 className="text-balance font-serif text-4xl leading-tight md:text-5xl lg:text-6xl">
-              {t("hero.title_main")}
-            </h1>
-            <p className="mx-auto mt-5 max-w-3xl text-base text-muted-foreground md:text-lg">
-              {t("hero.subtitle")}
-            </p>
-            <p className="mx-auto mt-2 max-w-3xl text-base text-muted-foreground md:text-lg">
-              {t("hero.description")}
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <TryNowButton label={t("hero.try_now")} />
-              <Link href="/blog">
-                <Button size="lg" variant="outline" className="rounded-xl px-7">
-                  {t("hero.tutorials")}
-                </Button>
-              </Link>
+    <div className="bg-card text-foreground">
+      <section className="relative overflow-hidden border-b pt-36 pb-14 lg:pt-44 lg:pb-16">
+        <div className="container relative">
+          <div className="mb-4 flex justify-start">
+            <div className="rounded-full bg-muted px-3 py-1 text-sm font-medium">
+              New: {t("hero.subtitle")}
             </div>
+          </div>
+
+          <h1 className="text-balance font-serif text-3xl font-medium leading-tight md:text-4xl lg:text-5xl xl:text-6xl">
+            {t("hero.title_main")}
+          </h1>
+          <p className="mt-3 max-w-3xl text-base text-foreground/70 md:text-lg">
+            {t("hero.description")}
+          </p>
+
+          <div className="mt-6 flex flex-wrap items-center gap-2">
+            <TryNowButton label={t("hero.try_now")} />
+            <Button asChild variant="ghost" size="lg">
+              <Link href="/blog">{t("hero.tutorials")}</Link>
+            </Button>
+          </div>
+
+          <div className="mx-auto mt-12 rounded-4xl bg-primary/10 p-4 lg:mt-16 lg:p-6">
+            <Image
+              src="https://chatmix.top/pixmind/index_image_demo2.webp"
+              alt={t("showcase.card1.title")}
+              width={1600}
+              height={900}
+              className="h-auto w-full rounded-xl object-cover"
+              priority
+            />
+          </div>
+        </div>
+      </section>
+
+      <section id="features" className="py-12 lg:py-16 xl:py-24">
+        <div className="container">
+          <div className="max-w-3xl">
+            <small className="mb-4 block text-xs font-medium uppercase tracking-wider text-primary">
+              Incredible features
+            </small>
+            <h2 className="font-serif text-2xl font-medium lg:text-3xl xl:text-4xl">
+              {t("showcase.card1.title")}
+            </h2>
+            <p className="mt-2 text-foreground/60 lg:text-lg">{t("showcase.card1.description")}</p>
+          </div>
+
+          <div className="mt-8 grid grid-cols-1 gap-4 lg:mt-12">
+            <article className="rounded-4xl bg-background p-6 lg:p-8">
+              <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 lg:gap-12">
+                <div>
+                  <h3 className="font-serif text-xl md:text-2xl">{t("showcase.card2.title")}</h3>
+                  <p className="mt-4 text-foreground/70">{t("showcase.card2.description")}</p>
+                  <div className="mt-4">
+                    <Button asChild>
+                      <Link href="/video-generate/sora-2">{t("showcase.card2.start_creating")}</Link>
+                    </Button>
+                  </div>
+                </div>
+                <div className="rounded-2xl bg-card p-3">
+                  <VideoCarousel />
+                </div>
+              </div>
+            </article>
+
+            <article className="rounded-4xl bg-background p-6 lg:p-8">
+              <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-2 lg:gap-12">
+                <div>
+                  <Image
+                    src="https://chatmix.top/pixmind/index_image_demo3.png"
+                    alt={t("showcase.card3.title")}
+                    width={1200}
+                    height={800}
+                    className="h-auto w-full rounded-xl object-cover"
+                    loading="lazy"
+                  />
+                </div>
+                <div>
+                  <h3 className="font-serif text-xl md:text-2xl">{t("showcase.card3.title")}</h3>
+                  <p className="mt-4 text-foreground/70">{t("showcase.card3.description")}</p>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    <Button asChild>
+                      <Link href="/txt-to-image/all">All Models</Link>
+                    </Button>
+                    <Button asChild variant="outline">
+                      <Link href="/txt-to-image/nano-banana">Nano Banana</Link>
+                    </Button>
+                    <Button asChild variant="outline">
+                      <Link href="/txt-to-image/google-imagen">Google Imagen 4</Link>
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>
 
       <EffectsSection locale={locale} />
 
-      <section className="container py-16 md:py-20">
-        <div className="space-y-6 md:space-y-8">
-          <article className="rounded-3xl border border-border/80 bg-card shadow-sm">
-            <div className="grid gap-8 p-6 md:grid-cols-2 md:items-center md:p-10 lg:p-12">
-              <div className="overflow-hidden rounded-2xl border border-border/70">
-                <Image
-                  src="https://chatmix.top/pixmind/index_image_demo2.webp"
-                  alt={t("showcase.card1.title")}
-                  width={1200}
-                  height={800}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="space-y-4">
-                <h2 className="font-serif text-2xl md:text-3xl">
-                  {t("showcase.card1.title")}
-                </h2>
-                <p className="text-sm leading-6 text-muted-foreground">
-                  {t("showcase.card1.description")}
-                </p>
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                      01
-                    </span>
-                    <div>
-                      <p className="font-medium">{t("showcase.card1.feature1_title")}</p>
-                      <p className="text-sm text-muted-foreground">{t("showcase.card1.feature1_desc")}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <span className="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-                      02
-                    </span>
-                    <div>
-                      <p className="font-medium">{t("showcase.card1.feature2_title")}</p>
-                      <p className="text-sm text-muted-foreground">{t("showcase.card1.feature2_desc")}</p>
-                    </div>
-                  </div>
-                </div>
-                <Button className="mt-2 rounded-xl">{t("showcase.card1.start_creating")}</Button>
-              </div>
-            </div>
-          </article>
-
-          <article className="rounded-3xl border border-border/80 bg-card shadow-sm">
-            <div className="grid gap-8 p-6 md:grid-cols-2 md:items-center md:p-10 lg:p-12">
-              <div className="space-y-5 md:order-1 order-2">
-                <h2 className="font-serif text-2xl md:text-3xl">
-                  {t("showcase.card2.title")}
-                </h2>
-                <p className="leading-7 text-muted-foreground">
-                  {t("showcase.card2.description")}
-                </p>
-                <Link href="/video-generate/sora-2">
-                  <Button className="rounded-xl">{t("showcase.card2.start_creating")}</Button>
-                </Link>
-              </div>
-              <div className="overflow-hidden rounded-2xl border border-border/70 md:order-2 order-1">
-                <VideoCarousel />
-              </div>
-            </div>
-          </article>
-
-          <article className="rounded-3xl border border-border/80 bg-card shadow-sm">
-            <div className="grid gap-8 p-6 md:grid-cols-2 md:items-center md:p-10 lg:p-12">
-              <div className="overflow-hidden rounded-2xl border border-border/70">
-                <Image
-                  src="https://chatmix.top/pixmind/index_image_demo3.png"
-                  alt={t("showcase.card3.title")}
-                  width={1200}
-                  height={800}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-              </div>
-              <div className="space-y-5">
-                <h2 className="font-serif text-2xl md:text-3xl">
-                  {t("showcase.card3.title")}
-                </h2>
-                <p className="leading-7 text-muted-foreground">
-                  {t("showcase.card3.description")}
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  <Link href="/txt-to-image/all">
-                    <Button className="rounded-xl">All Models</Button>
-                  </Link>
-                  <Link href="/txt-to-image/nano-banana">
-                    <Button variant="outline" className="rounded-xl">
-                      Nano Banana
-                    </Button>
-                  </Link>
-                  <Link href="/txt-to-image/google-imagen">
-                    <Button variant="outline" className="rounded-xl">
-                      Google Imagen 4
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </article>
+      <section id="pricing" className="border-y bg-background/70 py-14">
+        <div className="container text-center">
+          <h2 className="font-serif text-3xl font-medium">{t("showcase.card1.start_creating")}</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-foreground/65">
+            Flexible plans for creators and teams. Keep your existing billing logic unchanged.
+          </p>
+          <div className="mt-6">
+            <Button asChild size="lg">
+              <Link href="/pricing">View Pricing</Link>
+            </Button>
+          </div>
         </div>
       </section>
 
-      <FAQSection
-        title={t("faq.title")}
-        faqs={[
-          { question: t("faq.q1_question"), answer: t("faq.q1_answer") },
-          { question: t("faq.q2_question"), answer: t("faq.q2_answer") },
-          { question: t("faq.q3_question"), answer: t("faq.q3_answer") },
-          { question: t("faq.q4_question"), answer: t("faq.q4_answer") },
-        ]}
-      />
+      <section id="faq">
+        <FAQSection
+          title={t("faq.title")}
+          faqs={[
+            { question: t("faq.q1_question"), answer: t("faq.q1_answer") },
+            { question: t("faq.q2_question"), answer: t("faq.q2_answer") },
+            { question: t("faq.q3_question"), answer: t("faq.q3_answer") },
+            { question: t("faq.q4_question"), answer: t("faq.q4_answer") },
+          ]}
+        />
+      </section>
+
+      <section className="py-14">
+        <div className="container">
+          <div className="rounded-3xl border bg-card p-8 text-center lg:p-10">
+            <h3 className="font-serif text-2xl font-medium">Stay in the loop</h3>
+            <p className="mx-auto mt-2 max-w-xl text-foreground/65">
+              Get updates on new models, prompts, and product improvements.
+            </p>
+            <div className="mt-5">
+              <Button asChild variant="secondary">
+                <Link href="/contact">Contact Us</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
-
-

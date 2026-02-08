@@ -131,12 +131,12 @@ export default function ImageToPromptPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
+    <div className="container mx-auto max-w-6xl px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+        <h1 className="mb-4 text-4xl font-semibold tracking-tight text-foreground">
           Image to Prompt
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-muted-foreground">
           Upload an image and AI will analyze it to generate a detailed prompt or description
         </p>
       </div>
@@ -153,7 +153,7 @@ export default function ImageToPromptPage() {
           <div className="mb-4">
             <label
               htmlFor="image-upload"
-              className="flex flex-col items-center justify-center w-full h-64 border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="flex h-64 w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-border bg-muted/20 transition-colors hover:bg-muted/40"
             >
               {previewUrl ? (
                 <div className="relative w-full h-full">
@@ -165,11 +165,11 @@ export default function ImageToPromptPage() {
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <Upload className="w-12 h-12 mb-4 text-gray-400" />
-                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                  <Upload className="mb-4 h-12 w-12 text-muted-foreground" />
+                  <p className="mb-2 text-sm text-muted-foreground">
                     <span className="font-semibold">Click to upload</span> or drag and drop
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-muted-foreground">
                     PNG, JPG, WEBP (MAX. 10MB)
                   </p>
                 </div>
@@ -194,7 +194,7 @@ export default function ImageToPromptPage() {
                 <TabsTrigger value="detailed">Detailed</TabsTrigger>
               </TabsList>
             </Tabs>
-            <p className="text-xs text-gray-500 mt-2">
+            <p className="mt-2 text-xs text-muted-foreground">
               {mode === "prompt" && "Generate a concise image generation prompt"}
               {mode === "describe" && "Get a detailed description of the image"}
               {mode === "detailed" && "Get a comprehensive, technical prompt"}
@@ -250,7 +250,7 @@ export default function ImageToPromptPage() {
               </div>
             </>
           ) : (
-            <div className="flex flex-col items-center justify-center h-[400px] text-gray-400">
+            <div className="flex h-[400px] flex-col items-center justify-center text-muted-foreground">
               <Wand2 className="w-16 h-16 mb-4 opacity-50" />
               <p className="text-center">
                 Upload an image and click "Analyze Image" to see the result
@@ -266,19 +266,19 @@ export default function ImageToPromptPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
           <div>
             <h4 className="font-semibold mb-2">1. Upload Image</h4>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-muted-foreground">
               Upload any image you want to analyze
             </p>
           </div>
           <div>
             <h4 className="font-semibold mb-2">2. Choose Mode</h4>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-muted-foreground">
               Select prompt generation, description, or detailed analysis
             </p>
           </div>
           <div>
             <h4 className="font-semibold mb-2">3. Get Result</h4>
-            <p className="text-gray-600 dark:text-gray-400">
+            <p className="text-muted-foreground">
               AI analyzes the image and generates the result
             </p>
           </div>

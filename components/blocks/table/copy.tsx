@@ -4,7 +4,7 @@ import { CopyToClipboard } from "react-copy-to-clipboard";
 import { ReactNode } from "react";
 import { toast } from "sonner";
 
-export default function ({
+export default function CopyText({
   text,
   children,
 }: {
@@ -13,7 +13,7 @@ export default function ({
 }) {
   return (
     <CopyToClipboard text={text} onCopy={() => toast.success("Copied")}>
-      <div className="cursor-pointer">{children}</div>
+      <div className="cursor-pointer hover:text-primary transition-colors">{children}</div>
     </CopyToClipboard>
   );
 }

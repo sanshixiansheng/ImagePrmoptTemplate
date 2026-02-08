@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 /* eslint-disable @next/next/no-img-element, react/no-unescaped-entities, react-hooks/exhaustive-deps */
 
 import { useState, useEffect } from "react";
@@ -18,7 +18,7 @@ import { ImageComparison } from "@/components/ui/image-comparison";
 import { useConsumptionItems } from "@/hooks/useConsumptionItems";
 import { mapImageModelToConsumptionType } from "@/lib/model-consumption-mapping";
 
-// 复用 digital-human 的 Google 登录处理组件
+// Reuse Google auth handler logic from digital-human page
 function GoogleAuthHandler() {
   const t = useTranslations('ai_image');
   const [searchParams] = useState(() => {
@@ -29,21 +29,21 @@ function GoogleAuthHandler() {
   });
 
   useEffect(() => {
-    // 清除所有 Google OAuth 和登录相关的标志
+    // Clear Google OAuth/login related flags
     sessionStorage.removeItem('google_oauth_in_progress');
     sessionStorage.removeItem('user_opened_sign_modal');
 
-    // 检查URL参数中是否有token（从Google OAuth回调返回）
+    // Check auth token in URL params (returned from Google OAuth callback)
     const authToken = searchParams.get('auth_token');
     const refreshToken = searchParams.get('refresh_token');
 
     if (authToken) {
       console.log('[GoogleAuthHandler] Found auth token in URL params');
 
-      // 保存token到localStorage
+      // 淇濆瓨token鍒發ocalStorage
       localStorage.setItem("aiHubToken", authToken);
 
-      // 保存完整的token信息
+      // 淇濆瓨瀹屾暣鐨則oken淇℃伅
       localStorage.setItem("aiHubToken_full", JSON.stringify({
         token: authToken,
         refreshToken: refreshToken || '',
@@ -52,20 +52,20 @@ function GoogleAuthHandler() {
         loginTime: Date.now()
       }));
 
-      // 显示成功提示
+      // Show success message
       toast.success(t('login_success'));
 
-      // 清理URL参数
+      // Clean URL params
       const newUrl = new URL(window.location.href);
       newUrl.searchParams.delete('auth_token');
       newUrl.searchParams.delete('refresh_token');
       window.history.replaceState({}, '', newUrl.pathname);
 
-      // 刷新页面以获取新token
+      // Reload page to pick up new token
       window.location.reload();
     }
 
-    // 检查cookie中是否有token（备用方案）
+    // Check token from cookie as fallback
     const cookieToken = document.cookie
       .split('; ')
       .find(row => row.startsWith('aiHubToken='))
@@ -75,7 +75,7 @@ function GoogleAuthHandler() {
       console.log('[GoogleAuthHandler] Found auth token in cookie');
       localStorage.setItem("aiHubToken", cookieToken);
 
-      // 保存完整的token信息
+      // 淇濆瓨瀹屾暣鐨則oken淇℃伅
       localStorage.setItem("aiHubToken_full", JSON.stringify({
         token: cookieToken,
         refreshToken: '',
@@ -101,9 +101,9 @@ interface ImageModel {
 
 export default function TextToImagePage() {
   const params = useParams();
-  const routeModel = params?.model as string || 'all'; // 获取路由中的模型参数
+  const routeModel = params?.model as string || 'all'; // route model param
   const t = useTranslations('ai_image');
-  const locale = useLocale(); // 获取当前语言
+  const locale = useLocale(); // current locale
   const { getCredits } = useConsumptionItems();
   const { data: session, status } = useSession();
 
@@ -114,9 +114,9 @@ export default function TextToImagePage() {
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
   const [models, setModels] = useState<ImageModel[]>([]);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
-  const [isTranslating, setIsTranslating] = useState(false); // 翻译状态
+  const [isTranslating, setIsTranslating] = useState(false); // translation state
 
-  // Image to Image 相关状态
+  // Image to Image 鐩稿叧鐘舵€?
   const [referenceImage, setReferenceImage] = useState<File | null>(null);
   const [referenceImagePreview, setReferenceImagePreview] = useState<string | null>(null);
   const [i2iPrompt, setI2iPrompt] = useState("");
@@ -126,40 +126,40 @@ export default function TextToImagePage() {
   const [generatedI2IImage, setGeneratedI2IImage] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("text-to-image");
-  const [isTranslatingI2I, setIsTranslatingI2I] = useState(false); // 图生图翻译状态
+  const [isTranslatingI2I, setIsTranslatingI2I] = useState(false); // i2i translation state
 
-  // 根据路由参数过滤模型（文生图）
+  // Filter text-to-image models by route param
   const filteredModels = models.filter(m => {
-    // 首先检查是否支持文生图（如果字段存在）
+    // First, check supportsTextToImage when field exists
     if (m.supportsTextToImage !== undefined && m.supportsTextToImage === false) {
       return false;
     }
 
-    if (routeModel === 'all') return true; // 'all' 显示所有模型
+    if (routeModel === 'all') return true; // show all models
 
-    // google-imagen 页面：只显示 Imagen-4 Standard, Ultra, Fast
+    // google-imagen page: show Imagen-4 Standard/Ultra/Fast
     if (routeModel === 'google-imagen') {
       return m.id.includes('imagen-4');
     }
 
-    // nano-banana 页面：只显示 Evolink 的 nano-banana 模型
+    // nano-banana page: show Evolink nano-banana models
     if (routeModel === 'nano-banana') {
       return m.provider === 'evolink' || m.id.includes('nano-banana');
     }
 
-    // doubao-seedream 页面：只显示 Seedream 和 SeedEdit 模型
+    // doubao-seedream page: show Seedream/SeedEdit models
     if (routeModel === 'doubao-seedream') {
       return m.id.includes('seedream') || m.id.includes('seededit');
     }
 
-    // 其他路由：匹配模型 id 或 model 字段
+    // Other routes: match by model id/model field
     return m.id.includes(routeModel) || m.model.toLowerCase().includes(routeModel.toLowerCase());
   });
 
-  // 图生图专用模型列表：根据 supportsImageToImage 字段过滤
-  // 优先使用 supportsImageToImage 字段判断，兼容旧逻辑（-i2i 后缀）
+  // Filter image-to-image model list by supportsImageToImage
+  // Prefer supportsImageToImage field, keep backward-compatible logic
   const i2iFilteredModels = models.filter(m => {
-    // 首先检查是否支持图生图
+    // First, check if model supports image-to-image
     let supportsI2I = false;
 
     if (m.supportsImageToImage !== undefined) {
@@ -170,49 +170,49 @@ export default function TextToImagePage() {
       supportsI2I = true;
     }
 
-    // 如果不支持图生图，直接过滤掉
+    // Exclude models that do not support image-to-image
     if (!supportsI2I) {
       return false;
     }
 
-    // 根据路由参数进一步过滤模型
+    // Then apply route-based filtering
     if (routeModel === 'all') {
       return true;
     }
 
-    // google-imagen 页面：只显示 Google 的图生图模型
+    // google-imagen page: show Google image-to-image models
     if (routeModel === 'google-imagen') {
       return m.id.includes('imagen') && m.provider === 'google';
     }
 
-    // nano-banana 页面：只显示 Evolink 模型
+    // nano-banana page: show Evolink models
     if (routeModel === 'nano-banana') {
       return m.provider === 'evolink' || m.id.includes('nano-banana');
     }
 
-    // doubao-seedream 页面：只显示 Seedream 和 SeedEdit 模型
+    // doubao-seedream page: show Seedream/SeedEdit models
     if (routeModel === 'doubao-seedream') {
       return m.id.includes('seedream') || m.id.includes('seededit');
     }
 
-    // 其他路由：匹配模型 id 或 model 字段
+    // Other routes: match by model id/model field
     return m.id.includes(routeModel) || m.model.toLowerCase().includes(routeModel.toLowerCase());
   });
 
-  // 从 localStorage 获取 token，类似 digital-human
-  // 注意：现在直接在需要时从 localStorage 获取 token，不再使用状态变量
+  // Read token from localStorage (same as digital-human style)
+  // Note: read token on-demand instead of storing in React state
 
-  // 获取模型列表（不需要登录）
+  // Fetch model list (no login required)
   useEffect(() => {
     const fetchModels = async () => {
       setIsLoadingModels(true);
       try {
-        console.log('[TextToImage] ===== 开始获取模型列表 =====');
-        console.log('[TextToImage] 当前路由模型参数:', routeModel);
+        console.log('[TextToImage] ===== start fetching models =====');
+        console.log('[TextToImage] route model param:', routeModel);
 
-        // 使用硬编码的模型列表
+        // Use hardcoded model list
         const mockModels: ImageModel[] = [
-          // ✅ 已实现：Evolink Nano Banana
+          // ×宸插疄鐜帮細Evolink Nano Banana
           {
             id: 'nano-banana-2-lite',
             name: 'Nano Banana Pro',
@@ -222,7 +222,7 @@ export default function TextToImagePage() {
             supportsTextToImage: true,
             supportsImageToImage: true
           },
-          // 🔜 即将推出：Google Imagen 4 系列（保留前端选项，方便后续集成）
+          // Keep upcoming Google Imagen 4 options for future integration
           {
             id: 'imagen-4-standard',
             name: 'Imagen 4 Standard',
@@ -253,31 +253,31 @@ export default function TextToImagePage() {
         ];
 
         const result = { code: 1000, data: mockModels, message: 'success' };
-        console.log('[TextToImage] 模型列表响应数据:', JSON.stringify(result, null, 2));
+        console.log('[TextToImage] model list response:', JSON.stringify(result, null, 2));
 
         if (result.code === 1000 && result.data) {
           setModels(result.data);
 
-          // 根据路由参数过滤模型（文生图）
+          // Filter text-to-image models by route
           const filtered = result.data.filter((m: ImageModel) => {
-            // 首先检查是否支持文生图（如果字段存在）
+            // First, check supportsTextToImage when field exists
             if (m.supportsTextToImage !== undefined && m.supportsTextToImage === false) {
               return false;
             }
 
             if (routeModel === 'all') return true;
 
-            // google-imagen 页面：只显示 Imagen-4 Standard, Ultra, Fast
+            // google-imagen page: show Imagen-4 Standard/Ultra/Fast
             if (routeModel === 'google-imagen') {
               return m.id.includes('imagen-4');
             }
 
-            // nano-banana 页面：只显示 Evolink 的 nano-banana 模型
+            // nano-banana page: show Evolink nano-banana models
             if (routeModel === 'nano-banana') {
               return m.provider === 'evolink' || m.id.includes('nano-banana');
             }
 
-            // doubao-seedream 页面：只显示 Seedream 和 SeedEdit 模型
+            // doubao-seedream page: show Seedream/SeedEdit models
             if (routeModel === 'doubao-seedream') {
               return m.id.includes('seedream') || m.id.includes('seededit');
             }
@@ -285,9 +285,9 @@ export default function TextToImagePage() {
             return m.id.includes(routeModel) || m.model.toLowerCase().includes(routeModel.toLowerCase());
           });
 
-          // 图生图专用模型过滤：根据 supportsImageToImage 字段过滤
+          // Filter image-to-image models by supportsImageToImage
           const i2iFiltered = result.data.filter((m: ImageModel) => {
-            // 首先检查是否支持图生图
+            // First, check if model supports image-to-image
             let supportsI2I = false;
 
             if (m.supportsImageToImage !== undefined) {
@@ -298,86 +298,86 @@ export default function TextToImagePage() {
               supportsI2I = true;
             }
 
-            // 如果不支持图生图，直接过滤掉
+            // Exclude models that do not support image-to-image
             if (!supportsI2I) {
               return false;
             }
 
-            // 根据路由参数进一步过滤模型
+            // Then apply route-based filtering
             if (routeModel === 'all') {
               return true;
             }
 
-            // google-imagen 页面：只显示 Google 的图生图模型
+            // google-imagen page: show Google image-to-image models
             if (routeModel === 'google-imagen') {
               return m.id.includes('imagen') && m.provider === 'google';
             }
 
-            // nano-banana 页面：只显示 Evolink 模型
+            // nano-banana page: show Evolink models
             if (routeModel === 'nano-banana') {
               return m.provider === 'evolink' || m.id.includes('nano-banana');
             }
 
-            // doubao-seedream 页面：只显示 Seedream 和 SeedEdit 模型
+            // doubao-seedream page: show Seedream/SeedEdit models
             if (routeModel === 'doubao-seedream') {
               return m.id.includes('seedream') || m.id.includes('seededit');
             }
 
-            // 其他路由：匹配模型 id 或 model 字段
+            // Other routes: match by model id/model field
             return m.id.includes(routeModel) || m.model.toLowerCase().includes(routeModel.toLowerCase());
           });
 
-          // 设置默认模型
+          // Set default model
           if (filtered.length > 0) {
             setModel(filtered[0].id);
-            console.log('[TextToImage] ✅ 文生图：成功加载', filtered.length, '个模型');
-            console.log('[TextToImage] 默认模型设置为:', filtered[0].id, '-', filtered[0].name);
-            console.log('[TextToImage] 所有过滤后的模型:', filtered.map((m: ImageModel) => `${m.id} (${m.name})`).join(', '));
+            console.log('[TextToImage] text-to-image models loaded:', filtered.length);
+            console.log('[TextToImage] default model set:', filtered[0].id, '-', filtered[0].name);
+            console.log('[TextToImage] filtered models:', filtered.map((m: ImageModel) => `${m.id} (${m.name})`).join(', '));
           } else {
-            console.warn('[TextToImage] ⚠️ 没有匹配的模型，路由参数:', routeModel);
-            console.warn('[TextToImage] 所有可用模型:', result.data.map((m: ImageModel) => `${m.id} (provider: ${m.provider})`).join(', '));
+            console.warn('[TextToImage] no matched model for route param:', routeModel);
+            console.warn('[TextToImage] all available models:', result.data.map((m: ImageModel) => `${m.id} (provider: ${m.provider})`).join(', '));
           }
 
-          // 设置图生图默认模型
+          // Set default image-to-image model
           if (i2iFiltered.length > 0) {
             setI2iModel(i2iFiltered[0].id);
-            console.log('[TextToImage] ✅ 图生图：成功加载', i2iFiltered.length, '个模型');
-            console.log('[TextToImage] 图生图默认模型设置为:', i2iFiltered[0].id, '-', i2iFiltered[0].name);
-            console.log('[TextToImage] 所有图生图模型:', i2iFiltered.map((m: ImageModel) => `${m.id} (${m.name}, supportsI2I: ${m.supportsImageToImage})`).join(', '));
+            console.log('[TextToImage] image-to-image models loaded:', i2iFiltered.length);
+            console.log('[TextToImage] default i2i model set:', i2iFiltered[0].id, '-', i2iFiltered[0].name);
+            console.log('[TextToImage] all i2i models:', i2iFiltered.map((m: ImageModel) => `${m.id} (${m.name}, supportsI2I: ${m.supportsImageToImage})`).join(', '));
           } else {
-            console.warn('[TextToImage] ⚠️ 没有找到支持图生图的模型');
+            console.warn('[TextToImage] no models support image-to-image');
           }
         } else {
-          console.error('[TextToImage] ❌ 获取模型列表失败 - Code:', result.code, 'Message:', result.message);
-          toast.error(`获取模型列表失败: ${result.message || '未知错误'}`);
+          console.error('[TextToImage] generation failed - Code:', result.code, 'Message:', result.message);
+          toast.error(`Failed to fetch models: ${result.message || 'Unknown error'}`);
         }
       } catch (error) {
-        console.error('[TextToImage] ❌ 获取模型列表异常:', error);
-        toast.error('获取模型列表失败，请检查网络连接');
+        console.error('[TextToImage] generation exception:', error);
+        toast.error('Failed to load model list. Please check your network connection.');
       } finally {
         setIsLoadingModels(false);
-        console.log('[TextToImage] ===== 模型列表获取完成 =====');
+        console.log('[TextToImage] ===== model fetch completed =====');
       }
     };
 
     fetchModels();
-  }, [routeModel]); // 依赖路由参数，路由改变时重新获取
+  }, [routeModel]); // refetch when route model changes
 
-  // 保存当前页面URL，用于登录后跳转回来
+  // Save current URL for redirect after login
   const saveRedirectUrl = () => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('loginRedirectUrl', window.location.pathname);
-      console.log('[TextToImage] 已保存重定向URL:', window.location.pathname);
+      console.log('[TextToImage] 宸蹭繚瀛橀噸瀹氬悜URL:', window.location.pathname);
     }
   };
 
-  // 处理图片上传
+  // Handle reference image upload
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setReferenceImage(file);
       
-      // 创建预览
+      // 鍒涘缓棰勮
       const reader = new FileReader();
       reader.onload = (e) => {
         setReferenceImagePreview(e.target?.result as string);
@@ -386,15 +386,15 @@ export default function TextToImagePage() {
     }
   };
 
-  // 移除参考图片
+  // Remove reference image
   const handleRemoveImage = () => {
     setReferenceImage(null);
     setReferenceImagePreview(null);
   };
 
   const handleGenerate = async () => {
-    console.log('[TextToImage] 点击生成按钮，session 状态:', session ? '已登录' : '未登录');
-    console.log('[TextToImage] 当前模型:', model);
+    console.log('[TextToImage] Generate clicked, session status:', session ? 'logged-in' : 'not-logged-in');
+    console.log('[TextToImage] current model:', model);
 
     if (!session) {
       saveRedirectUrl();
@@ -415,9 +415,9 @@ export default function TextToImagePage() {
     setGeneratedImage(null);
 
     try {
-      // 如果是 nano-banana 模型，使用 Evolink API
+      // If nano-banana model is selected, use Evolink API
       if (model === 'nano-banana-2-lite') {
-        console.log('[Evolink] 使用 Evolink API 生成图片');
+        console.log('[Evolink] generating image via Evolink API');
 
         const sizeMap: Record<string, string> = {
           '1:1': '1:1',
@@ -427,9 +427,9 @@ export default function TextToImagePage() {
           '3:4': '3:4'
         };
 
-        console.log('[Evolink] 使用 session 认证');
+        console.log('[Evolink] 浣跨敤 session 璁よ瘉');
 
-        // 创建任务
+        // 鍒涘缓浠诲姟
         const response = await fetch('/api/ai/evolink/generate', {
           method: 'POST',
           headers: {
@@ -443,16 +443,16 @@ export default function TextToImagePage() {
         });
 
         const result = await response.json();
-        console.log('[Evolink] 创建任务响应:', result);
+        console.log('[Evolink] 鍒涘缓浠诲姟鍝嶅簲:', result);
 
         if (result.code !== 1000) {
           throw new Error(result.message || 'Generation failed');
         }
 
         const taskId = result.data.id;
-        console.log('[Evolink] 任务ID:', taskId);
+        console.log('[Evolink] 浠诲姟ID:', taskId);
 
-        // 轮询任务状态
+        // 杞浠诲姟鐘舵€?
         const maxAttempts = 120;
         const pollInterval = 2000;
 
@@ -462,7 +462,7 @@ export default function TextToImagePage() {
           const statusResponse = await fetch(`/api/ai/evolink/task/${taskId}`);
 
           const statusResult = await statusResponse.json();
-          console.log(`[Evolink] 轮询 ${attempt + 1}/${maxAttempts}, 状态:`, statusResult.data?.status, '进度:', statusResult.data?.progress);
+          console.log(`[Evolink] 杞 ${attempt + 1}/${maxAttempts}, 鐘舵€?`, statusResult.data?.status, '杩涘害:', statusResult.data?.progress);
 
           if (statusResult.code !== 1000) {
             throw new Error(statusResult.message || 'Task query failed');
@@ -471,7 +471,7 @@ export default function TextToImagePage() {
           const taskData = statusResult.data;
 
           if (taskData.status === 'completed' && taskData.results && taskData.results.length > 0) {
-            console.log('[Evolink] 生成完成，图片URL:', taskData.results[0]);
+            console.log('[Evolink] generation completed, image URL:', taskData.results[0]);
             setGeneratedImage(taskData.results[0]);
             toast.success(t('generation_success'));
             return;
@@ -485,18 +485,18 @@ export default function TextToImagePage() {
         throw new Error('Task timeout');
       }
 
-      // 🔜 Google Imagen 系列模型：即将推出
+      // Google Imagen series model: coming soon
       if (model.includes('imagen-4')) {
-        console.log('[Google Imagen] 用户选择了即将推出的模型:', model);
-        toast.info('🚀 Google Imagen 4 系列即将推出，敬请期待！\n\n当前可用模型：Nano Banana Pro', {
+        console.log('[Google Imagen] user selected upcoming model:', model);
+        toast.info('Google Imagen 4 series is coming soon. Current available model: Nano Banana Pro', {
           duration: 4000
         });
         setIsGenerating(false);
         return;
       }
 
-      // 其他模型使用通用 API（如有）
-      console.log('开始生成图片...', {
+      // Other models use common API (if available)
+      console.log('[TextToImage] start generation...', {
         prompt,
         modelId: model,
         aspectRatio
@@ -517,10 +517,10 @@ export default function TextToImagePage() {
 
       const result = await response.json();
 
-      console.log('[TextToImage] API 响应:', JSON.stringify(result, null, 2));
+      console.log('[TextToImage] API response:', JSON.stringify(result, null, 2));
 
       if (result.code === 401 || response.status === 401) {
-        console.error('[TextToImage] 登录失效:', result.message);
+        console.error('[TextToImage] auth failed:', result.message);
         authEventBus.emit({
           type: 'login-expired',
           message: result.message || t('login_expired')
@@ -531,24 +531,24 @@ export default function TextToImagePage() {
 
       if (result.code === 1000 && result.data?.images && result.data.images.length > 0) {
         const imageUrl = result.data.images[0];
-        console.log('[TextToImage] 图片生成成功:', imageUrl);
+        console.log('[TextToImage] image generated:', imageUrl);
         setGeneratedImage(imageUrl);
         toast.success(t('generation_success'));
       } else {
-        console.error('[TextToImage] 生成失败 - Code:', result.code, 'Message:', result.message);
+        console.error('[TextToImage] generation failed - Code:', result.code, 'Message:', result.message);
         toast.error(result.message || t('generation_failed'));
       }
     } catch (error: any) {
-      console.error('[TextToImage] 生成图片异常:', error);
+      console.error('[TextToImage] generation exception:', error);
       toast.error(error.message || t('generation_error'));
     } finally {
       setIsGenerating(false);
     }
   };
 
-  // Image to Image 生成函数
+  // Image-to-image generation handler
   const handleImageToImageGenerate = async () => {
-    console.log('[ImageToImage] 点击生成按钮');
+    console.log('[ImageToImage] generate button clicked');
 
     if (!session) {
       saveRedirectUrl();
@@ -574,10 +574,10 @@ export default function TextToImagePage() {
     setGeneratedI2IImage(null);
 
     try {
-      // 🔜 Google Imagen 系列模型：即将推出
+      // Google Imagen series model: coming soon
       if (i2iModel.includes('imagen-4')) {
-        console.log('[ImageToImage] 用户选择了即将推出的模型:', i2iModel);
-        toast.info('🚀 Google Imagen 4 图生图功能即将推出，敬请期待！\n\n当前可用模型：Nano Banana Pro', {
+        console.log('[ImageToImage] user selected upcoming model:', i2iModel);
+        toast.info('Google Imagen 4 image-to-image is coming soon. Current available model: Nano Banana Pro', {
           duration: 4000
         });
         setIsGeneratingI2I(false);
@@ -587,10 +587,10 @@ export default function TextToImagePage() {
       const formData = new FormData();
       formData.append('image', referenceImage);
       formData.append('prompt', i2iPrompt);
-      formData.append('model', i2iModel);  // 直接使用模型 id
+      formData.append('model', i2iModel);  // use model id directly
       formData.append('aspectRatio', i2iAspectRatio);
 
-      console.log('[ImageToImage] 开始生成，参数:', {
+      console.log('[ImageToImage] start generation, params:', {
         hasImage: !!referenceImage,
         prompt: i2iPrompt,
         modelId: i2iModel,
@@ -600,19 +600,19 @@ export default function TextToImagePage() {
       const response = await fetch('/api/ai/image-to-image', {
         method: 'POST',
         headers: {
-          'language': locale,  // 添加语言头
+          'language': locale,  // attach language header
         },
         body: formData,
       });
 
       const result = await response.json();
-      console.log('[ImageToImage] API 响应:', result);
+      console.log('[ImageToImage] API 鍝嶅簲:', result);
 
-      // 检查登录失效
+      // Check login expiration
       if (result.code === 401 || response.status === 401) {
-        console.error('[ImageToImage] 登录失效:', result.message);
+        console.error('[ImageToImage] auth expired:', result.message);
 
-        // 触发登录失效事件，打开登录弹窗
+        // Emit login-expired event to open login modal
         authEventBus.emit({
           type: 'login-expired',
           message: result.message || t('login_expired')
@@ -627,18 +627,18 @@ export default function TextToImagePage() {
         setGeneratedI2IImage(imageUrl);
         toast.success(t('generation_success'));
       } else {
-        console.error('[ImageToImage] 生成失败:', result);
+        console.error('[ImageToImage] generation failed:', result);
         toast.error(result.message || t('generation_failed'));
       }
     } catch (error) {
-      console.error('[ImageToImage] 生成异常:', error);
+      console.error('[ImageToImage] generation exception:', error);
       toast.error(t('generation_error'));
     } finally {
       setIsGeneratingI2I(false);
     }
   };
 
-  // 翻译提示词（文生图）
+  // Translate prompt (text-to-image)
   const handleTranslate = async () => {
     if (!prompt.trim()) {
       toast.error(t('enter_prompt'));
@@ -658,10 +658,10 @@ export default function TextToImagePage() {
     setIsTranslating(true);
 
     try {
-      console.log('[Translate] 开始翻译提示词:', prompt);
+      console.log('[Translate] start translating prompt:', prompt);
 
-      // 目标语言：根据当前语言决定
-      // 如果当前是中文，翻译成英文；如果是英文，翻译成中文
+      // Decide target language based on current locale
+      // zh -> en, en -> zh
       const targetLanguage = locale === 'zh' ? 'en' : 'zh';
 
       const response = await fetch('/api/text-to-prompt/translate', {
@@ -676,7 +676,7 @@ export default function TextToImagePage() {
       });
 
       const result = await response.json();
-      console.log('[Translate] 翻译响应:', result);
+      console.log('[Translate] translation response:', result);
 
       if (result.code === 1000 && result.data?.translated) {
         setPrompt(result.data.translated);
@@ -685,14 +685,14 @@ export default function TextToImagePage() {
         throw new Error(result.message || 'Translation failed');
       }
     } catch (error: any) {
-      console.error('[Translate] 翻译异常:', error);
+      console.error('[Translate] translation exception:', error);
       toast.error(error.message || t('translate_failed') || 'Translation failed');
     } finally {
       setIsTranslating(false);
     }
   };
 
-  // 翻译提示词（图生图）
+  // Translate prompt (image-to-image)
   const handleTranslateI2I = async () => {
     if (!i2iPrompt.trim()) {
       toast.error(t('enter_prompt'));
@@ -712,9 +712,9 @@ export default function TextToImagePage() {
     setIsTranslatingI2I(true);
 
     try {
-      console.log('[Translate I2I] 开始翻译提示词:', i2iPrompt);
+      console.log('[Translate I2I] start translating prompt:', i2iPrompt);
 
-      // 目标语言：根据当前语言决定
+      // Decide target language based on current locale
       const targetLanguage = locale === 'zh' ? 'en' : 'zh';
 
       const response = await fetch('/api/text-to-prompt/translate', {
@@ -729,7 +729,7 @@ export default function TextToImagePage() {
       });
 
       const result = await response.json();
-      console.log('[Translate I2I] 翻译响应:', result);
+      console.log('[Translate I2I] translation response:', result);
 
       if (result.code === 1000 && result.data?.translated) {
         setI2iPrompt(result.data.translated);
@@ -738,7 +738,7 @@ export default function TextToImagePage() {
         throw new Error(result.message || 'Translation failed');
       }
     } catch (error: any) {
-      console.error('[Translate I2I] 翻译异常:', error);
+      console.error('[Translate I2I] translation exception:', error);
       toast.error(error.message || t('translate_failed') || 'Translation failed');
     } finally {
       setIsTranslatingI2I(false);
@@ -747,7 +747,7 @@ export default function TextToImagePage() {
 
   return (
     <>
-      {/* Google Auth Handler - 复用 digital-human 的登录逻辑 */}
+      {/* Google Auth Handler - reused login flow from digital-human */}
       <GoogleAuthHandler />
 
       <div className="min-h-screen bg-background">
@@ -802,15 +802,15 @@ export default function TextToImagePage() {
             <TabsList className="mb-8 bg-card p-1 border border-border">
               <TabsTrigger
                 value="text-to-image"
-                className="data-[state=active]:bg-purple-600 data-[state=active]:text-white px-6 py-2.5 rounded-md transition-all"
+                className="data-[state=active]:bg-primary data-[state=active]:text-white px-6 py-2.5 rounded-md transition-all"
               >
                 {t('txt_to_image.title')}
               </TabsTrigger>
-              {/* google-imagen 不支持图生图，只显示文生图 */}
+              {/* google-imagen does not support image-to-image; show text-to-image only */}
               {routeModel !== 'google-imagen' && (
                 <TabsTrigger
                   value="image-to-image"
-                  className="data-[state=active]:bg-purple-600 data-[state=active]:text-white px-6 py-2.5 rounded-md transition-all"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white px-6 py-2.5 rounded-md transition-all"
                 >
                   {t('image_to_image.title')}
                 </TabsTrigger>
@@ -825,7 +825,7 @@ export default function TextToImagePage() {
                     <h3 className="text-lg font-semibold mb-2 text-foreground">{t('prompt_label')}</h3>
                     <p className="text-sm text-muted-foreground mb-4">
                       {t('prompt_description')}{" "}
-                      <a href="#" className="text-purple-600 hover:underline">
+                      <a href="#" className="text-primary hover:underline">
                         {t('prompt_link')}
                       </a>
                     </p>
@@ -835,7 +835,7 @@ export default function TextToImagePage() {
                         value={prompt}
                         onChange={(e) => setPrompt(e.target.value)}
                         maxLength={2048}
-                        className="min-h-[120px] resize-none border-border focus:border-purple-500 focus:ring-purple-500"
+                        className="min-h-[120px] resize-none border-border focus:border-primary focus:ring-primary"
                       />
                       <div className="absolute bottom-2 right-2 text-xs text-muted-foreground">
                         {prompt.length}/2048
@@ -905,13 +905,13 @@ export default function TextToImagePage() {
                   <Button
                     onClick={handleGenerate}
                     disabled={!prompt || isGenerating}
-                    className="w-full bg-purple-600 hover:bg-purple-700"
+                    className="w-full bg-primary hover:bg-primary/90"
                     size="lg"
                   >
                     {isGenerating ? t('generating') : t('generate_image')}
                   </Button>
 
-                  {/* 积分显示 */}
+                  {/* 绉垎鏄剧ず */}
                   {model && (() => {
                     const consumptionType = mapImageModelToConsumptionType(model);
                     if (consumptionType) {
@@ -920,7 +920,7 @@ export default function TextToImagePage() {
                         return (
                           <div className="flex items-center justify-between text-sm pt-2 border-t border-border">
                             <div className="text-muted-foreground font-medium">
-                              Credits: {credits} ⚡
+                              Credits: {credits}
                             </div>
                           </div>
                         );
@@ -938,16 +938,16 @@ export default function TextToImagePage() {
 
                   {/* <div className="flex items-center justify-between text-sm pt-2 border-t border-border">
                     <div className="text-muted-foreground font-medium">
-                      Credits: 2 ⚡
+                      Credits: 2
                     </div>
-                    <Button variant="link" className="text-purple-600 hover:text-purple-700 p-0 h-auto">
+                    <Button variant="link" className="text-primary hover:text-primary p-0 h-auto">
                       Get More Credits &gt;
                     </Button>
                   </div>
 
                   <div className="text-center pt-2 border-t border-border">
-                    <Button variant="link" className="text-purple-600 hover:text-purple-700 p-0 h-auto">
-                      📜 View History
+                    <Button variant="link" className="text-primary hover:text-primary p-0 h-auto">
+                      View History
                     </Button>
                   </div> */}
                 </div>
@@ -956,7 +956,7 @@ export default function TextToImagePage() {
                 <div className="bg-muted/30 rounded-xl p-8 flex items-center justify-center min-h-[500px] border-2 border-dashed border-border">
                   {isGenerating ? (
                     <div className="text-center">
-                      <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                      <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                       <p className="text-muted-foreground">Generating your image...</p>
                     </div>
                   ) : generatedImage ? (
@@ -966,12 +966,12 @@ export default function TextToImagePage() {
                         alt="Generated"
                         className="w-full h-auto rounded-lg shadow-lg"
                         onLoad={() => {
-                          console.log('[TextToImage] 渲染图片组件，URL:', generatedImage);
-                          console.log('[TextToImage] ✅ 图片加载成功');
+                          console.log('[TextToImage] rendering image component, URL:', generatedImage);
+                          console.log('[TextToImage] image loaded successfully');
                         }}
                         onError={(e) => {
-                          console.error('[TextToImage] ❌ 图片加载失败:', e);
-                          console.error('[TextToImage] 失败的URL:', generatedImage);
+                          console.error('[TextToImage] image failed to load:', e);
+                          console.error('[TextToImage] failed URL:', generatedImage);
                         }}
                       />
                       <div className="mt-4 flex gap-2 justify-center">
@@ -990,7 +990,7 @@ export default function TextToImagePage() {
                             link.click();
                           }}
                           size="sm"
-                          className="bg-purple-600 hover:bg-purple-700"
+                          className="bg-primary hover:bg-primary/90"
                         >
                           Download
                         </Button>
@@ -1030,7 +1030,7 @@ export default function TextToImagePage() {
                     </p>
                     
                     {!referenceImagePreview ? (
-                      <label className="block border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-purple-500 transition-colors">
+                      <label className="block border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors">
                         <input
                           type="file"
                           accept="image/*"
@@ -1085,7 +1085,7 @@ export default function TextToImagePage() {
                         value={i2iPrompt}
                         onChange={(e) => setI2iPrompt(e.target.value)}
                         maxLength={2048}
-                        className="min-h-[120px] resize-none border-border focus:border-purple-500 focus:ring-purple-500"
+                        className="min-h-[120px] resize-none border-border focus:border-primary focus:ring-primary"
                       />
                       <div className="absolute bottom-2 right-2 text-xs text-muted-foreground">
                         {i2iPrompt.length}/2048
@@ -1151,13 +1151,13 @@ export default function TextToImagePage() {
                   <Button
                     onClick={handleImageToImageGenerate}
                     disabled={!referenceImage || !i2iPrompt || isGeneratingI2I}
-                    className="w-full bg-purple-600 hover:bg-purple-700"
+                    className="w-full bg-primary hover:bg-primary/90"
                     size="lg"
                   >
                     {isGeneratingI2I ? t('generating') : t('generate_image')}
                   </Button>
 
-                  {/* 积分显示 */}
+                  {/* 绉垎鏄剧ず */}
                   {i2iModel && (() => {
                     const consumptionType = mapImageModelToConsumptionType(i2iModel);
                     if (consumptionType) {
@@ -1166,7 +1166,7 @@ export default function TextToImagePage() {
                         return (
                           <div className="flex items-center justify-between text-sm pt-2 border-t border-border">
                             <div className="text-muted-foreground font-medium">
-                              Credits: {credits} ⚡
+                              Credits: {credits}
                             </div>
                           </div>
                         );
@@ -1183,16 +1183,16 @@ export default function TextToImagePage() {
 
                   {/* <div className="flex items-center justify-between text-sm pt-2 border-t border-border">
                     <div className="text-muted-foreground font-medium">
-                      Credits: 3 ⚡
+                      Credits: 3
                     </div>
-                    <Button variant="link" className="text-purple-600 hover:text-purple-700 p-0 h-auto">
+                    <Button variant="link" className="text-primary hover:text-primary p-0 h-auto">
                       Get More Credits &gt;
                     </Button>
                   </div>
 
                   <div className="text-center pt-2 border-t border-border">
-                    <Button variant="link" className="text-purple-600 hover:text-purple-700 p-0 h-auto">
-                      📜 View History
+                    <Button variant="link" className="text-primary hover:text-primary p-0 h-auto">
+                      View History
                     </Button>
                   </div> */}
                 </div>
@@ -1201,7 +1201,7 @@ export default function TextToImagePage() {
                 <div className="bg-muted/30 rounded-xl p-8 flex items-center justify-center min-h-[500px] border-2 border-dashed border-border">
                   {isGeneratingI2I ? (
                     <div className="text-center">
-                      <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                      <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                       <p className="text-muted-foreground">Generating your image...</p>
                     </div>
                   ) : generatedI2IImage ? (
@@ -1227,7 +1227,7 @@ export default function TextToImagePage() {
                             link.click();
                           }}
                           size="sm"
-                          className="bg-purple-600 hover:bg-purple-700"
+                          className="bg-primary hover:bg-primary/90"
                         >
                           Download
                         </Button>
@@ -1274,38 +1274,38 @@ export default function TextToImagePage() {
                 <h3 className="text-2xl font-bold mb-6 text-center text-foreground text-foreground">{t('prompt_guide.core_structure_title')}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="bg-background rounded-lg p-6 shadow-md border border-border">
-                    <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center mb-4 text-xl font-bold">
+                    <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mb-4 text-xl font-bold">
                       1
                     </div>
                     <h4 className="font-semibold text-lg mb-2 text-foreground text-foreground">{t('prompt_guide.subject_title')}</h4>
                     <p className="text-sm text-muted-foreground">
                       {t('prompt_guide.subject_desc')}
                     </p>
-                    <p className="text-xs text-purple-600 dark:text-purple-400 mt-2">
+                    <p className="text-xs text-primary dark:text-primary mt-2">
                       {t('prompt_guide.subject_example')}
                     </p>
                   </div>
                   <div className="bg-background rounded-lg p-6 shadow-md border border-border">
-                    <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center mb-4 text-xl font-bold">
+                    <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mb-4 text-xl font-bold">
                       2
                     </div>
                     <h4 className="font-semibold text-lg mb-2 text-foreground text-foreground">{t('prompt_guide.background_title')}</h4>
                     <p className="text-sm text-muted-foreground">
                       {t('prompt_guide.background_desc')}
                     </p>
-                    <p className="text-xs text-purple-600 dark:text-purple-400 mt-2">
+                    <p className="text-xs text-primary dark:text-primary mt-2">
                       {t('prompt_guide.background_example')}
                     </p>
                   </div>
                   <div className="bg-background rounded-lg p-6 shadow-md border border-border">
-                    <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center mb-4 text-xl font-bold">
+                    <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mb-4 text-xl font-bold">
                       3
                     </div>
                     <h4 className="font-semibold text-lg mb-2 text-foreground text-foreground">{t('prompt_guide.style_title')}</h4>
                     <p className="text-sm text-muted-foreground">
                       {t('prompt_guide.style_desc')}
                     </p>
-                    <p className="text-xs text-purple-600 dark:text-purple-400 mt-2">
+                    <p className="text-xs text-primary dark:text-primary mt-2">
                       {t('prompt_guide.style_example')}
                     </p>
                   </div>
@@ -1316,15 +1316,15 @@ export default function TextToImagePage() {
                   <h4 className="font-semibold text-lg mb-4 text-foreground">{t('prompt_guide.progression_title')}</h4>
                   <div className="space-y-3">
                     <div className="flex items-start gap-3">
-                      <span className="text-purple-600 font-semibold min-w-[80px]">{t('prompt_guide.basic_label')}</span>
+                      <span className="text-primary font-semibold min-w-[80px]">{t('prompt_guide.basic_label')}</span>
                       <span className="text-sm text-foreground">"{t('prompt_guide.basic_example')}"</span>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="text-purple-600 font-semibold min-w-[80px]">{t('prompt_guide.enhanced_label')}</span>
+                      <span className="text-primary font-semibold min-w-[80px]">{t('prompt_guide.enhanced_label')}</span>
                       <span className="text-sm text-foreground">"{t('prompt_guide.enhanced_example')}"</span>
                     </div>
                     <div className="flex items-start gap-3">
-                      <span className="text-purple-600 font-semibold min-w-[80px]">{t('prompt_guide.detailed_label')}</span>
+                      <span className="text-primary font-semibold min-w-[80px]">{t('prompt_guide.detailed_label')}</span>
                       <span className="text-sm text-foreground">"{t('prompt_guide.detailed_example')}"</span>
                     </div>
                   </div>
@@ -1336,27 +1336,27 @@ export default function TextToImagePage() {
                 {/* Photography Modifiers */}
                 <div className="bg-card rounded-xl p-6 border border-border">
                   <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-foreground">
-                    <span className="text-2xl">📷</span> {t('prompt_guide.photography_title')}
+                    <span className="text-2xl">[P]</span> {t('prompt_guide.photography_title')}
                   </h3>
                   <div className="space-y-3 text-sm">
                     <div>
-                      <span className="font-semibold text-purple-600">Camera proximity:</span>
+                      <span className="font-semibold text-primary">Camera proximity:</span>
                       <span className="text-muted-foreground"> "close-up", "zoomed out", "macro"</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-purple-600">Camera position:</span>
+                      <span className="font-semibold text-primary">Camera position:</span>
                       <span className="text-muted-foreground"> "aerial photo", "from below", "eye-level"</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-purple-600">Lighting:</span>
+                      <span className="font-semibold text-primary">Lighting:</span>
                       <span className="text-muted-foreground"> "natural lighting", "dramatic lighting", "soft diffused light"</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-purple-600">Camera settings:</span>
+                      <span className="font-semibold text-primary">Camera settings:</span>
                       <span className="text-muted-foreground"> "bokeh", "soft focus", "motion blur", "shallow depth of field"</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-purple-600">Lens types:</span>
+                      <span className="font-semibold text-primary">Lens types:</span>
                       <span className="text-muted-foreground"> "35mm", "macro lens", "fisheye lens", "100mm"</span>
                     </div>
                   </div>
@@ -1365,23 +1365,23 @@ export default function TextToImagePage() {
                 {/* Art Styles */}
                 <div className="bg-card rounded-xl p-6 border border-border">
                   <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-foreground">
-                    <span className="text-2xl">🎨</span> {t('prompt_guide.art_styles_title')}
+                    <span className="text-2xl">[A]</span> {t('prompt_guide.art_styles_title')}
                   </h3>
                   <div className="space-y-3 text-sm">
                     <div>
-                      <span className="font-semibold text-purple-600">Historical styles:</span>
+                      <span className="font-semibold text-primary">Historical styles:</span>
                       <span className="text-muted-foreground"> "impressionist painting", "renaissance painting", "pop art"</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-purple-600">Modern styles:</span>
+                      <span className="font-semibold text-primary">Modern styles:</span>
                       <span className="text-muted-foreground"> "digital art", "3D render", "watercolor", "oil painting"</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-purple-600">Film types:</span>
+                      <span className="font-semibold text-primary">Film types:</span>
                       <span className="text-muted-foreground"> "polaroid portrait", "black and white film", "vintage film"</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-purple-600">Quality enhancers:</span>
+                      <span className="font-semibold text-primary">Quality enhancers:</span>
                       <span className="text-muted-foreground"> "4K", "HDR", "high quality", "professional photography"</span>
                     </div>
                   </div>
@@ -1390,19 +1390,19 @@ export default function TextToImagePage() {
                 {/* Creative Techniques */}
                 <div className="bg-card rounded-xl p-6 border border-border">
                   <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-foreground">
-                    <span className="text-2xl">✨</span> {t('prompt_guide.creative_techniques_title')}
+                    <span className="text-2xl">*</span> {t('prompt_guide.creative_techniques_title')}
                   </h3>
                   <div className="space-y-3 text-sm">
                     <div>
-                      <span className="font-semibold text-purple-600">Material combinations:</span>
+                      <span className="font-semibold text-primary">Material combinations:</span>
                       <span className="text-muted-foreground"> "duffle bag made of cheese", "glass sculpture of a bird"</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-purple-600">Shape transformations:</span>
+                      <span className="font-semibold text-primary">Shape transformations:</span>
                       <span className="text-muted-foreground"> "neon tubes in the shape of a bird", "clouds forming a dragon"</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-purple-600">Descriptive language:</span>
+                      <span className="font-semibold text-primary">Descriptive language:</span>
                       <span className="text-muted-foreground"> Use detailed adjectives and adverbs to paint clear pictures</span>
                     </div>
                   </div>
@@ -1411,23 +1411,23 @@ export default function TextToImagePage() {
                 {/* Aspect Ratio Guide */}
                 <div className="bg-card rounded-xl p-6 border border-border">
                   <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-foreground">
-                    <span className="text-2xl">📐</span> {t('prompt_guide.aspect_ratio_title')}
+                    <span className="text-2xl">[R]</span> {t('prompt_guide.aspect_ratio_title')}
                   </h3>
                   <div className="space-y-3 text-sm">
                     <div>
-                      <span className="font-semibold text-purple-600">1:1 (Square):</span>
+                      <span className="font-semibold text-primary">1:1 (Square):</span>
                       <span className="text-muted-foreground"> Social media posts, profile pictures</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-purple-600">16:9 (Widescreen):</span>
+                      <span className="font-semibold text-primary">16:9 (Widescreen):</span>
                       <span className="text-muted-foreground"> Landscapes, backgrounds, wallpapers</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-purple-600">9:16 (Portrait):</span>
+                      <span className="font-semibold text-primary">9:16 (Portrait):</span>
                       <span className="text-muted-foreground"> Tall objects, buildings, waterfalls</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-purple-600">4:3 / 3:4:</span>
+                      <span className="font-semibold text-primary">4:3 / 3:4:</span>
                       <span className="text-muted-foreground"> Traditional media and film formats</span>
                     </div>
                   </div>
@@ -1592,7 +1592,7 @@ export default function TextToImagePage() {
                     <p className="text-sm text-muted-foreground mb-3">
                       "A pastel painting of an angular sports car"
                     </p>
-                    <span className="inline-block bg-pink-100 dark:bg-pink-900 text-pink-700 dark:text-pink-300 text-xs px-2 py-1 rounded">
+                    <span className="inline-block bg-primary/10 dark:bg-primary/20 text-primary dark:text-primary text-xs px-2 py-1 rounded">
                       Pastel Art
                     </span>
                   </div>
@@ -1613,10 +1613,10 @@ export default function TextToImagePage() {
                 {/* Portrait Photography */}
                 <div className="bg-card rounded-xl p-6 border border-border">
                   <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-foreground text-foreground">
-                    <span className="text-2xl">👤</span> Portrait Photography
+                    <span className="text-2xl">[P]</span> Portrait Photography
                   </h3>
                   <div className="space-y-3 text-sm">
-                    <div className="bg-purple-50 dark:bg-purple-900/30 rounded-lg p-3">
+                    <div className="bg-muted dark:bg-muted rounded-lg p-3">
                       <p className="text-foreground">
                         "35mm portrait, film noir, black and white film"
                       </p>
@@ -1630,7 +1630,7 @@ export default function TextToImagePage() {
                 {/* Macro/Object Photography */}
                 <div className="bg-card rounded-xl p-6 border border-border">
                   <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-foreground text-foreground">
-                    <span className="text-2xl">🔍</span> Macro & Object Photography
+                    <span className="text-2xl">[M]</span> Macro & Object Photography
                   </h3>
                   <div className="space-y-3 text-sm">
                     <div className="bg-blue-50 dark:bg-blue-900/30 rounded-lg p-3">
@@ -1647,7 +1647,7 @@ export default function TextToImagePage() {
                 {/* Motion Photography */}
                 <div className="bg-card rounded-xl p-6 border border-border">
                   <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-foreground text-foreground">
-                    <span className="text-2xl">⚡</span> Action & Motion
+                    <span className="text-2xl">*</span> Action & Motion
                   </h3>
                   <div className="space-y-3 text-sm">
                     <div className="bg-green-50 dark:bg-green-900/30 rounded-lg p-3">
@@ -1664,7 +1664,7 @@ export default function TextToImagePage() {
                 {/* Landscape Photography */}
                 <div className="bg-card rounded-xl p-6 border border-border">
                   <h3 className="font-bold text-lg mb-4 flex items-center gap-2 text-foreground text-foreground">
-                    <span className="text-2xl">🏔️</span> Landscape Photography
+                    <span className="text-2xl">*</span> Landscape Photography
                   </h3>
                   <div className="space-y-3 text-sm">
                     <div className="bg-orange-50 dark:bg-orange-900/30 rounded-lg p-3">
@@ -1741,31 +1741,31 @@ export default function TextToImagePage() {
             <h2 className="text-3xl font-bold text-center mb-12 text-foreground">{t('how_to_use_t2i.title')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-8 items-start">
               <div className="text-center">
-                <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                   1
                 </div>
                 <p className="text-sm">{t('how_to_use_t2i.step1')}</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                   2
                 </div>
                 <p className="text-sm">{t('how_to_use_t2i.step2')}</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                   3
                 </div>
                 <p className="text-sm">{t('how_to_use_t2i.step3')}</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                   4
                 </div>
                 <p className="text-sm">{t('how_to_use_t2i.step4')}</p>
               </div>
               <div className="text-center">
-                <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                   5
                 </div>
                 <p className="text-sm">{t('how_to_use_t2i.step5')}</p>
@@ -1798,7 +1798,7 @@ export default function TextToImagePage() {
                       />
                     </div>
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                      <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center shadow-lg font-bold border-4 border-white">
+                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg font-bold border-4 border-white">
                         VS
                       </div>
                     </div>
@@ -1828,7 +1828,7 @@ export default function TextToImagePage() {
                       />
                     </div>
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                      <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center shadow-lg font-bold border-4 border-white">
+                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg font-bold border-4 border-white">
                         VS
                       </div>
                     </div>
@@ -1858,7 +1858,7 @@ export default function TextToImagePage() {
                       />
                     </div>
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                      <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center shadow-lg font-bold border-4 border-white">
+                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg font-bold border-4 border-white">
                         VS
                       </div>
                     </div>
@@ -1888,7 +1888,7 @@ export default function TextToImagePage() {
                       />
                     </div>
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                      <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center shadow-lg font-bold border-4 border-white">
+                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg font-bold border-4 border-white">
                         VS
                       </div>
                     </div>
@@ -1912,25 +1912,25 @@ export default function TextToImagePage() {
               <h2 className="text-3xl font-bold text-center mb-12 text-foreground">{t('how_to_use_i2i.title')}</h2>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-8 items-start">
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                  <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                     1
                   </div>
                   <p className="text-sm">{t('how_to_use_i2i.step1')}</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                  <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                     2
                   </div>
                   <p className="text-sm">{t('how_to_use_i2i.step2')}</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                  <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                     3
                   </div>
                   <p className="text-sm">{t('how_to_use_i2i.step3')}</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-12 h-12 bg-purple-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
+                  <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl font-bold">
                     4
                   </div>
                   <p className="text-sm">{t('how_to_use_i2i.step4')}</p>
@@ -1994,7 +1994,7 @@ export default function TextToImagePage() {
                           <span>{t('model_comparison.photo_realistic_example')}</span>
                           <div className="relative group">
                             <svg
-                              className="w-4 h-4 text-purple-600 cursor-help"
+                              className="w-4 h-4 text-primary cursor-help"
                               fill="none"
                               stroke="currentColor"
                               viewBox="0 0 24 24"
@@ -2007,7 +2007,7 @@ export default function TextToImagePage() {
                               />
                             </svg>
                             <div className="absolute left-0 top-6 w-80 bg-gray-900 text-white text-xs rounded-lg p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-lg">
-                              <div className="font-semibold mb-1">示例提示词 (Prompt):</div>
+                              <div className="font-semibold mb-1">Example Prompt:</div>
                               <div className="text-gray-200">
                                 a boy, center-framed and slightly low-angled, is playfully reaching out to a curious cat seated on a worn, wooden floor, with warm, golden light illuminating the scene and a shallow depth of field, blurring the subtle, textured background.
                               </div>
@@ -2051,7 +2051,7 @@ export default function TextToImagePage() {
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <div className="text-muted-foreground text-lg">→</div>
+                          <div className="text-muted-foreground text-lg">&rarr;</div>
                           <div
                             className="relative w-[90px] h-48 rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
                             onClick={() => setPreviewImage("https://chatmix.top/image-to-prompt/s-edit-after.jpeg")}
@@ -2107,7 +2107,7 @@ export default function TextToImagePage() {
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <div className="text-muted-foreground text-lg">→</div>
+                          <div className="text-muted-foreground text-lg">&rarr;</div>
                           <div
                             className="relative w-[90px] h-48 rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
                             onClick={() => setPreviewImage("https://chatmix.top/image-to-prompt/s-edit-after-2.jpg")}
@@ -2204,7 +2204,7 @@ export default function TextToImagePage() {
               onClick={() => setPreviewImage(null)}
               className="absolute -top-10 right-0 text-white hover:text-gray-300 text-2xl"
             >
-              ✕
+              ×
             </button>
             <img
               src={previewImage}
@@ -2276,3 +2276,8 @@ export default function TextToImagePage() {
     </>
   );
 }
+
+
+
+
+

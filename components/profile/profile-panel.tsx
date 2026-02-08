@@ -149,7 +149,7 @@ export function ProfilePanel() {
     <div className="space-y-6">
       {/* Email */}
       <div className="space-y-2">
-        <Label htmlFor="email" className="text-slate-200">
+        <Label htmlFor="email" className="text-foreground">
           {t('email_label')}
         </Label>
         <Input
@@ -157,14 +157,14 @@ export function ProfilePanel() {
           type="email"
           value={profile.email}
           disabled
-          className="bg-slate-800 border-slate-700 text-slate-300 cursor-not-allowed"
+          className="bg-muted/60 text-muted-foreground cursor-not-allowed"
         />
-        <p className="text-xs text-slate-400">{t('email_readonly_hint')}</p>
+        <p className="text-xs text-muted-foreground">{t('email_readonly_hint')}</p>
       </div>
 
       {/* Name */}
       <div className="space-y-2">
-        <Label htmlFor="name" className="text-slate-200">
+        <Label htmlFor="name" className="text-foreground">
           {t('name_label')}
         </Label>
         <Input
@@ -173,17 +173,17 @@ export function ProfilePanel() {
           value={profile.name}
           onChange={(e) => setProfile({ ...profile, name: e.target.value })}
           disabled={isLoading || isSaving}
-          className="bg-slate-800 border-slate-700 text-white focus:border-violet-500 focus:ring-violet-500"
+          className="bg-background"
           placeholder={t('name_placeholder')}
         />
       </div>
 
       {/* Avatar */}
       <div className="space-y-2">
-        <Label className="text-slate-200">{t('avatar_label')}</Label>
+        <Label className="text-foreground">{t('avatar_label')}</Label>
         <div className="flex items-center gap-4">
           {/* Avatar Preview */}
-          <div className="w-20 h-20 rounded-full bg-slate-800 border-2 border-slate-700 flex items-center justify-center overflow-hidden">
+          <div className="w-20 h-20 rounded-full bg-muted border-2 border-border flex items-center justify-center overflow-hidden">
             {profile.avatar_url ? (
               <img
                 src={profile.avatar_url}
@@ -191,7 +191,7 @@ export function ProfilePanel() {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <span className="text-2xl text-slate-400">
+              <span className="text-2xl text-muted-foreground">
                 {(profile.name || profile.email || 'U').charAt(0).toUpperCase()}
               </span>
             )}
@@ -209,7 +209,7 @@ export function ProfilePanel() {
             />
             <Label
               htmlFor="avatar-upload"
-              className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="cursor-pointer inline-flex items-center gap-2 px-4 py-2 bg-card hover:bg-accent text-foreground border border-border rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSaving ? (
                 <>
@@ -220,7 +220,7 @@ export function ProfilePanel() {
                 t('change_avatar')
               )}
             </Label>
-            <p className="text-xs text-slate-400 mt-1">{t('avatar_hint')}</p>
+            <p className="text-xs text-muted-foreground mt-1">{t('avatar_hint')}</p>
           </div>
         </div>
       </div>
@@ -230,7 +230,7 @@ export function ProfilePanel() {
         <Button
           onClick={handleSave}
           disabled={isLoading || isSaving}
-          className="bg-violet-500 hover:bg-violet-600 text-white"
+          className=""
         >
           {isSaving ? (
             <>

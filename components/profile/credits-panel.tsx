@@ -214,10 +214,10 @@ export function CreditsPanel() {
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Zap className="h-6 w-6 text-amber-500" />
-                <span className="text-slate-300">{t('user.credits')}</span>
-                <span className="text-3xl font-bold text-white">
+                <div className="flex items-center gap-2">
+                  <Zap className="h-6 w-6 text-amber-500" />
+                <span className="text-muted-foreground">{t('user.credits')}</span>
+                <span className="text-3xl font-bold text-foreground">
                   {accountInfo?.availablePoints || contextUser?.credits || 0}
                 </span>
               </div>
@@ -225,7 +225,7 @@ export function CreditsPanel() {
             <Button
               size="sm"
               variant="outline"
-              className="shrink-0 border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white"
+              className="shrink-0"
               onClick={() => (window.location.href = `/${locale}/pricing`)}
             >
               {t('user.recharge_credits')}
@@ -239,14 +239,14 @@ export function CreditsPanel() {
         <CardContent className="p-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-violet-500/20 rounded-full flex items-center justify-center">
-                <Crown className="h-6 w-6 text-violet-400" />
+              <div className="w-12 h-12 bg-primary/15 rounded-full flex items-center justify-center">
+                <Crown className="h-6 w-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-slate-300">{t('user.membership')}</p>
-                <p className="text-lg font-semibold text-white">{getMemberName()}</p>
+                <p className="text-sm text-muted-foreground">{t('user.membership')}</p>
+                <p className="text-lg font-semibold text-foreground">{getMemberName()}</p>
                 {accountInfo?.subscriptionEndTime && accountInfo.subscriptionStatus?.toUpperCase() === 'ACTIVE' && (
-                  <p className="text-xs text-slate-400 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {t('user.valid_until')}: {new Date(accountInfo.subscriptionEndTime).toLocaleDateString(locale)}
                   </p>
                 )}
@@ -254,7 +254,7 @@ export function CreditsPanel() {
             </div>
             <Button
               variant="default"
-              className="shrink-0 bg-violet-500 hover:bg-violet-600 text-white"
+              className="shrink-0"
               onClick={() => (window.location.href = `/${locale}/pricing`)}
             >
               <Crown className="h-4 w-4 mr-2" />
@@ -267,9 +267,9 @@ export function CreditsPanel() {
       {/* Transaction History */}
       <Card>
         <CardContent className="p-0">
-          <div className="p-6 border-b border-slate-800">
-            <h3 className="text-lg font-semibold text-white flex items-center gap-2">
-              <Activity className="h-5 w-5 text-violet-400" />
+          <div className="p-6 border-b border-border">
+            <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+              <Activity className="h-5 w-5 text-primary" />
               {t('user.transaction_history')}
             </h3>
           </div>

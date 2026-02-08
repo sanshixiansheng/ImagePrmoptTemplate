@@ -9,9 +9,9 @@ export default function CTA({ section }: { section: SectionType }) {
   }
 
   return (
-    <section id={section.name} className="py-16">
-      <div className="px-8">
-        <div className='flex items-center justify-center rounded-2xl  bg-[url("/imgs/masks/circle.svg")] bg-cover bg-center px-8 py-12 text-center md:p-16'>
+    <section id={section.name} className="py-16 md:py-24">
+      <div className="container">
+        <div className='relative overflow-hidden rounded-3xl border border-border/60 bg-[url("/imgs/masks/circle.svg")] bg-cover bg-center px-8 py-12 text-center shadow-sm md:p-16'>
           <div className="mx-auto max-w-(--breakpoint-md)">
             <h2 className="mb-4 text-balance text-3xl font-semibold md:text-5xl">
               {section.title}
@@ -22,7 +22,7 @@ export default function CTA({ section }: { section: SectionType }) {
             {section.buttons && (
               <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
                 {section.buttons.map((item, idx) => (
-                  <Button key={idx} variant={item.variant || "default"}>
+                  <Button key={idx} variant={item.variant || "default"} className="h-11 px-6">
                     <Link
                       href={item.url || "#"}
                       target={item.target}

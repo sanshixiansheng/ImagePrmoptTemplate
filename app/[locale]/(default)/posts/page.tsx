@@ -43,5 +43,15 @@ export default async function PostsPage({
     read_more_text: t("blog.read_more_text"),
   };
 
-  return <Blog blog={blog} />;
+  return (
+    <div className="bg-card">
+      <section className="border-b bg-background/60">
+        <div className="container py-14 text-center md:py-16">
+          <h1 className="font-serif text-4xl font-medium md:text-5xl">{blog.title}</h1>
+          <p className="mx-auto mt-3 max-w-2xl text-foreground/65 md:text-lg">{blog.description}</p>
+        </div>
+      </section>
+      <Blog blog={blog} />
+    </div>
+  );
 }

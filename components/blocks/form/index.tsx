@@ -79,7 +79,7 @@ const generateFormSchema = (fields: FormFieldType[]) => {
   return z.object(schemaFields);
 };
 
-export default function ({
+export default function FormBlock({
   fields,
   data,
   passby,
@@ -147,7 +147,7 @@ export default function ({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="w-full md:w-1/2 lg:w-1/2 space-y-6 px-2 pb-8"
+        className="w-full space-y-6 rounded-2xl border border-border/60 bg-card p-4 shadow-sm md:w-1/2 lg:w-1/2"
       >
         {fields.map((item, index) => {
           return (
@@ -176,10 +176,10 @@ export default function ({
                         defaultValue={field.value}
                         {...item.attributes}
                       >
-                        <SelectTrigger className="w-full bg-background rounded-md">
+                        <SelectTrigger className="w-full rounded-md bg-background">
                           <SelectValue placeholder={item.placeholder} />
                         </SelectTrigger>
-                        <SelectContent className="bg-background rounded-md">
+                        <SelectContent className="rounded-md bg-background">
                           {item.options?.map((option: any) => (
                             <SelectItem key={option.value} value={option.value}>
                               {option.title}
@@ -200,7 +200,7 @@ export default function ({
                         {...field}
                         type={item.type || "text"}
                         placeholder={item.placeholder}
-                        className="bg-background rounded-md"
+                        className="rounded-md bg-background"
                         {...item.attributes}
                       />
                     )}
@@ -220,7 +220,7 @@ export default function ({
           <Button
             type="submit"
             variant={submit.button.variant}
-            className="flex items-center justify-center gap-2 font-semibold cursor-pointer"
+            className="flex cursor-pointer items-center justify-center gap-2 font-semibold"
             disabled={loading}
           >
             {loading ? (

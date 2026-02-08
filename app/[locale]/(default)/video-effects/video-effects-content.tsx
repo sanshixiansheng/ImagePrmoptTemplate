@@ -27,17 +27,17 @@ interface Channel {
   }
 }
 
-// 缂撳瓨绠＄悊
+// Cache management
 const effectsCache = {
   data: null as any,
   timestamp: 0,
-  ttl: 5 * 60 * 1000 // 5鍒嗛挓缂撳瓨
+  ttl: 5 * 60 * 1000 // cache for 5 minutes
 }
 
 const channelsCache = {
   data: null as Channel[] | null,
   timestamp: 0,
-  ttl: 5 * 60 * 1000 // 5鍒嗛挓缂撳瓨
+  ttl: 5 * 60 * 1000 // cache for 5 minutes
 }
 
 const ITEMS_PER_PAGE = 20
@@ -81,14 +81,14 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
     }
   }, [selectedVideo])
 
-  // 鍒囨崲鍒嗙被鏃堕噸缃〉鐮?
+  // Reset page index when switching channel
   useEffect(() => {
     setCurrentPage(1)
   }, [selectedChannel])
 
   const fetchChannels = async () => {
     try {
-      // 妫€鏌ョ紦瀛?
+      // Check cache
       const now = Date.now()
       if (channelsCache.data && (now - channelsCache.timestamp) < channelsCache.ttl) {
         console.log('Using cached channels data')
@@ -99,7 +99,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
       const response = await fetch('/api/video-effects/channels')
       const data = await response.json()
 
-      // 鏇存柊缂撳瓨
+      // Update cache
       channelsCache.data = data
       channelsCache.timestamp = now
 
@@ -111,7 +111,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
 
   const fetchEffects = async () => {
     try {
-      // 妫€鏌ョ紦瀛?
+      // Check cache
       const now = Date.now()
       if (effectsCache.data && (now - effectsCache.timestamp) < effectsCache.ttl) {
         console.log('Using cached effects data')
@@ -123,7 +123,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
       const response = await fetch('/api/video-effects')
       const data = await response.json()
 
-      // 鏇存柊缂撳瓨
+      // Update cache
       effectsCache.data = data
       effectsCache.timestamp = now
 
@@ -202,7 +202,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
         </div>
       </div>
 
-      {/* Effects Grid - 鍗＄墖澶у皬鍑忓皯30% */}
+      {/* Effects Grid - card size reduced by about 30% */}
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-3">
         {displayedEffects.map((effect) => {
           const localizedName = getLocalizedName(effect.i18n_json) || effect.display_name
@@ -215,7 +215,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
               locale={locale}
               onClick={() => handleVideoClick(effect)}
               onGoCreate={(effectData) => {
-                // 灏?effect 鏁版嵁搴忓垪鍖栧悗浼犻€?
+                // Serialize effect payload before navigation
                 const fullEffect = effectData as any;
                 const effectToPass = {
                   template_id: fullEffect.template_id,
@@ -236,7 +236,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
         })}
       </div>
 
-      {/* 鍒嗛〉鎺т欢 */}
+      {/* Pagination */}
       {totalPages > 1 && (
         <div className="mt-8 flex items-center justify-center gap-2">
           <button
@@ -249,7 +249,7 @@ export function VideoEffectsContent({ locale }: { locale: string }) {
 
           <div className="flex items-center gap-1">
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
-              // 鏄剧ず閫昏緫: 濮嬬粓鏄剧ず绗竴椤点€佹渶鍚庝竴椤点€佸綋鍓嶉〉鍙婂叾鍓嶅悗鍚?椤?
+              // Show first/last/current and neighbors; collapse others
               const showPage =
                 page === 1 ||
                 page === totalPages ||
@@ -348,7 +348,7 @@ function EffectCard({ effect, localizedName, locale, onClick, onGoCreate }: {
 
   useEffect(() => {
     if (isVisible && !imageLoaded && !imageError) {
-      // 璁剧疆瓒呮椂锛屽鏋?绉掑悗杩樻病鍔犺浇瀹屾垚锛屽氨闅愯棌loading
+      // Fallback: hide loading if image is not loaded in 3s
       const timeout = setTimeout(() => {
         if (!imageLoaded) {
           setImageLoaded(true)
@@ -375,7 +375,7 @@ function EffectCard({ effect, localizedName, locale, onClick, onGoCreate }: {
         className="group relative w-full rounded-lg cursor-pointer bg-card border border-border overflow-hidden shadow-sm hover:shadow-md transition-shadow"
         onClick={onClick}
       >
-        <div className="aspect-[224/168] relative bg-gradient-to-br from-purple-500/10 to-pink-500/10 overflow-hidden">
+        <div className="aspect-[224/168] relative bg-gradient-to-br from-primary/10 to-muted/40 overflow-hidden">
           {isVisible ? (
             <>
               {!imageLoaded && !imageError && (
@@ -418,7 +418,7 @@ function EffectCard({ effect, localizedName, locale, onClick, onGoCreate }: {
                 e.stopPropagation()
                 onGoCreate(effect)
               }}
-              className="w-full py-1 px-2 bg-purple-600 hover:bg-purple-700 text-white text-[10px] font-medium rounded shadow-lg transition-all hover:scale-105"
+              className="w-full py-1 px-2 bg-primary hover:bg-primary/90 text-white text-[10px] font-medium rounded shadow-lg transition-all hover:scale-105"
             >
               {locale === 'zh' ? '开始创作' : 'Go Create'}
             </button>
@@ -443,7 +443,7 @@ function EffectCard({ effect, localizedName, locale, onClick, onGoCreate }: {
   )
 }
 
-// 瑙嗛鎾斁鍣ㄦā鎬佹缁勪欢
+// Video player modal component
 function VideoModal({ videoRef, selectedVideo, onClose }: {
   videoRef: React.RefObject<HTMLVideoElement>
   selectedVideo: { url: string; title: string }
@@ -488,6 +488,7 @@ function VideoModal({ videoRef, selectedVideo, onClose }: {
     </div>
   )
 }
+
 
 
 

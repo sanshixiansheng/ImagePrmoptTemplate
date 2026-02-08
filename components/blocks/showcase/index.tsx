@@ -9,17 +9,17 @@ export default function Showcase({ section }: { section: SectionType }) {
   }
 
   return (
-    <section className="py-16 md:py-20">
+    <section className="py-16 md:py-24">
       <div className="container">
         <div className="mx-auto mb-10 max-w-3xl text-center">
-          <h2 className="font-serif text-3xl md:text-4xl">{section.title}</h2>
+          <h2 className="text-3xl font-semibold tracking-tight md:text-4xl">{section.title}</h2>
           <p className="mt-3 text-muted-foreground md:text-lg">{section.description}</p>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {section.items?.map((item, index) => (
             <Link key={index} href={item.url || ""} target={item.target}>
-              <Card className="h-full overflow-hidden rounded-2xl border-border/70 p-0 transition-all hover:-translate-y-1 hover:shadow-md">
+              <Card className="h-full overflow-hidden rounded-2xl border border-border/60 bg-card p-0 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md">
                 <CardContent className="p-0">
                   <div className="relative aspect-[16/10] w-full overflow-hidden">
                     <Image
