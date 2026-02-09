@@ -14,7 +14,7 @@ export default function AffiliatePage() {
           <div className="text-center mb-12">
             <h1 className="mb-4 font-serif text-4xl font-medium text-foreground md:text-5xl">Affiliate Program</h1>
             <p className="text-xl text-foreground/65">
-              Earn recurring commissions by promoting Pixmind
+              Earn recurring commissions by promoting Visora
             </p>
           </div>
 
@@ -143,7 +143,7 @@ export default function AffiliatePage() {
                   <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                     <span className="text-white text-xs">3</span>
                   </div>
-                  <span className="text-muted-foreground">How you plan to promote Pixmind</span>
+                  <span className="text-muted-foreground">How you plan to promote Visora</span>
                 </li>
               </ul>
               <Button asChild size="lg" className="bg-blue-500 hover:bg-blue-600 w-full md:w-auto">
@@ -189,4 +189,5 @@ export default function AffiliatePage() {
     </div>
   );
 }
+
 

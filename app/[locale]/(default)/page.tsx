@@ -11,7 +11,7 @@ import { FAQSection } from "./faq-section";
 export const metadata: Metadata = {
   title: "Image to Prompt Generator - AI image prompt generator",
   description:
-    "Generate high-quality prompts from images and create AI visuals fast with Pixmind.",
+    "Generate high-quality prompts from images and create AI visuals fast with Visora.",
 };
 
 export default async function LandingPage({
@@ -168,3 +168,4 @@ export default async function LandingPage({
     </div>
   );
 }
+

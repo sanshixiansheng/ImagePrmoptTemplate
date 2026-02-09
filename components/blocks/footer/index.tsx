@@ -18,9 +18,9 @@ export default function Footer({ footer }: { footer: FooterType }) {
                 <Image
                   src={footer.brand.logo.src}
                   alt={footer.brand.logo.alt || footer.brand.title || "Logo"}
-                  width={180}
-                  height={40}
-                  className="h-10 w-auto"
+                  width={240}
+                  height={64}
+                  className="h-12 w-auto"
                 />
               ) : (
                 <span className="font-serif text-2xl font-semibold opacity-80">{footer.brand?.title}</span>

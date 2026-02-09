@@ -1,4 +1,4 @@
-import DashboardLayout from "@/components/dashboard/layout";
+﻿import DashboardLayout from "@/components/dashboard/layout";
 import Empty from "@/components/blocks/empty";
 import { ReactNode } from "react";
 import { Sidebar } from "@/types/blocks/sidebar";
@@ -24,7 +24,7 @@ export default async function AdminLayout({
     brand: {
       title: "Digital Human",
       logo: {
-        src: "/logo.jpg",
+        src: "/logo.png",
         alt: "Digital Human",
       },
       url: "/admin",
@@ -133,3 +133,4 @@ export default async function AdminLayout({
 
   return <DashboardLayout sidebar={sidebar}>{children}</DashboardLayout>;
 }
+

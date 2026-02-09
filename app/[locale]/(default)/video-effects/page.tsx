@@ -12,7 +12,7 @@ import { VideoEffectsContent } from "./video-effects-content";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AI Video Effects - Transform Images into Videos | Pixmind",
+  title: "AI Video Effects - Transform Images into Videos | Visora",
   description: "Explore 100+ AI video effects. Transform images into stunning videos with AI Kiss, AI Hug, AI Dance, and more creative templates.",
 };
 
@@ -45,7 +45,7 @@ export default async function VideoEffectsPage({
               Generate Stunning Videos Online with AI Effects for Free
             </h2>
             <p className="text-lg text-muted-foreground">
-              Transform static images into stunning videos with Pixmind AI's innovative templates. Simply upload your photo, choose a professional AI effect, and create stunning videos in minutes - no experience needed. Start now!
+              Transform static images into stunning videos with Visora AI's innovative templates. Simply upload your photo, choose a professional AI effect, and create stunning videos in minutes - no experience needed. Start now!
             </p>
           </div>
 
@@ -217,10 +217,10 @@ export default async function VideoEffectsPage({
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-4xl font-semibold mb-4 text-foreground">
-                FAQs about Pixmind AI Video Effects
+                FAQs about Visora AI Video Effects
               </h2>
               <p className="text-lg text-muted-foreground">
-                Find answers to frequently asked questions about Pixmind AI video effects.
+                Find answers to frequently asked questions about Visora AI video effects.
               </p>
             </div>
 
@@ -264,5 +264,6 @@ export default async function VideoEffectsPage({
     </div>
   );
 }
+
 
 

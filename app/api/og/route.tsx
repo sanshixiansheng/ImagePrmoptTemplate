@@ -1,16 +1,16 @@
-import { ImageResponse } from 'next/og'
+﻿import { ImageResponse } from 'next/og'
 import { NextRequest } from 'next/server'
 
 export const runtime = 'edge'
 
 /**
- * 动态生成 Open Graph 图片
- * 使用示例: /api/og?title=标题&description=描述
+ * 鍔ㄦ€佺敓鎴?Open Graph 鍥剧墖
+ * 浣跨敤绀轰緥: /api/og?title=鏍囬&description=鎻忚堪
  */
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = req.nextUrl
-    const title = searchParams.get('title') || 'Pixmind'
+    const title = searchParams.get('title') || 'Visora'
     const description = searchParams.get('description') || 'AI Image Generation & Analysis Platform'
 
     return new ImageResponse(
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
             backgroundImage: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           }}
         >
-          {/* 主内容容器 */}
+          {/* 涓诲唴瀹瑰鍣?*/}
           <div
             style={{
               display: 'flex',
@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
               maxWidth: '1000px',
             }}
           >
-            {/* Logo/Brand 区域 */}
+            {/* Logo/Brand 鍖哄煙 */}
             <div
               style={{
                 display: 'flex',
@@ -57,11 +57,11 @@ export async function GET(req: NextRequest) {
                   WebkitTextFillColor: 'transparent',
                 }}
               >
-                🎨 Pixmind
+                馃帹 Visora
               </div>
             </div>
 
-            {/* 标题 */}
+            {/* 鏍囬 */}
             <h1
               style={{
                 fontSize: '72px',
@@ -76,7 +76,7 @@ export async function GET(req: NextRequest) {
               {title}
             </h1>
 
-            {/* 描述 */}
+            {/* 鎻忚堪 */}
             <p
               style={{
                 fontSize: '32px',
@@ -89,7 +89,7 @@ export async function GET(req: NextRequest) {
               {description}
             </p>
 
-            {/* 底部标签 */}
+            {/* 搴曢儴鏍囩 */}
             <div
               style={{
                 display: 'flex',
@@ -117,7 +117,7 @@ export async function GET(req: NextRequest) {
                   color: 'white',
                 }}
               >
-                形象克隆
+                褰㈣薄鍏嬮殕
               </div>
               <div
                 style={{
@@ -128,7 +128,7 @@ export async function GET(req: NextRequest) {
                   color: 'white',
                 }}
               >
-                声音克隆
+                澹伴煶鍏嬮殕
               </div>
             </div>
           </div>
@@ -146,3 +146,5 @@ export async function GET(req: NextRequest) {
     })
   }
 }
+
+

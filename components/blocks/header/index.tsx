@@ -51,13 +51,13 @@ export default function Header({ header }: { header: HeaderType }) {
             {header.brand?.logo?.src ? (
               <Image
                 src={header.brand.logo.src}
-                alt={header.brand.logo.alt || "Pixmind"}
-                width={160}
-                height={36}
-                className="h-9 w-auto"
+                alt={header.brand.logo.alt || "Visora"}
+                width={220}
+                height={60}
+                className="h-11 w-auto md:h-12"
               />
             ) : (
-              <span className="font-serif text-xl font-semibold">{header.brand?.title || "Pixmind"}</span>
+              <span className="font-serif text-xl font-semibold">{header.brand?.title || "Visora"}</span>
             )}
           </Link>
 
@@ -294,5 +294,6 @@ export default function Header({ header }: { header: HeaderType }) {
     </header>
   );
 }
+
 
 

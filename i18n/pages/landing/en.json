@@ -1,12 +1,12 @@
-{
+﻿{
   "template": "pixmind-template-one",
   "theme": "light",
   "header": {
     "brand": {
-      "title": "Pixmind",
+      "title": "Visora",
       "logo": {
         "src": "/logo.png",
-        "alt": "Pixmind"
+        "alt": "Visora"
       },
       "url": "/"
     },
@@ -89,7 +89,7 @@
       "title_free": "Free",
       "title_main": "Work side by side with AI to turn ideas into reality.",
       "title_generator": "Generator",
-      "subtitle": "From concept to creation, PixMind fuels your creative fire.",
+      "subtitle": "From concept to creation, Visora fuels your creative fire.",
       "description": "Convert any image to detailed prompts instantly. Perfect for Midjourney, DALL-E, Stable Diffusion and more.",
       "try_now": "Try it now!",
       "tutorials": "Tutorials"
@@ -136,17 +136,17 @@
       },
       "features_section": {
         "title": "Features of Our Image to Prompt Generator",
-        "accurate_analysis_title": "✨ Accurate Image Analysis",
+        "accurate_analysis_title": "鉁?Accurate Image Analysis",
         "accurate_analysis_desc": "Our image to prompt AI accurately identifies objects, styles, colors, and composition",
-        "fast_generation_title": "🚀 Fast Prompt Generation",
+        "fast_generation_title": "馃殌 Fast Prompt Generation",
         "fast_generation_desc": "Generate image prompts in seconds with our optimized prompt generator engine",
-        "multi_platform_title": "🎨 Multi-Platform Support",
+        "multi_platform_title": "馃帹 Multi-Platform Support",
         "multi_platform_desc": "Image prompts optimized for Midjourney, DALL-E, Stable Diffusion, and more",
-        "customizable_title": "🔧 Customizable Output",
+        "customizable_title": "馃敡 Customizable Output",
         "customizable_desc": "Adjust prompt generator settings for different styles and detail levels",
-        "smart_enhancement_title": "💡 Smart Enhancement",
+        "smart_enhancement_title": "馃挕 Smart Enhancement",
         "smart_enhancement_desc": "Our image to prompt generator adds artistic keywords automatically",
-        "free_to_use_title": "🆓 Free to Use",
+        "free_to_use_title": "馃啌 Free to Use",
         "free_to_use_desc": "Start using our image prompt generator completely free, no credit card required"
       }
     },
@@ -165,15 +165,15 @@
   "footer": {
     "name": "footer",
     "brand": {
-      "title": "Pixmind",
+      "title": "Visora",
       "description": "Transform your creative vision into reality with our AI-powered prompt generation tools. Convert images to prompts, enhance text prompts, and generate stunning visuals.",
       "logo": {
         "src": "/logo.png",
-        "alt": "Pixmind"
+        "alt": "Visora"
       },
       "url": "/"
     },
-    "copyright": "© 2025 • Pixmind. All rights reserved.  pixmind.service@aimix.pro",
+    "copyright": "漏 2025 鈥?Visora. All rights reserved.  pixmind.service@aimix.pro",
     "nav": {
       "items": [
         {
@@ -265,3 +265,4 @@
     }
   }
 }
+

@@ -1,7 +1,7 @@
-import { Metadata } from 'next'
+﻿import { Metadata } from 'next'
 
 /**
- * SEO配置接口
+ * SEO閰嶇疆鎺ュ彛
  */
 interface SEOConfig {
   title: string
@@ -16,7 +16,7 @@ interface SEOConfig {
 }
 
 /**
- * 生成页面Metadata（包含OG、Twitter Card等）
+ * 鐢熸垚椤甸潰Metadata锛堝寘鍚玂G銆乀witter Card绛夛級
  */
 export function generateSEOMetadata(config: SEOConfig): Metadata {
   const {
@@ -39,9 +39,9 @@ export function generateSEOMetadata(config: SEOConfig): Metadata {
     title,
     description,
     keywords,
-    authors: [{ name: 'Pixmind' }],
-    creator: 'Pixmind',
-    publisher: 'Pixmind',
+    authors: [{ name: 'Visora' }],
+    creator: 'Visora',
+    publisher: 'Visora',
 
     // Open Graph
     openGraph: {
@@ -50,7 +50,7 @@ export function generateSEOMetadata(config: SEOConfig): Metadata {
       url,
       title,
       description,
-      siteName: 'Pixmind',
+      siteName: 'Visora',
       images: [
         {
           url: imageUrl,
@@ -81,7 +81,7 @@ export function generateSEOMetadata(config: SEOConfig): Metadata {
       },
     },
 
-    // 其他元数据
+    // 鍏朵粬鍏冩暟鎹?
     robots: {
       index: true,
       follow: true,
@@ -94,7 +94,7 @@ export function generateSEOMetadata(config: SEOConfig): Metadata {
       },
     },
 
-    // Verification (可选，添加你的验证码)
+    // Verification (鍙€夛紝娣诲姞浣犵殑楠岃瘉鐮?
     // verification: {
     //   google: 'your-google-verification-code',
     //   yandex: 'your-yandex-verification-code',
@@ -104,7 +104,7 @@ export function generateSEOMetadata(config: SEOConfig): Metadata {
 }
 
 /**
- * 生成 Schema.org 组织结构化数据
+ * 鐢熸垚 Schema.org 缁勭粐缁撴瀯鍖栨暟鎹?
  */
 export function generateOrganizationSchema() {
   const baseUrl = process.env.NEXT_PUBLIC_WEB_URL || ''
@@ -112,12 +112,12 @@ export function generateOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Pixmind',
+    name: 'Visora',
     url: baseUrl,
     logo: `${baseUrl}/logo.png`,
     description: 'Professional AI image generation and analysis platform with image-to-prompt and text-to-image capabilities',
     sameAs: [
-      // 添加你的社交媒体链接
+      // 娣诲姞浣犵殑绀句氦濯掍綋閾炬帴
       // 'https://twitter.com/yourprofile',
       // 'https://facebook.com/yourprofile',
       // 'https://linkedin.com/company/yourprofile',
@@ -126,7 +126,7 @@ export function generateOrganizationSchema() {
 }
 
 /**
- * 生成 Schema.org 产品结构化数据
+ * 鐢熸垚 Schema.org 浜у搧缁撴瀯鍖栨暟鎹?
  */
 export function generateProductSchema(product: {
   name: string
@@ -162,7 +162,7 @@ export function generateProductSchema(product: {
 }
 
 /**
- * 生成 Schema.org 文章结构化数据
+ * 鐢熸垚 Schema.org 鏂囩珷缁撴瀯鍖栨暟鎹?
  */
 export function generateArticleSchema(article: {
   title: string
@@ -188,7 +188,7 @@ export function generateArticleSchema(article: {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Pixmind',
+      name: 'Visora',
       logo: {
         '@type': 'ImageObject',
         url: `${baseUrl}/logo.png`,
@@ -198,7 +198,7 @@ export function generateArticleSchema(article: {
 }
 
 /**
- * 生成 Schema.org 面包屑导航结构化数据
+ * 鐢熸垚 Schema.org 闈㈠寘灞戝鑸粨鏋勫寲鏁版嵁
  */
 export function generateBreadcrumbSchema(breadcrumbs: Array<{ name: string; url: string }>) {
   const baseUrl = process.env.NEXT_PUBLIC_WEB_URL || ''
@@ -216,7 +216,7 @@ export function generateBreadcrumbSchema(breadcrumbs: Array<{ name: string; url:
 }
 
 /**
- * 生成 Schema.org FAQ 结构化数据
+ * 鐢熸垚 Schema.org FAQ 缁撴瀯鍖栨暟鎹?
  */
 export function generateFAQSchema(faqs: Array<{ question: string; answer: string }>) {
   return {
@@ -234,7 +234,7 @@ export function generateFAQSchema(faqs: Array<{ question: string; answer: string
 }
 
 /**
- * 生成 Schema.org 视频结构化数据
+ * 鐢熸垚 Schema.org 瑙嗛缁撴瀯鍖栨暟鎹?
  */
 export function generateVideoSchema(video: {
   name: string
@@ -255,3 +255,4 @@ export function generateVideoSchema(video: {
     ...(video.contentUrl && { contentUrl: video.contentUrl }),
   }
 }
+

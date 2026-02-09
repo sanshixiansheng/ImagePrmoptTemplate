@@ -57,9 +57,9 @@ export default function DashboardSidebar({
                   <Image
                     src={sidebar.brand?.logo?.src as any}
                     alt={sidebar.brand?.title as string}
-                    width={28}
-                    height={28}
-                    className="rounded-full"
+                    width={140}
+                    height={40}
+                    className="h-9 w-auto object-contain"
                   />
                 )}
                 <span className="text-base font-semibold">
