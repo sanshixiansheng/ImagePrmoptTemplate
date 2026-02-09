@@ -57,7 +57,7 @@ export function VideoCarousel() {
   }, [currentVideoIndex]);
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative h-full w-full overflow-hidden rounded-xl bg-muted/30 aspect-video">
       {videos.map((videoSrc, index) => (
         <video
           key={videoSrc}

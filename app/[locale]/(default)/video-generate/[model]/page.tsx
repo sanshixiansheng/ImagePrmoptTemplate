@@ -152,6 +152,15 @@ export default function VideoGeneratePage() {
   const [videoModels, setVideoModels] = useState<VideoModel[]>([]);
   const [isLoadingModels, setIsLoadingModels] = useState(false);
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const q = new URLSearchParams(window.location.search).get("prompt");
+    if (q && q.trim()) {
+      setT2vPrompt(q.trim());
+      setI2vPrompt(q.trim());
+    }
+  }, []);
+
   // 璁＄畻绉垎鐨勮緟鍔╁嚱鏁?
   const calculateCredits = (model: string, duration: string, resolution: string, enableAudio: boolean) => {
     if (!model) return 0;
@@ -206,7 +215,7 @@ export default function VideoGeneratePage() {
 
         const response = await fetch('/api/ai/video-models');
 
-        console.log('[VideoModels] API 鍝嶅簲鐘舵€?', response.status);
+        console.log('[VideoModels] API status:', response.status);
 
         if (!response.ok) {
           console.error('[VideoModels] API 杩斿洖閿欒:', response.status, response.statusText);
@@ -218,7 +227,7 @@ export default function VideoGeneratePage() {
         }
 
         const result = await response.json();
-        console.log('[VideoModels] API 鍝嶅簲鏁版嵁:', result);
+        console.log('[VideoModels] API payload:', result);
 
         if (result.code === 1000 && result.data && Array.isArray(result.data)) {
           console.log('[VideoModels] model list fetched, count:', result.data.length);
@@ -467,7 +476,7 @@ export default function VideoGeneratePage() {
     }
   };
 
-  // Text to Video 杞浠诲姟鐘舵€?
+  // Text-to-video polling task status
   const pollT2VTaskStatus = async (taskId: string) => {
     const maxAttempts = 60;
     let attempts = 0;
@@ -478,7 +487,7 @@ export default function VideoGeneratePage() {
         const response = await fetch(`/api/ai/video-generate/task-status?taskId=${taskId}`);
 
         const result = await response.json();
-        console.log('[T2V] 浠诲姟鐘舵€?', result);
+        console.log('[T2V] task status:', result);
         console.log('[T2V] status:', result.data?.status, 'videoUrl:', result.data?.videoUrl);
 
         if (result.code === 1000 && result.data) {
@@ -553,7 +562,7 @@ export default function VideoGeneratePage() {
     poll();
   };
 
-  // Image to Video 杞浠诲姟鐘舵€?
+  // Image-to-video polling task status
   const pollI2VTaskStatus = async (taskId: string) => {
     const maxAttempts = 60;
     let attempts = 0;
@@ -564,7 +573,7 @@ export default function VideoGeneratePage() {
         const response = await fetch(`/api/ai/video-generate/task-status?taskId=${taskId}`);
 
         const result = await response.json();
-        console.log('[I2V] 浠诲姟鐘舵€?', result);
+        console.log('[I2V] task status:', result);
         console.log('[I2V] status:', result.data?.status, 'videoUrl:', result.data?.videoUrl);
 
         if (result.code === 1000 && result.data) {
@@ -686,7 +695,7 @@ export default function VideoGeneratePage() {
       });
 
       const result = await response.json();
-      console.log('[T2V] API 鍝嶅簲:', result);
+      console.log('[T2V] API response:', result);
 
       if (result.code === 1000 && result.data?.taskId) {
         const taskId = result.data.taskId;
@@ -698,7 +707,7 @@ export default function VideoGeneratePage() {
         toast.error(result.message || t('toast.taskCreateFailed'));
       }
     } catch (error) {
-      console.error('[T2V] 鐢熸垚寮傚父:', error);
+      console.error('[T2V] generation exception:', error);
       setIsGeneratingT2V(false);
       toast.error(t('toast.generateFailed'));
     }
@@ -758,7 +767,7 @@ export default function VideoGeneratePage() {
       });
 
       const result = await response.json();
-      console.log('[I2V] API 鍝嶅簲:', result);
+      console.log('[I2V] API response:', result);
 
       if (result.code === 1000 && result.data?.taskId) {
         const taskId = result.data.taskId;
@@ -770,7 +779,7 @@ export default function VideoGeneratePage() {
         toast.error(result.message || t('toast.taskCreateFailed'));
       }
     } catch (error) {
-      console.error('[I2V] 鐢熸垚寮傚父:', error);
+      console.error('[I2V] generation exception:', error);
       setIsGeneratingI2V(false);
       toast.error(t('toast.generateFailed'));
     }
@@ -780,7 +789,7 @@ export default function VideoGeneratePage() {
     <>
       <GoogleAuthHandler />
 
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-gray-950 dark:via-background dark:to-gray-950">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 dark:from-background dark:via-background dark:to-muted/20">
 
         {/* Hero Section */}
         <section className="container mx-auto px-4 pt-24 pb-12">
@@ -828,7 +837,7 @@ export default function VideoGeneratePage() {
         <section className="container mx-auto px-4 pb-16">
           <div className="max-w-7xl mx-auto">
             <Tabs defaultValue="text-to-video" className="w-full">
-              <TabsList className="mb-8 bg-white/80 dark:bg-card/80 backdrop-blur-sm p-1.5 border border-gray-200 dark:border-border shadow-sm rounded-lg">
+              <TabsList className="mb-8 bg-card/80 backdrop-blur-sm p-1.5 border border-border/70 shadow-sm rounded-lg">
                 <TabsTrigger
                   value="text-to-video"
                   className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary data-[state=active]:text-white data-[state=active]:shadow-md px-8 py-3 rounded-md transition-all font-medium"
@@ -847,7 +856,7 @@ export default function VideoGeneratePage() {
               <TabsContent value="text-to-video">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Left Panel */}
-                  <div className="space-y-6 bg-white dark:bg-card p-8 rounded-2xl shadow-lg border border-gray-100 dark:border-border">
+                  <div className="space-y-6 bg-card p-8 rounded-2xl shadow-sm border border-border/70">
                     <div>
                       <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-foreground flex items-center gap-2">
                         <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -864,7 +873,7 @@ export default function VideoGeneratePage() {
                           value={t2vPrompt}
                           onChange={(e) => setT2vPrompt(e.target.value)}
                           maxLength={2048}
-                          className="min-h-[140px] resize-none border-gray-200 dark:border-border focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all rounded-lg"
+                          className="min-h-[140px] resize-none border-border focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all rounded-lg"
                         />
                         <div className="absolute bottom-3 right-3 text-xs text-gray-500 dark:text-muted-foreground bg-white/90 dark:bg-background/90 px-2 py-1 rounded-md backdrop-blur-sm">
                           {t2vPrompt.length}/2048
@@ -901,7 +910,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('textToVideo.model')}</label>
                           <Select value={t2vModel} onValueChange={setT2vModel} disabled={isLoadingModels || filteredVideoModels.length === 0}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
+                            <SelectTrigger className="border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue>
                                 {t2vModel ? filteredVideoModels.find(m => m.id === t2vModel)?.name :
                                   (isLoadingModels ? t('common.loading') : t('common.selectModel'))}
@@ -929,7 +938,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('textToVideo.aspectRatio')}</label>
                           <Select value={t2vAspectRatio} onValueChange={setT2vAspectRatio}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
+                            <SelectTrigger className="border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -953,7 +962,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('textToVideo.duration')}</label>
                           <Select value={t2vDuration} onValueChange={setT2vDuration}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
+                            <SelectTrigger className="border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -975,7 +984,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('textToVideo.resolution')}</label>
                           <Select value={t2vResolution} onValueChange={setT2vResolution}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
+                            <SelectTrigger className="border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -1026,7 +1035,7 @@ export default function VideoGeneratePage() {
                         return (
                           <div className="flex items-center justify-between text-sm pt-2 border-t border-border">
                             <div className="text-muted-foreground font-medium">
-                              Credits: {credits} 鈿?
+                              Credits: {credits}
                             </div>
                           </div>
                         );
@@ -1049,7 +1058,7 @@ export default function VideoGeneratePage() {
                       <div className="text-center">
                         <div className="relative w-20 h-20 mx-auto mb-6">
                           <div className="absolute inset-0 border-4 border-border dark:border-border rounded-full"></div>
-                          <div className="absolute inset-0 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+                          <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                         </div>
                         <p className="text-gray-700 dark:text-gray-300 mb-2 font-medium">{t('common.generatingMessage')}</p>
                         <p className="text-sm text-gray-600 dark:text-muted-foreground leading-relaxed">{t('common.generatingHint')}</p>
@@ -1121,7 +1130,7 @@ export default function VideoGeneratePage() {
               <TabsContent value="image-to-video">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   {/* Left Panel */}
-                  <div className="space-y-6 bg-white dark:bg-card p-8 rounded-2xl shadow-lg border border-gray-100 dark:border-border">
+                  <div className="space-y-6 bg-card p-8 rounded-2xl shadow-sm border border-border/70">
                     {/* Reference Image Upload */}
                     <div>
                       <h3 className="text-xl font-semibold mb-3 text-gray-900 dark:text-foreground flex items-center gap-2">
@@ -1135,7 +1144,7 @@ export default function VideoGeneratePage() {
                       </p>
                       
                       {!referenceImagePreview ? (
-                        <label className="block border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-10 text-center cursor-pointer hover:border-purple-500 hover:bg-muted/50 dark:hover:bg-purple-900/10 transition-all group">
+                        <label className="block border-2 border-dashed border-border rounded-xl p-10 text-center cursor-pointer hover:border-primary/60 hover:bg-muted/60 transition-all group">
                           <input
                             type="file"
                             accept="image/*"
@@ -1143,7 +1152,7 @@ export default function VideoGeneratePage() {
                             className="hidden"
                           />
                           <svg
-                            className="w-14 h-14 mx-auto mb-4 text-gray-400 group-hover:text-purple-500 transition-colors"
+                            className="w-14 h-14 mx-auto mb-4 text-foreground/45 group-hover:text-primary transition-colors"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -1207,7 +1216,7 @@ export default function VideoGeneratePage() {
                           value={i2vPrompt}
                           onChange={(e) => setI2vPrompt(e.target.value)}
                           maxLength={2048}
-                          className="min-h-[140px] resize-none border-gray-200 dark:border-border focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all rounded-lg"
+                          className="min-h-[140px] resize-none border-border focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all rounded-lg"
                         />
                         <div className="absolute bottom-3 right-3 text-xs text-gray-500 dark:text-muted-foreground bg-white/90 dark:bg-background/90 px-2 py-1 rounded-md backdrop-blur-sm">
                           {i2vPrompt.length}/2048
@@ -1234,7 +1243,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('imageToVideo.model')}</label>
                           <Select value={i2vModel} onValueChange={setI2vModel} disabled={isLoadingModels || filteredVideoModels.length === 0}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
+                            <SelectTrigger className="border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue>
                                 {i2vModel ? filteredVideoModels.find(m => m.id === i2vModel)?.name :
                                   (isLoadingModels ? t('common.loading') : t('common.selectModel'))}
@@ -1262,7 +1271,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('imageToVideo.aspectRatio')}</label>
                           <Select value={i2vAspectRatio} onValueChange={setI2vAspectRatio}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
+                            <SelectTrigger className="border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -1287,7 +1296,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('imageToVideo.duration')}</label>
                           <Select value={i2vDuration} onValueChange={setI2vDuration}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
+                            <SelectTrigger className="border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -1309,7 +1318,7 @@ export default function VideoGeneratePage() {
                         <div className="flex items-center gap-3">
                           <label className="text-sm font-medium whitespace-nowrap">{t('imageToVideo.resolution')}</label>
                           <Select value={i2vResolution} onValueChange={setI2vResolution}>
-                            <SelectTrigger className="border-gray-200 dark:border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
+                            <SelectTrigger className="border-border hover:border-primary/60 dark:hover:border-primary/60 focus:border-primary focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/20 transition-all">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -1360,7 +1369,7 @@ export default function VideoGeneratePage() {
                         return (
                           <div className="flex items-center justify-between text-sm pt-2 border-t border-border">
                             <div className="text-muted-foreground font-medium">
-                              Credits: {credits} 鈿?
+                              Credits: {credits}
                             </div>
                           </div>
                         );
@@ -1383,7 +1392,7 @@ export default function VideoGeneratePage() {
                       <div className="text-center">
                         <div className="relative w-20 h-20 mx-auto mb-6">
                           <div className="absolute inset-0 border-4 border-border dark:border-border rounded-full"></div>
-                          <div className="absolute inset-0 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
+                          <div className="absolute inset-0 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                         </div>
                         <p className="text-gray-700 dark:text-gray-300 mb-2 font-medium">{t('common.generatingMessage')}</p>
                         <p className="text-sm text-gray-600 dark:text-muted-foreground leading-relaxed">{t('common.generatingHint')}</p>
@@ -1469,7 +1478,7 @@ export default function VideoGeneratePage() {
                   {t('veo.features.physics.description')}
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="bg-white dark:bg-card rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 border border-gray-100 dark:border-border">
+                  <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 border border-border/70">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
                         <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1482,7 +1491,7 @@ export default function VideoGeneratePage() {
                       {t('veo.features.physics.physics_desc')}
                     </p>
                   </div>
-                  <div className="bg-white dark:bg-card rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 border border-gray-100 dark:border-border">
+                  <div className="bg-card rounded-2xl p-8 shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 border border-border/70">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
                         <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1512,7 +1521,7 @@ export default function VideoGeneratePage() {
                   {t('veo.features.audio.description')}
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="bg-white dark:bg-card rounded-xl p-6 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 border border-gray-100 dark:border-border">
+                  <div className="bg-card rounded-xl p-6 shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 border border-border/70">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center">
                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1525,7 +1534,7 @@ export default function VideoGeneratePage() {
                       {t('veo.features.audio.sound_effects_desc')}
                     </p>
                   </div>
-                  <div className="bg-white dark:bg-card rounded-xl p-6 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 border border-gray-100 dark:border-border">
+                  <div className="bg-card rounded-xl p-6 shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 border border-border/70">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1538,7 +1547,7 @@ export default function VideoGeneratePage() {
                       {t('veo.features.audio.ambient_noise_desc')}
                     </p>
                   </div>
-                  <div className="bg-white dark:bg-card rounded-xl p-6 shadow-md hover:shadow-lg transition-all transform hover:-translate-y-1 border border-gray-100 dark:border-border">
+                  <div className="bg-card rounded-xl p-6 shadow-sm hover:shadow-md transition-all transform hover:-translate-y-1 border border-border/70">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
                         <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1580,7 +1589,7 @@ export default function VideoGeneratePage() {
                     </p>
                   </div>
                   <div className="text-center p-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary rounded-full flex items-center justify-center mx-auto mb-4">
                       <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -1592,7 +1601,7 @@ export default function VideoGeneratePage() {
                     </p>
                   </div>
                   <div className="text-center p-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-pink-600 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary to-primary rounded-full flex items-center justify-center mx-auto mb-4">
                       <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                       </svg>
@@ -1736,7 +1745,7 @@ export default function VideoGeneratePage() {
         </section>
 
         {/* FAQ Section */}
-        <section className="relative overflow-hidden bg-gradient-to-b from-white to-gray-50 dark:from-background dark:to-gray-900/20 py-20">
+        <section className="relative overflow-hidden bg-gradient-to-b from-background to-muted/20 py-20">
           <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-4 text-foreground">
@@ -1990,4 +1999,7 @@ export default function VideoGeneratePage() {
     </>
   );
 }
+
+
+
 

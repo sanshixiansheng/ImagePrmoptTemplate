@@ -10,74 +10,117 @@
      ✓ mdxRs
 
  ✓ Starting...
- ✓ Ready in 2.5s
+ ✓ Ready in 2.7s
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Parsing of E:\z-image\ImagePrmoptTemplate\node_modules\next-intl\dist\esm\production\extractor\format\index.js for build dependencies failed at 'import(t)'.
+<w> Build dependencies behind this expression are ignored and might cause incorrect cache invalidation.
  ○ Compiling /middleware ...
- ✓ Compiled /middleware in 1029ms (326 modules)
-<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Parsing of E:\z-image\ImagePrmoptTemplate\node_modules\next-intl\dist\esm\production\extractor\format\index.js for build dependencies failed at 'import(t)'.
-<w> Build dependencies behind this expression are ignored and might cause incorrect cache invalidation.
+ ✓ Compiled /middleware in 1036ms (326 modules)
  ○ Compiling /[locale] ...
- ✓ Compiled /[locale] in 8.2s (1671 modules)
 <w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Parsing of E:\z-image\ImagePrmoptTemplate\node_modules\next-intl\dist\esm\production\extractor\format\index.js for build dependencies failed at 'import(t)'.
 <w> Build dependencies behind this expression are ignored and might cause incorrect cache invalidation.
- HEAD /en 200 in 10369ms
- ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 650ms (916 modules)
- ✓ Compiled in 443ms (544 modules)
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 1506ms
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 20ms
- ✓ Compiled /[locale] in 225ms (1126 modules)
-[NextAuth Session] User loaded: 114298030@qq.com
-[AppContext] Using initial user data from SSR: roy
- GET /en 200 in 930ms
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 86ms
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 18ms
-[NextAuth Session] User loaded: 114298030@qq.com
-[AppContext] Using initial user data from SSR: roy
- GET /en 200 in 201ms
- ✓ Compiled /api/video-effects in 500ms (1659 modules)
- GET /api/video-effects 200 in 569ms
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 625ms
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 23ms
- ○ Compiling /[locale]/my-profile ...
- ✓ Compiled /[locale]/my-profile in 1747ms (1731 modules)
- GET /en/my-profile 200 in 2941ms
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /en/my-profile 200 in 64ms
- ✓ Compiled /api/user/profile in 423ms (1724 modules)
-[NextAuth Session] User loaded: 114298030@qq.com
-[ProfileAPI] Failed to fetch user: {
-  code: '42703',
-  details: null,
-  hint: null,
-  message: 'column users.avatar_url does not exist'
-}
- GET /api/user/profile 200 in 2602ms
+ ✓ Compiled /[locale] in 15.7s (1674 modules)
+<w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Parsing of E:\z-image\ImagePrmoptTemplate\node_modules\next-intl\dist\esm\production\extractor\format\index.js for build dependencies failed at 'import(t)'.
+<w> Build dependencies behind this expression are ignored and might cause incorrect cache invalidation.
+ GET /en 200 in 453ms
+ ○ Compiling /[locale]/pricing ...
+ ✓ Compiled /[locale]/pricing in 1499ms (1688 modules)
+ GET /en/pricing 200 in 3082ms
  ○ Compiling /[locale]/txt-to-image/[model] ...
- ✓ Compiled /[locale]/txt-to-image/[model] in 731ms (1782 modules)
- GET /en/txt-to-image/nano-banana 200 in 1872ms
- ○ Compiling /[locale]/video-effects ...
- ✓ Compiled /[locale]/video-effects in 1216ms (1791 modules)
- GET /en/video-effects 200 in 2391ms
- ○ Compiling /api/video-effects ...
- ✓ Compiled /api/video-effects in 635ms (1796 modules)
- GET /api/video-effects/channels 200 in 692ms
- GET /api/video-effects 200 in 703ms
+ ✓ Compiled /[locale]/txt-to-image/[model] in 705ms (1732 modules)
+ GET /en/txt-to-image/nano-banana 200 in 2151ms
  ○ Compiling /[locale]/video-generate/[model] ...
- ✓ Compiled /[locale]/video-generate/[model] in 1508ms (2001 modules)
- GET /en/video-generate/veo 200 in 2847ms
- ○ Compiling /api/ai/video-models ...
- ✓ Compiled /api/ai/video-models in 625ms (2003 modules)
-[Video Models] 获取视频模型列表
-[Video Models] 返回模型数量: 2
- GET /api/ai/video-models 200 in 668ms
- GET /en 200 in 138ms
- GET /api/video-effects 200 in 29ms
- GET /en/txt-to-image/nano-banana 200 in 59ms
- GET /api/video-effects 200 in 28ms
-^C^C
+ ✓ Compiled /[locale]/video-generate/[model] in 1320ms (1938 modules)
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+ GET /en/video-generate/veo 200 in 2898ms
+ ✓ Compiled /api/health in 412ms (1946 modules)
+ GET /api/health 200 in 553ms
+ ○ Compiling /api/og ...
+ ✓ Compiled /api/og in 987ms (1214 modules)
+ GET /api/og?title=Visora&description=AI 200 in 1420ms
+ GET /en 200 in 505ms
+ ○ Compiling /api/video-effects ...
+ ✓ Compiled /api/video-effects in 957ms (1772 modules)
+ GET /api/video-effects 200 in 1133ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[AppContext] Using initial user data from SSR: roy
+ GET /en 200 in 1802ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1372ms (1774 modules)
+ GET /api/video-effects 200 in 1507ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 2416ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 58ms
+ ○ Compiling /[locale]/txt-to-image/[model] ...
+ ✓ Compiled /[locale]/txt-to-image/[model] in 878ms (1141 modules)
+ GET /en/txt-to-image/nano-banana 200 in 1386ms
+ ✓ Compiled /api/video-effects in 373ms (1149 modules)
+ GET /api/video-effects 200 in 589ms
+ GET /en/txt-to-image/nano-banana 200 in 285ms
+ GET /api/video-effects 200 in 62ms
+ GET /en/txt-to-image/nano-banana 200 in 72ms
+ GET /api/video-effects 200 in 47ms
+ ✓ Compiled /api/auth/[...nextauth] in 352ms (1148 modules)
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 446ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 25ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 35ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 26ms
+ ✓ Compiled in 2.3s (1798 modules)
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /en 200 in 316ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 776ms (1148 modules)
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 936ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 25ms
+ ✓ Compiled in 2.7s (1805 modules)
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /en 200 in 271ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 40ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 26ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[AppContext] Using initial user data from SSR: roy
+ GET /en 200 in 707ms
+ ○ Compiling /api/video-effects ...
+ ✓ Compiled /api/video-effects in 1215ms (1151 modules)
+ GET /api/video-effects 200 in 1561ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 1694ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 31ms
+ GET /en 200 in 116ms
+ GET /en 200 in 50ms
+ GET /en 200 in 42ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 38ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 38ms
+ ✓ Compiled in 2.4s (1798 modules)
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+[NextAuth Session] User loaded: 114298030@qq.com
+ ✓ Compiled in 762ms (657 modules)
+[NextAuth Session] User loaded: 114298030@qq.com
+[AppContext] Using initial user data from SSR: roy
+ GET /en 200 in 1145ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /en 200 in 770ms
+ ✓ Compiled /api/auth/[...nextauth] in 438ms (1149 modules)
+ ✓ Compiled (1151 modules)
+ GET /api/video-effects 200 in 875ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 875ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 21ms
+ ✓ Compiled in 985ms (1798 modules)
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /en 200 in 307ms

@@ -128,6 +128,15 @@ export default function TextToImagePage() {
   const [activeTab, setActiveTab] = useState("text-to-image");
   const [isTranslatingI2I, setIsTranslatingI2I] = useState(false); // i2i translation state
 
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const q = new URLSearchParams(window.location.search).get("prompt");
+    if (q && q.trim()) {
+      setPrompt(q.trim());
+      setI2iPrompt(q.trim());
+    }
+  }, []);
+
   // Filter text-to-image models by route param
   const filteredModels = models.filter(m => {
     // First, check supportsTextToImage when field exists
@@ -367,7 +376,7 @@ export default function TextToImagePage() {
   const saveRedirectUrl = () => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('loginRedirectUrl', window.location.pathname);
-      console.log('[TextToImage] 宸蹭繚瀛橀噸瀹氬悜URL:', window.location.pathname);
+      console.log('[TextToImage] preserved redirect URL:', window.location.pathname);
     }
   };
 
@@ -427,9 +436,9 @@ export default function TextToImagePage() {
           '3:4': '3:4'
         };
 
-        console.log('[Evolink] 浣跨敤 session 璁よ瘉');
+        console.log('[Evolink] using session auth');
 
-        // 鍒涘缓浠诲姟
+        // Create task
         const response = await fetch('/api/ai/evolink/generate', {
           method: 'POST',
           headers: {
@@ -443,16 +452,16 @@ export default function TextToImagePage() {
         });
 
         const result = await response.json();
-        console.log('[Evolink] 鍒涘缓浠诲姟鍝嶅簲:', result);
+        console.log('[Evolink] create task response:', result);
 
         if (result.code !== 1000) {
           throw new Error(result.message || 'Generation failed');
         }
 
         const taskId = result.data.id;
-        console.log('[Evolink] 浠诲姟ID:', taskId);
+        console.log('[Evolink] task id:', taskId);
 
-        // 杞浠诲姟鐘舵€?
+        // Poll task status
         const maxAttempts = 120;
         const pollInterval = 2000;
 
@@ -606,7 +615,7 @@ export default function TextToImagePage() {
       });
 
       const result = await response.json();
-      console.log('[ImageToImage] API 鍝嶅簲:', result);
+      console.log('[ImageToImage] API response:', result);
 
       // Check login expiration
       if (result.code === 401 || response.status === 401) {
@@ -1473,7 +1482,7 @@ export default function TextToImagePage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {/* Example 1: Coffee Beans Photography */}
-                <div className="bg-card rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow">
+                <div className="bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
                   <div className="aspect-square overflow-hidden bg-muted/30">
                     <img
                       src="https://cloud.google.com/static/vertex-ai/generative-ai/docs/image/images/1_style-photography_coffee-beans.png"
@@ -1494,7 +1503,7 @@ export default function TextToImagePage() {
                 </div>
 
                 {/* Example 2: Chocolate Bar */}
-                <div className="bg-card rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow">
+                <div className="bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
                   <div className="aspect-square overflow-hidden bg-muted/30">
                     <img
                       src="https://cloud.google.com/static/vertex-ai/generative-ai/docs/image/images/1_style-photography_chocolate-bar.png"
@@ -1515,7 +1524,7 @@ export default function TextToImagePage() {
                 </div>
 
                 {/* Example 3: Modern Building */}
-                <div className="bg-card rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow">
+                <div className="bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
                   <div className="aspect-square overflow-hidden bg-muted/30">
                     <img
                       src="https://cloud.google.com/static/vertex-ai/generative-ai/docs/image/images/1_style-photography_modern-building.png"
@@ -1536,7 +1545,7 @@ export default function TextToImagePage() {
                 </div>
 
                 {/* Example 4: Technical Pencil Drawing */}
-                <div className="bg-card rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow">
+                <div className="bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
                   <div className="aspect-square overflow-hidden bg-muted/30">
                     <img
                       src="https://cloud.google.com/static/vertex-ai/generative-ai/docs/image/images/2_style-illustration1A.png"
@@ -1557,7 +1566,7 @@ export default function TextToImagePage() {
                 </div>
 
                 {/* Example 5: Charcoal Drawing */}
-                <div className="bg-card rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow">
+                <div className="bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
                   <div className="aspect-square overflow-hidden bg-muted/30">
                     <img
                       src="https://cloud.google.com/static/vertex-ai/generative-ai/docs/image/images/2_style-illustration1B.png"
@@ -1578,7 +1587,7 @@ export default function TextToImagePage() {
                 </div>
 
                 {/* Example 6: Pastel Painting */}
-                <div className="bg-card rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow">
+                <div className="bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
                   <div className="aspect-square overflow-hidden bg-muted/30">
                     <img
                       src="https://cloud.google.com/static/vertex-ai/generative-ai/docs/image/images/2_style-illustration2E.png"
@@ -1788,7 +1797,7 @@ export default function TextToImagePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
               {/* Example 1 */}
               <div>
-                <div className="relative bg-card rounded-xl overflow-hidden shadow-lg p-2">
+                <div className="relative bg-card rounded-xl overflow-hidden shadow-sm p-2">
                   <div className="flex gap-2">
                     <div className="relative flex-1">
                       <img
@@ -1798,7 +1807,7 @@ export default function TextToImagePage() {
                       />
                     </div>
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg font-bold border-4 border-white">
+                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-md font-bold border-4 border-background">
                         VS
                       </div>
                     </div>
@@ -1818,7 +1827,7 @@ export default function TextToImagePage() {
 
               {/* Example 2 */}
               <div>
-                <div className="relative bg-card rounded-xl overflow-hidden shadow-lg p-2">
+                <div className="relative bg-card rounded-xl overflow-hidden shadow-sm p-2">
                   <div className="flex gap-2">
                     <div className="relative flex-1">
                       <img
@@ -1828,7 +1837,7 @@ export default function TextToImagePage() {
                       />
                     </div>
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg font-bold border-4 border-white">
+                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-md font-bold border-4 border-background">
                         VS
                       </div>
                     </div>
@@ -1848,7 +1857,7 @@ export default function TextToImagePage() {
 
               {/* Example 3 */}
               <div>
-                <div className="relative bg-card rounded-xl overflow-hidden shadow-lg p-2">
+                <div className="relative bg-card rounded-xl overflow-hidden shadow-sm p-2">
                   <div className="flex gap-2">
                     <div className="relative flex-1">
                       <img
@@ -1858,7 +1867,7 @@ export default function TextToImagePage() {
                       />
                     </div>
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg font-bold border-4 border-white">
+                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-md font-bold border-4 border-background">
                         VS
                       </div>
                     </div>
@@ -1878,7 +1887,7 @@ export default function TextToImagePage() {
 
               {/* Example 4 */}
               <div>
-                <div className="relative bg-card rounded-xl overflow-hidden shadow-lg p-2">
+                <div className="relative bg-card rounded-xl overflow-hidden shadow-sm p-2">
                   <div className="flex gap-2">
                     <div className="relative flex-1">
                       <img
@@ -1888,7 +1897,7 @@ export default function TextToImagePage() {
                       />
                     </div>
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-lg font-bold border-4 border-white">
+                      <div className="w-12 h-12 bg-primary text-white rounded-full flex items-center justify-center shadow-md font-bold border-4 border-background">
                         VS
                       </div>
                     </div>
@@ -2006,7 +2015,7 @@ export default function TextToImagePage() {
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                               />
                             </svg>
-                            <div className="absolute left-0 top-6 w-80 bg-gray-900 text-white text-xs rounded-lg p-3 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-lg">
+                            <div className="absolute left-0 top-6 w-80 bg-popover text-popover-foreground text-xs rounded-lg p-3 border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-lg">
                               <div className="font-semibold mb-1">Example Prompt:</div>
                               <div className="text-gray-200">
                                 a boy, center-framed and slightly low-angled, is playfully reaching out to a curious cat seated on a worn, wooden floor, with warm, golden light illuminating the scene and a shallow depth of field, blurring the subtle, textured background.
@@ -2276,6 +2285,8 @@ export default function TextToImagePage() {
     </>
   );
 }
+
+
 
 
 

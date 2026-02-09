@@ -81,7 +81,7 @@ export default function Pricing({ pricing }: { pricing: PricingType }) {
                   <>
                     <div className="pointer-events-none absolute inset-0 opacity-60 [background:radial-gradient(circle_at_18%_15%,rgba(77,168,255,0.14),transparent_38%),radial-gradient(circle_at_82%_0%,rgba(245,216,115,0.18),transparent_42%)]" />
                     <div className="pointer-events-none absolute inset-0 opacity-45 [background:linear-gradient(120deg,transparent,rgba(255,211,106,0.45),transparent)] [background-size:200%_100%] animate-[shimmer_3.2s_linear_infinite]" />
-                    <span className="absolute inset-x-0 -top-3 mx-auto flex h-7 w-fit items-center rounded-full px-3 py-1 text-xs font-bold ring-1 ring-white/20 ring-offset-1 ring-offset-gray-950/5 bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-200 text-amber-900 shadow-[0_0_40px_rgba(255,211,106,0.55)]">
+                    <span className="absolute inset-x-0 -top-3 mx-auto flex h-7 w-fit items-center rounded-full px-3 py-1 text-xs font-bold ring-1 ring-white/20 ring-offset-1 ring-offset-background bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-200 text-amber-900 shadow-[0_0_24px_rgba(251,191,36,0.35)]">
                       {item.badge_icon || "Most Popular"}
                     </span>
                   </>
@@ -127,9 +127,9 @@ export default function Pricing({ pricing }: { pricing: PricingType }) {
 
                   <Button
                     onClick={() => handleCheckout(item)}
-                    className={`mt-4 w-full px-4 py-2 border-[0.5px] border-white/25 shadow-black/20 ${
+                    className={`mt-4 w-full px-4 py-2 border border-border/60 ${
                       isFeatured
-                        ? "h-11 text-[15px] bg-[linear-gradient(90deg,#FFD36A,#F5D873)] text-slate-950 shadow-[0_0_24px_rgba(251,191,36,0.28)] hover:shadow-[0_0_32px_rgba(251,191,36,0.38)] font-bold"
+                        ? "h-11 text-[15px] bg-primary text-primary-foreground shadow-md hover:bg-primary/90 font-bold"
                         : "h-9 bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
                     }`}
                   >
@@ -168,4 +168,5 @@ export default function Pricing({ pricing }: { pricing: PricingType }) {
     </section>
   );
 }
+
 

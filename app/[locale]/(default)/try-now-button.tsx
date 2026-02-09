@@ -7,7 +7,7 @@ import { trackTryItNowClick } from "@/lib/analytics";
 export function TryNowButton({ label }: { label: string }) {
   return (
     <Link
-      href="/txt-to-image/nano-banana"
+      href="#workspace"
       onClick={() => trackTryItNowClick('hero')}
     >
       <Button
@@ -19,4 +19,5 @@ export function TryNowButton({ label }: { label: string }) {
     </Link>
   );
 }
+
 
