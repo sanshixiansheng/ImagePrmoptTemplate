@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { UsageLimitDialog } from "@/components/billing/usage-limit-dialog";
 import { Wand2, Globe } from "lucide-react";
 import { toast } from "sonner";
 import { authEventBus } from "@/lib/auth-event";
@@ -127,6 +128,8 @@ export default function TextToImagePage() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("text-to-image");
   const [isTranslatingI2I, setIsTranslatingI2I] = useState(false); // i2i translation state
+  const [showQuotaModal, setShowQuotaModal] = useState(false);
+  const [quotaMessage, setQuotaMessage] = useState(t("quota_modal_default_message"));
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -454,6 +457,12 @@ export default function TextToImagePage() {
         const result = await response.json();
         console.log('[Evolink] create task response:', result);
 
+        if (result.errorCode === 'FREE_DAILY_IMAGE_QUOTA_USED' || result.code === 4021 || response.status === 402) {
+          setQuotaMessage(result.message || t("quota_modal_default_message"));
+          setShowQuotaModal(true);
+          return;
+        }
+
         if (result.code !== 1000) {
           throw new Error(result.message || 'Generation failed');
         }
@@ -616,6 +625,12 @@ export default function TextToImagePage() {
 
       const result = await response.json();
       console.log('[ImageToImage] API response:', result);
+
+      if (result.errorCode === 'FREE_DAILY_IMAGE_QUOTA_USED' || result.code === 4021 || response.status === 402) {
+        setQuotaMessage(result.message || t("quota_modal_default_message"));
+        setShowQuotaModal(true);
+        return;
+      }
 
       // Check login expiration
       if (result.code === 401 || response.status === 401) {
@@ -2281,6 +2296,15 @@ export default function TextToImagePage() {
           </Accordion>
         </div>
       </section>
+
+      <UsageLimitDialog
+        open={showQuotaModal}
+        onOpenChange={setShowQuotaModal}
+        title={t("quota_modal_title")}
+        message={quotaMessage}
+        primaryLabel={t("quota_modal_buy_credits")}
+        secondaryLabel={t("quota_modal_try_tomorrow")}
+      />
       </div>
     </>
   );

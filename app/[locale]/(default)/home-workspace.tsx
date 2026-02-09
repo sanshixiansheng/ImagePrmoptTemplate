@@ -3,13 +3,16 @@
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { UsageLimitDialog } from "@/components/billing/usage-limit-dialog";
 
 const ASPECTS = ["1:1", "16:9", "9:16", "4:3", "3:4"] as const;
 const HISTORY_KEY = "home_workspace_recent_results_v1";
 
 export function HomeWorkspace() {
+  const t = useTranslations("ai_image");
   const [prompt, setPrompt] = useState(
     "Cinematic portrait of a traveler in neon rain, 35mm film, soft backlight, high detail."
   );
@@ -19,6 +22,8 @@ export function HomeWorkspace() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [history, setHistory] = useState<string[]>([]);
+  const [showQuotaModal, setShowQuotaModal] = useState(false);
+  const [quotaMessage, setQuotaMessage] = useState(t("quota_modal_default_message"));
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -69,6 +74,11 @@ export function HomeWorkspace() {
       const result = await response.json();
       if (result.code === 401 || response.status === 401) {
         throw new Error("Please login first.");
+      }
+      if (result.errorCode === "FREE_DAILY_IMAGE_QUOTA_USED" || result.code === 4021 || response.status === 402) {
+        setQuotaMessage(result.message || t("quota_modal_default_message"));
+        setShowQuotaModal(true);
+        return;
       }
       if (result.code !== 1000 || !result.data?.id) {
         throw new Error(result.message || "Failed to create generation task.");
@@ -185,6 +195,12 @@ export function HomeWorkspace() {
             <Button size="sm" className="w-full" onClick={generateOnHome} disabled={!canGenerate}>
               {isGenerating ? "Generating..." : "Generate Image"}
             </Button>
+            <p className="mt-2 text-xs text-foreground/65">
+              {t("home_workspace_free_quota_hint")}
+            </p>
+            <p className="mt-1 text-xs text-foreground/65">
+              {t("home_workspace_video_quota_hint")}
+            </p>
           </div>
         </div>
 
@@ -245,6 +261,15 @@ export function HomeWorkspace() {
           </div>
         </div>
       </div>
+
+      <UsageLimitDialog
+        open={showQuotaModal}
+        onOpenChange={setShowQuotaModal}
+        title={t("quota_modal_title")}
+        message={quotaMessage}
+        primaryLabel={t("quota_modal_buy_credits")}
+        secondaryLabel={t("quota_modal_try_tomorrow")}
+      />
     </div>
   );
 }

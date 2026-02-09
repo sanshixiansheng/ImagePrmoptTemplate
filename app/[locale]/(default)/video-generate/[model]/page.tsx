@@ -3,9 +3,11 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 import { useTranslations } from 'next-intl';
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import { UsageLimitDialog } from "@/components/billing/usage-limit-dialog";
 import { authEventBus } from "@/lib/auth-event";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -127,6 +129,8 @@ export default function VideoGeneratePage() {
   const [isT2vTranslateDialogOpen, setIsT2vTranslateDialogOpen] = useState(false);
   const [t2vTargetLanguage, setT2vTargetLanguage] = useState("en");
   const [isT2vProcessing, setIsT2vProcessing] = useState(false);
+  const [showVideoCreditsModal, setShowVideoCreditsModal] = useState(false);
+  const [videoCreditsMessage, setVideoCreditsMessage] = useState(t("credits_modal.default_message"));
 
   // Image to Video 鐘舵€?
   const [i2vPrompt, setI2vPrompt] = useState("");
@@ -697,6 +701,16 @@ export default function VideoGeneratePage() {
       const result = await response.json();
       console.log('[T2V] API response:', result);
 
+      if (result.errorCode === 'INSUFFICIENT_CREDITS_VIDEO' || result.code === 4022 || response.status === 402) {
+        setVideoCreditsMessage(
+          result.message ||
+          t("credits_modal.dynamic_message", { unit: result.unitPricePerSecond || 12 })
+        );
+        setShowVideoCreditsModal(true);
+        setIsGeneratingT2V(false);
+        return;
+      }
+
       if (result.code === 1000 && result.data?.taskId) {
         const taskId = result.data.taskId;
         setT2vTaskId(taskId);
@@ -768,6 +782,16 @@ export default function VideoGeneratePage() {
 
       const result = await response.json();
       console.log('[I2V] API response:', result);
+
+      if (result.errorCode === 'INSUFFICIENT_CREDITS_VIDEO' || result.code === 4022 || response.status === 402) {
+        setVideoCreditsMessage(
+          result.message ||
+          t("credits_modal.dynamic_message", { unit: result.unitPricePerSecond || 12 })
+        );
+        setShowVideoCreditsModal(true);
+        setIsGeneratingI2V(false);
+        return;
+      }
 
       if (result.code === 1000 && result.data?.taskId) {
         const taskId = result.data.taskId;
@@ -1996,9 +2020,19 @@ export default function VideoGeneratePage() {
           </DialogContent>
         </Dialog>
       </div>
+
+      <UsageLimitDialog
+        open={showVideoCreditsModal}
+        onOpenChange={setShowVideoCreditsModal}
+        title={t("credits_modal.title")}
+        message={videoCreditsMessage}
+        primaryLabel={t("credits_modal.buy_credits")}
+        secondaryLabel={t("quota_modal_try_tomorrow")}
+      />
     </>
   );
 }
+
 
 
 

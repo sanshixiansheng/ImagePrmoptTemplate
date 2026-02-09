@@ -13,60 +13,60 @@
     "nav": {
       "items": [
         {
-          "title": "AI 图像",
+          "title": "AI Image",
           "icon": "RiImageAiLine",
           "children": [
             {
               "title": "Nano Banana",
-              "description": "Gemini 2.5 Flash 图像编辑器",
+              "description": "Gemini 2.5 Flash image editor",
               "url": "/txt-to-image/nano-banana",
               "icon": "RiFlashlightLine"
             }
           ]
         },
         {
-          "title": "AI 视频",
+          "title": "AI Video",
           "icon": "RiVideoAddLine",
           "children": [
             {
               "title": "Veo3.0/3.1",
-              "description": "Veo 视频生成模型",
+              "description": "Veo video generation model",
               "url": "/video-generate/veo",
               "icon": "RiVideoUploadLine"
             }
           ]
         },
         {
-          "title": "AI 视频特效",
+          "title": "AI Video Effects",
           "url": "/video-effects",
           "icon": "RiVideoLine"
         },
         {
-          "title": "图像工具",
+          "title": "Image Tools",
           "icon": "RiImageLine",
           "children": [
             {
-              "title": "图像转文本",
+              "title": "Image to Text",
               "icon": "RiImageEditLine",
               "children": [
                 {
-                  "title": "图片生成提示词 (免费)",
-                  "description": "将图片转换为提示词",
+                  "title": "ImageToPrompt (Free)",
+                  "description": "Convert images to prompts",
                   "url": "/image-to-prompt",
                   "icon": "RiImageEditLine"
                 }
               ]
             },
             {
-              "title": "图片压缩 (免费)",
-              "description": "无损压缩图片",
+              "title": "Image Compress (Free)",
+              "description": "Compress images without quality loss",
               "url": "/image-compress",
               "icon": "RiFileReduceLine"
             }
           ]
         },
         {
-          "title": "定价",
+          "title": "Pricing",
           "url": "/pricing",
           "icon": "RiMoneyDollarCircleLine"
         }
@@ -74,7 +74,7 @@
     },
     "buttons": [
       {
-        "title": "登录",
+        "title": "Sign In",
         "url": "/auth/signin",
         "variant": "default",
         "target": "_self"
@@ -86,98 +86,98 @@
   },
   "homepage": {
     "hero": {
-      "title_free": "免费",
-      "title_main": "与AI并肩创作,让灵感照进现实。",
-      "title_generator": "生成器",
-      "subtitle": "从创意到作品,Visora 点燃你的创作激情。",
-      "description": "即时将任何图像转换为详细提示词。完美支持 Midjourney、DALL-E、Stable Diffusion 等。",
-      "try_now": "立即试用！",
-      "tutorials": "教程"
+      "title_free": "Free",
+      "title_main": "Work side by side with AI to turn ideas into reality.",
+      "title_generator": "Generator",
+      "subtitle": "From concept to creation, Visora fuels your creative fire.",
+      "description": "Convert any image to detailed prompts instantly. Perfect for Midjourney, DALL-E, Stable Diffusion and more.",
+      "try_now": "Try it now!",
+      "tutorials": "Tutorials"
     },
     "features": {
       "image_to_prompt": {
-        "title": "图像转提示词",
-        "description": "高级图像转提示词生成器 - 即时将任何图像转换为详细的 AI 提示词"
+        "title": "Image to Prompt Converter",
+        "description": "Advanced image to prompt generator - Convert any image to detailed AI prompts instantly"
       },
       "ai_image_generate": {
-        "title": "AI 图像生成",
-        "description": "使用先进模型将文本提示词转换为令人惊艳的 AI 生成图像"
+        "title": "AI Image Generate",
+        "description": "Transform your text prompts into stunning AI-generated images with advanced models"
       },
       "ai_video_generate": {
-        "title": "AI 视频生成",
-        "description": "使用前沿视频模型从文本或图像创建精彩的 AI 生成视频"
+        "title": "AI Video Generate",
+        "description": "Create amazing AI-generated videos from text or images with cutting-edge video models"
       }
     },
     "suite": {
-      "title": "专业的图像转提示词生成器套件",
-      "description": "最全面的图像提示词生成器工具包 - 从图像到提示词，再到图像"
+      "title": "Professional Image to Prompt Generator Suite",
+      "description": "The most comprehensive image prompt generator toolkit - From image to prompt and back to image"
     },
     "why_choose": {
-      "title": "为什么选择我们的图像转提示词生成器？",
+      "title": "Why Choose Our Image to Prompt Generator?",
       "what_is": {
-        "title": "什么是图像转提示词？",
-        "text_1": "图像转提示词",
-        "text_2": "技术使用先进的 AI 分析任何图像并生成详细的文本描述，可用作 AI 艺术生成器的提示词。我们的",
-        "text_3": "图像转提示词生成器",
-        "text_4": "支持所有主流平台，包括 Midjourney、DALL-E 和 Stable Diffusion。",
-        "text_5": "无论您是想重现风格、理解构图还是生成类似的艺术作品，我们的",
-        "text_6": "图像提示词",
-        "text_7": "工具都能提供完美的解决方案。"
+        "title": "What is Image to Prompt?",
+        "text_1": "Image to prompt",
+        "text_2": " technology uses advanced AI to analyze any image and generate detailed text descriptions that can be used as prompts for AI art generators. Our ",
+        "text_3": "image to prompt generator",
+        "text_4": " supports all major platforms including Midjourney, DALL-E, and Stable Diffusion.",
+        "text_5": "Whether you're looking to recreate a style, understand composition, or generate similar artwork, our ",
+        "text_6": "image prompt",
+        "text_7": " tools provide the perfect solution."
       },
       "how_works": {
-        "title": "我们的提示词生成器如何工作",
-        "text_1": "我们的",
-        "text_2": "提示词生成器",
-        "text_3": "使用最先进的视觉 AI 模型在多个层面理解图像 - 从基本对象和场景到艺术风格、构图和情绪。",
-        "step_1": "将任何图像上传到我们的图像提示词分析器",
-        "step_2": "AI 处理并提取详细描述",
-        "step_3": "接收为您首选 AI 工具优化的提示词",
-        "step_4": "使用生成的提示词创建新的 AI 艺术作品"
+        "title": "How Our Prompt Generator Works",
+        "text_1": "Our ",
+        "text_2": "prompt generator",
+        "text_3": " uses state-of-the-art vision AI models to understand images at multiple levels - from basic objects and scenes to artistic styles, composition, and mood.",
+        "step_1": "Upload any image to our image prompt analyzer",
+        "step_2": "AI processes and extracts detailed descriptions",
+        "step_3": "Receive optimized prompts for your preferred AI tool",
+        "step_4": "Use generated prompts to create new AI artwork"
       },
       "features_section": {
-        "title": "我们的图像转提示词生成器功能",
-        "accurate_analysis_title": "✨ 精确的图像分析",
-        "accurate_analysis_desc": "我们的图像转提示词 AI 准确识别对象、风格、颜色和构图",
-        "fast_generation_title": "🚀 快速提示词生成",
-        "fast_generation_desc": "使用我们优化的提示词生成器引擎，在几秒钟内生成图像提示词",
-        "multi_platform_title": "🎨 多平台支持",
-        "multi_platform_desc": "为 Midjourney、DALL-E、Stable Diffusion 等优化的图像提示词",
-        "customizable_title": "🔧 可定制输出",
-        "customizable_desc": "为不同风格和细节级别调整提示词生成器设置",
-        "smart_enhancement_title": "💡 智能增强",
-        "smart_enhancement_desc": "我们的图像转提示词生成器自动添加艺术关键词",
-        "free_to_use_title": "🆓 免费使用",
-        "free_to_use_desc": "完全免费开始使用我们的图像提示词生成器，无需信用卡"
+        "title": "Features of Our Image to Prompt Generator",
+        "accurate_analysis_title": "Accurate Image Analysis",
+        "accurate_analysis_desc": "Our image to prompt AI accurately identifies objects, styles, colors, and composition",
+        "fast_generation_title": "Fast Prompt Generation",
+        "fast_generation_desc": "Generate image prompts in seconds with our optimized prompt generator engine",
+        "multi_platform_title": "Multi-Platform Support",
+        "multi_platform_desc": "Image prompts optimized for Midjourney, DALL-E, Stable Diffusion, and more",
+        "customizable_title": "Customizable Output",
+        "customizable_desc": "Adjust prompt generator settings for different styles and detail levels",
+        "smart_enhancement_title": "Smart Enhancement",
+        "smart_enhancement_desc": "Our image to prompt generator adds artistic keywords automatically",
+        "free_to_use_title": "Free to Use",
+        "free_to_use_desc": "Start using our image prompt generator completely free, no credit card required"
       }
     },
     "faq": {
-      "title": "常见问题",
-      "q1_question": "什么是图像转提示词生成器？",
-      "q1_answer": "图像转提示词生成器是一个 AI 工具，可以分析图像并将其转换为详细的文本描述（提示词），可用于 Midjourney、DALL-E 或 Stable Diffusion 等 AI 图像生成工具。",
-      "q2_question": "图像提示词生成的准确度如何？",
-      "q2_answer": "我们的图像转提示词技术使用先进的 AI 模型，在识别对象、风格、颜色、构图和艺术元素方面实现高精度，为 AI 艺术生成提供详细且可用的提示词。",
-      "q3_question": "我可以在任何 AI 工具上使用生成的提示词吗？",
-      "q3_answer": "是的！我们的提示词生成器创建通用的图像提示词，可与所有主流 AI 艺术平台配合使用，包括 Midjourney、DALL-E、Stable Diffusion、Leonardo AI 等。",
-      "q4_question": "图像转提示词生成器免费吗？",
-      "q4_answer": "是的，我们的基础图像转提示词生成器完全免费使用。我们为需要高级提示词生成功能的专业用户提供付费功能。"
+      "title": "Frequently Asked Questions",
+      "q1_question": "What is an image to prompt generator?",
+      "q1_answer": "An image to prompt generator is an AI tool that analyzes images and converts them into detailed text descriptions (prompts) that can be used with AI image generation tools like Midjourney, DALL-E, or Stable Diffusion.",
+      "q2_question": "How accurate is the image prompt generation?",
+      "q2_answer": "Our image to prompt technology uses advanced AI models to achieve high accuracy in identifying objects, styles, colors, composition, and artistic elements, providing detailed and usable prompts for AI art generation.",
+      "q3_question": "Can I use generated prompts with any AI tool?",
+      "q3_answer": "Yes! Our prompt generator creates versatile image prompts that work with all major AI art platforms including Midjourney, DALL-E, Stable Diffusion, Leonardo AI, and more.",
+      "q4_question": "Is the image to prompt generator free?",
+      "q4_answer": "Yes, our basic image to prompt generator is completely free to use. We offer premium features for professional users who need advanced prompt generation capabilities."
     }
   },
   "footer": {
     "name": "footer",
     "brand": {
       "title": "Visora",
-      "description": "使用我们的 AI 驱动的提示词生成工具，将您的创意愿景变为现实。将图片转换为提示词，增强文本提示词，并生成惊艳的视觉效果。",
+      "description": "Transform your creative vision into reality with our AI-powered prompt generation tools. Convert images to prompts, enhance text prompts, and generate stunning visuals.",
       "logo": {
         "src": "/logo.png",
         "alt": "Visora"
       },
       "url": "/"
     },
-    "copyright": "© 2025 • Visora 保留所有权利。  pixmind.service@aimix.pro",
+    "copyright": "© 2025 Visora. All rights reserved. pixmind.service@aimix.pro",
     "nav": {
       "items": [
         {
-          "title": "AI 图像",
+          "title": "AI Image",
           "children": [
             {
               "title": "Nano Banana",
@@ -187,7 +187,7 @@
           ]
         },
         {
-          "title": "AI 视频",
+          "title": "AI Video",
           "children": [
             {
               "title": "Veo3.0/3.1",
@@ -195,37 +195,37 @@
               "target": "_self"
             },
             {
-              "title": "AI 视频特效",
+              "title": "AI Video Effects",
               "url": "/video-effects",
               "target": "_self"
             }
           ]
         },
         {
-          "title": "图像工具",
+          "title": "Image Tools",
           "children": [
             {
-              "title": "图片生成提示词 (免费)",
+              "title": "Image to Prompt (Free)",
               "url": "/image-to-prompt",
               "target": "_self"
             },
             {
-              "title": "图片压缩 (免费)",
+              "title": "Image Compress (Free)",
               "url": "/image-compress",
               "target": "_self"
             }
           ]
         },
         {
-          "title": "支持与法律",
+          "title": "Support & Legal",
           "children": [
             {
-              "title": "联系我们",
+              "title": "Contact Us",
               "url": "/contact",
               "target": "_self"
             },
             {
-              "title": "关于我们",
+              "title": "About Us",
               "url": "/about",
               "target": "_self"
             },
@@ -235,17 +235,17 @@
               "target": "_self"
             },
             {
-              "title": "联盟计划",
+              "title": "Affiliate Program",
               "url": "/affiliate",
               "target": "_self"
             },
             {
-              "title": "隐私政策",
+              "title": "Privacy Policy",
               "url": "/privacy-policy",
               "target": "_self"
             },
             {
-              "title": "服务条款",
+              "title": "Terms of Service",
               "url": "/terms-of-service",
               "target": "_self"
             }
@@ -256,7 +256,7 @@
     "social": {
       "items": [
         {
-          "title": "邮箱",
+          "title": "Email",
           "icon": "RiMailLine",
           "url": "mailto:pixmind.service@aimix.pro",
           "target": "_self"
@@ -265,3 +265,4 @@
     }
   }
 }
+

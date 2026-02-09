@@ -98,6 +98,45 @@ export async function updateUserCredits(
   return data as Credit;
 }
 
+export async function consumeUserCredits(
+  userUuid: string,
+  amount: number,
+  type: string,
+  description?: string
+): Promise<{ success: boolean; balance: number; error?: string }> {
+  if (amount <= 0) {
+    return { success: false, balance: 0, error: "amount must be greater than 0" };
+  }
+
+  let currentCredits = await getUserCredits(userUuid);
+  if (!currentCredits) {
+    currentCredits = await createUserCredits(userUuid, 0);
+  }
+
+  if (!currentCredits) {
+    return { success: false, balance: 0, error: "failed to load credits" };
+  }
+
+  if (currentCredits.balance < amount) {
+    return {
+      success: false,
+      balance: currentCredits.balance,
+      error: "insufficient credits",
+    };
+  }
+
+  const updated = await updateUserCredits(userUuid, -amount, type, description);
+  if (!updated) {
+    return {
+      success: false,
+      balance: currentCredits.balance,
+      error: "failed to update credits",
+    };
+  }
+
+  return { success: true, balance: updated.balance };
+}
+
 export async function addCreditHistory(
   userUuid: string,
   amount: number,

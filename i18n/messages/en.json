@@ -527,6 +527,12 @@
     "login_to_get_credits": "Login to get free credits and use more features",
     "generating": "Generating...",
     "generate_image": "Generate Image",
+    "home_workspace_free_quota_hint": "Daily free quota: 1 image per user. Extra images: 3 credits each.",
+    "home_workspace_video_quota_hint": "Video generation has no free quota: 12 credits per second.",
+    "quota_modal_title": "Free daily images used up",
+    "quota_modal_default_message": "Your free daily image quota has been used. You can continue with 3 credits per image.",
+    "quota_modal_buy_credits": "Buy Credits",
+    "quota_modal_try_tomorrow": "Try Again Tomorrow",
     "login_success": "Login successful!",
     "please_login": "Please login first to use this feature",
     "login_expired": "Login expired, please login again",
@@ -900,6 +906,13 @@
       "generatingHint": "This may take 2-5 minutes",
       "loading": "Loading...",
       "selectModel": "Select Model"
+    },
+    "credits_modal": {
+      "title": "Insufficient credits for video generation",
+      "default_message": "Video generation costs 12 credits per second. Please buy more credits to continue.",
+      "dynamic_message": "Insufficient credits. Video generation costs {unit} credits per second.",
+      "buy_credits": "Buy Credits",
+      "close": "Try Again Tomorrow"
     },
     "toast": {
       "taskCreated": "Task created, generating video...",

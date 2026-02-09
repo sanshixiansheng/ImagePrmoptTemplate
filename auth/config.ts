@@ -5,7 +5,7 @@ import Credentials from "next-auth/providers/credentials";
 import { getUuid } from "@/lib/hash";
 import { getIsoTimestr } from "@/lib/time";
 import { getClientIp } from "@/lib/ip";
-import { findUserByEmail, insertUser } from "@/models/user";
+import { findUserByEmail, insertUser, syncOauthUserByEmail } from "@/models/user";
 import { createUserCredits } from "@/models/credit";
 
 const GOOGLE_ENABLED = process.env.NEXT_PUBLIC_AUTH_GOOGLE_ENABLED === "true";
@@ -183,7 +183,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           // Check if user exists in database
           console.log("[NextAuth JWT] Checking if user exists in database...");
-          let dbUserRecord = await findUserByEmail(user.email!, account.provider);
+          let dbUserRecord = await findUserByEmail(user.email!);
 
           if (!dbUserRecord) {
             console.log("[NextAuth JWT] User not found, creating new user in database...");
@@ -197,23 +197,27 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
               created_at: dbUser.created_at
             });
 
-            // Create new user in database
-            dbUserRecord = await insertUser(dbUser as any);
-            console.log("[NextAuth JWT] 鉁?New user created successfully!");
-            console.log("[NextAuth JWT] Saved user UUID:", dbUserRecord.uuid);
-            console.log("[NextAuth JWT] Saved user email:", dbUserRecord.email);
+            try {
+              // Create new user in database
+              dbUserRecord = await insertUser(dbUser as any);
+              console.log("[NextAuth JWT] 鉁?New user created successfully!");
+              console.log("[NextAuth JWT] Saved user UUID:", dbUserRecord.uuid);
+              console.log("[NextAuth JWT] Saved user email:", dbUserRecord.email);
 
-            // Create initial credits for new user (e.g., 100 free credits)
-            const initialCredits = parseInt(process.env.INITIAL_USER_CREDITS || "100");
-            console.log("[NextAuth JWT] Creating initial credits:", initialCredits);
+              // Create initial credits for new user (e.g., 100 free credits)
+              const initialCredits = parseInt(process.env.INITIAL_USER_CREDITS || "100");
+              console.log("[NextAuth JWT] Creating initial credits:", initialCredits);
 
-            const userUuid = dbUserRecord.uuid || dbUser.uuid;
-            const creditRecord = await createUserCredits(userUuid, initialCredits);
-            if (creditRecord) {
-              console.log("[NextAuth JWT] 鉁?Initial credits created successfully!");
-              console.log("[NextAuth JWT] Credits balance:", creditRecord.balance);
-            } else {
-              console.error("[NextAuth JWT] 鉂?Failed to create initial credits");
+              const userUuid = dbUserRecord.uuid || dbUser.uuid;
+              const creditRecord = await createUserCredits(userUuid, initialCredits);
+              if (creditRecord) {
+                console.log("[NextAuth JWT] 鉁?Initial credits created successfully!");
+                console.log("[NextAuth JWT] Credits balance:", creditRecord.balance);
+              } else {
+                console.error("[NextAuth JWT] 鉂?Failed to create initial credits");
+              }
+            } catch (insertErr) {
+              console.error("[NextAuth JWT] Insert user failed, fallback to sync flow:", insertErr);
             }
           } else {
             console.log("[NextAuth JWT] 鉁?Existing user found in database");
@@ -222,14 +226,37 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             console.log("[NextAuth JWT] User created at:", dbUserRecord.created_at);
           }
 
+          if (account.provider !== "credentials") {
+            await syncOauthUserByEmail({
+              email: user.email!,
+              provider: account.provider,
+              providerAccountId: account.providerAccountId,
+              name: user.name || undefined,
+              avatarUrl: user.image || undefined,
+              signinIp: signin_ip,
+            });
+
+            // Reload after sync so session token always picks the latest row shape.
+            const latestUser = await findUserByEmail(user.email!);
+            if (latestUser) {
+              dbUserRecord = latestUser;
+            }
+          }
+
+          if (!dbUserRecord) {
+            dbUserRecord = dbUser as any;
+          }
+
+          const safeUser = (dbUserRecord || dbUser) as any;
+
           // Store user info in token (use database UUID for existing users)
           token.user = {
-            uuid: dbUserRecord.uuid || dbUser.uuid,
-            email: dbUserRecord.email,
-            nickname: dbUserRecord.nickname || dbUser.nickname,
-            avatar_url: dbUserRecord.avatar_url || dbUser.avatar_url,
-            signin_provider: dbUserRecord.signin_provider || dbUser.signin_provider,
-            created_at: dbUserRecord.created_at || dbUser.created_at,
+            uuid: safeUser.uuid || dbUser.uuid,
+            email: safeUser.email,
+            nickname: safeUser.nickname || dbUser.nickname,
+            avatar_url: safeUser.avatar_url || dbUser.avatar_url,
+            signin_provider: safeUser.signin_provider || dbUser.signin_provider,
+            created_at: safeUser.created_at || dbUser.created_at,
             // 淇濈暀鍘熷鐨?name 鍜?image 鐢ㄤ簬澶村儚鏄剧ず
             name: user.name,
             image: user.image,
@@ -273,6 +300,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
   secret: process.env.AUTH_SECRET,
 });
+
 
 
 

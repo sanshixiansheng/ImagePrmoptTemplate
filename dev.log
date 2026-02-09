@@ -10,117 +10,1791 @@
      ✓ mdxRs
 
  ✓ Starting...
- ✓ Ready in 2.7s
+ ✓ Ready in 2.8s
 <w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Parsing of E:\z-image\ImagePrmoptTemplate\node_modules\next-intl\dist\esm\production\extractor\format\index.js for build dependencies failed at 'import(t)'.
 <w> Build dependencies behind this expression are ignored and might cause incorrect cache invalidation.
  ○ Compiling /middleware ...
- ✓ Compiled /middleware in 1036ms (326 modules)
+ ✓ Compiled /middleware in 2.2s (326 modules)
  ○ Compiling /[locale] ...
 <w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Parsing of E:\z-image\ImagePrmoptTemplate\node_modules\next-intl\dist\esm\production\extractor\format\index.js for build dependencies failed at 'import(t)'.
 <w> Build dependencies behind this expression are ignored and might cause incorrect cache invalidation.
- ✓ Compiled /[locale] in 15.7s (1674 modules)
+ ✓ Compiled /[locale] in 9.6s (1676 modules)
 <w> [webpack.cache.PackFileCacheStrategy/webpack.FileSystemInfo] Parsing of E:\z-image\ImagePrmoptTemplate\node_modules\next-intl\dist\esm\production\extractor\format\index.js for build dependencies failed at 'import(t)'.
 <w> Build dependencies behind this expression are ignored and might cause incorrect cache invalidation.
- GET /en 200 in 453ms
- ○ Compiling /[locale]/pricing ...
- ✓ Compiled /[locale]/pricing in 1499ms (1688 modules)
- GET /en/pricing 200 in 3082ms
- ○ Compiling /[locale]/txt-to-image/[model] ...
- ✓ Compiled /[locale]/txt-to-image/[model] in 705ms (1732 modules)
- GET /en/txt-to-image/nano-banana 200 in 2151ms
- ○ Compiling /[locale]/video-generate/[model] ...
- ✓ Compiled /[locale]/video-generate/[model] in 1320ms (1938 modules)
+ GET /en 200 in 297ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 714ms (918 modules)
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 1598ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 24ms
+ ✓ Compiled /[locale] in 295ms (1129 modules)
+[NextAuth Session] User loaded: 114298030@qq.com
+[AppContext] Using initial user data from SSR: roy
+ GET /en 200 in 1070ms
+ ○ Compiling /api/video-effects ...
+ ✓ Compiled /api/video-effects in 1960ms (1678 modules)
+ GET /api/video-effects 200 in 2284ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 2300ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 283ms
+ GET /en 200 in 334ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 55ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 51ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 44ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 27ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 170ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 32ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 63ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 39ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 34ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 28ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 37ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 21ms
+ ○ Compiling /api/ai/evolink/generate ...
+ ✓ Compiled /api/ai/evolink/generate in 1135ms (1812 modules)
 [AI Hub Config] Using base URL: undefined
 [AI Hub Config] App Key configured: false
 [Evolink Config] Using base URL: https://api.evolink.ai
 [Evolink Config] API Key configured: true
- GET /en/video-generate/veo 200 in 2898ms
- ✓ Compiled /api/health in 412ms (1946 modules)
- GET /api/health 200 in 553ms
- ○ Compiling /api/og ...
- ✓ Compiled /api/og in 987ms (1214 modules)
- GET /api/og?title=Visora&description=AI 200 in 1420ms
- GET /en 200 in 505ms
- ○ Compiling /api/video-effects ...
- ✓ Compiled /api/video-effects in 957ms (1772 modules)
- GET /api/video-effects 200 in 1133ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Generate] request received: {
+  user: '114298030@qq.com',
+  prompt: '一只小狗正在吃骨头',
+  size: '1:1',
+  quality: '2K',
+  hasImageUrls: false
+}
+ ✓ Compiled in 541ms (546 modules)
+[NextAuth Session] User loaded: 114298030@qq.com
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /en 200 in 261ms
+ GET /en 200 in 64ms
+[Evolink Generate] calling Evolink API: {
+  model: 'nano-banana-2-lite',
+  prompt: '一只小狗正在吃骨头',
+  size: '1:1',
+  quality: '2K'
+}
+
+[Evolink Request] POST https://api.evolink.ai/v1/images/generations
+Using API Key authentication
+Request data: {
+  model: 'nano-banana-2-lite',
+  prompt: '一只小狗正在吃骨头',
+  size: '1:1',
+  quality: '2K'
+}
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 0,
+  status: 'pending',
+  task_info: { can_cancel: true, estimated_time: 200 },
+  type: 'image',
+  usage: {
+    billing_rule: 'per_call',
+    credits_reserved: 3.1,
+    user_group: 'default'
+  }
+}
+[Evolink Generate] response: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 0,
+  status: 'pending',
+  task_info: { can_cancel: true, estimated_time: 200 },
+  type: 'image',
+  usage: {
+    billing_rule: 'per_call',
+    credits_reserved: 3.1,
+    user_group: 'default'
+  }
+}
+Error adding credit history: {
+  code: 'PGRST205',
+  details: null,
+  hint: null,
+  message: "Could not find the table 'public.credit_history' in the schema cache"
+}
+ POST /api/ai/evolink/generate 200 in 4923ms
+ ○ Compiling /api/ai/evolink/task/[taskId] ...
+ ✓ Compiled /api/ai/evolink/task/[taskId] in 1206ms (2230 modules)
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /en 200 in 175ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 3945ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 360ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 671ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 2,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 2,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 446ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 2,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 2,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 292ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 3,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 3,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 307ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 4,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 4,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 336ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 5,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 5,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 315ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 6,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 6,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 322ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 6,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 6,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 373ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 7,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 7,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 699ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 8,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 8,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 350ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 9,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 9,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 304ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642247-6galmxjf'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642247-6galmxjf
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 100,
+  results: [
+    'https://media.evolink.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2E5MmFkNGQ1LTkyZTQtNDUyYy04N2FiLWE2MDc2NDQzYzQwNS5qcGc='
+  ],
+  status: 'completed',
+  task_info: { can_cancel: false },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642247,
+  id: 'task-unified-1770642247-6galmxjf',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 100,
+  results: [
+    'https://media.evolink.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2E5MmFkNGQ1LTkyZTQtNDUyYy04N2FiLWE2MDc2NDQzYzQwNS5qcGc='
+  ],
+  status: 'completed',
+  task_info: { can_cancel: false },
+  type: 'image'
+}
+[Evolink Task] 任务已完成,开始上传结果到 R2
+[Evolink Task] 开始下载并上传图片: {
+  url: 'https://media.evolink.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2E5MmFkNGQ1LTkyZTQtNDUyYy04N2FiLWE2MDc2NDQzYzQwNS5qcGc=',
+  key: 'ai-generated/images/2026/02/09/1770642285518-p8z0ayu99zq.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2E5MmFkNGQ1LTkyZTQtNDUyYy04N2FiLWE2MDc2NDQzYzQwNS5qcGc='
+}
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[Evolink Task] 图片上传成功: {
+  location: 'https://z-image.6211726a06a81200271bc624e042a08c.r2.cloudflarestorage.com/ai-generated/images/2026/02/09/1770642285518-p8z0ayu99zq.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMT...',
+  bucket: 'z-image',
+  key: 'ai-generated/images/2026/02/09/1770642285518-p8z0ayu99zq.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2E5MmFkNGQ1LTkyZTQtNDUyYy04N2FiLWE2MDc2NDQzYzQwNS5qcGc=',
+  filename: 'aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2E5MmFkNGQ1LTkyZTQtNDUyYy04N2FiLWE2MDc2NDQzYzQwNS5qcGc=',
+  url: 'https://pub-bdf54eeaabfa45439d502f7c16d1a167.r2.dev/ai-generated/images/2026/02/09/1770642285518-p8z0ayu99zq.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2E5MmFkNGQ1LTkyZTQt...'
+}
+ GET /api/ai/evolink/task/task-unified-1770642247-6galmxjf 200 in 31773ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Generate] request received: {
+  user: '114298030@qq.com',
+  prompt: '一只小猫正在抓老鼠',
+  size: '1:1',
+  quality: '2K',
+  hasImageUrls: false
+}
+[Evolink Generate] calling Evolink API: {
+  model: 'nano-banana-2-lite',
+  prompt: '一只小猫正在抓老鼠',
+  size: '1:1',
+  quality: '2K'
+}
+
+[Evolink Request] POST https://api.evolink.ai/v1/images/generations
+Using API Key authentication
+Request data: {
+  model: 'nano-banana-2-lite',
+  prompt: '一只小猫正在抓老鼠',
+  size: '1:1',
+  quality: '2K'
+}
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 0,
+  status: 'pending',
+  task_info: { can_cancel: true, estimated_time: 200 },
+  type: 'image',
+  usage: {
+    billing_rule: 'per_call',
+    credits_reserved: 3.1,
+    user_group: 'default'
+  }
+}
+[Evolink Generate] response: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 0,
+  status: 'pending',
+  task_info: { can_cancel: true, estimated_time: 200 },
+  type: 'image',
+  usage: {
+    billing_rule: 'per_call',
+    credits_reserved: 3.1,
+    user_group: 'default'
+  }
+}
+Error adding credit history: {
+  code: 'PGRST205',
+  details: null,
+  hint: null,
+  message: "Could not find the table 'public.credit_history' in the schema cache"
+}
+ POST /api/ai/evolink/generate 200 in 2521ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642351-rohpk5rt'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642351-rohpk5rt
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642351-rohpk5rt 200 in 337ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642351-rohpk5rt'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642351-rohpk5rt
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642351-rohpk5rt 200 in 333ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642351-rohpk5rt'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642351-rohpk5rt
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642351-rohpk5rt 200 in 653ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642351-rohpk5rt'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642351-rohpk5rt
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 2,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 2,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642351-rohpk5rt 200 in 339ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642351-rohpk5rt'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642351-rohpk5rt
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 3,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 3,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642351-rohpk5rt 200 in 325ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642351-rohpk5rt'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642351-rohpk5rt
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 4,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 4,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642351-rohpk5rt 200 in 312ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642351-rohpk5rt'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642351-rohpk5rt
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 4,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 4,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642351-rohpk5rt 200 in 665ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642351-rohpk5rt'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642351-rohpk5rt
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 5,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 5,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642351-rohpk5rt 200 in 293ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642351-rohpk5rt'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642351-rohpk5rt
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 6,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 6,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642351-rohpk5rt 200 in 292ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642351-rohpk5rt'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642351-rohpk5rt
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 7,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 7,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642351-rohpk5rt 200 in 294ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642351-rohpk5rt'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642351-rohpk5rt
+Using API Key authentication
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 8,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 8,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770642351-rohpk5rt 200 in 835ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770642351-rohpk5rt'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770642351-rohpk5rt
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 100,
+  results: [
+    'https://media.evolink.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1LzE0YWEzOTIxLWE1YTAtNGQ4ZC1hMzg1LTNkNDViMzgzNzhiOC5qcGc='
+  ],
+  status: 'completed',
+  task_info: { can_cancel: false },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770642351,
+  id: 'task-unified-1770642351-rohpk5rt',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 100,
+  results: [
+    'https://media.evolink.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1LzE0YWEzOTIxLWE1YTAtNGQ4ZC1hMzg1LTNkNDViMzgzNzhiOC5qcGc='
+  ],
+  status: 'completed',
+  task_info: { can_cancel: false },
+  type: 'image'
+}
+[Evolink Task] 任务已完成,开始上传结果到 R2
+[Evolink Task] 开始下载并上传图片: {
+  url: 'https://media.evolink.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1LzE0YWEzOTIxLWE1YTAtNGQ4ZC1hMzg1LTNkNDViMzgzNzhiOC5qcGc=',
+  key: 'ai-generated/images/2026/02/09/1770642382035-37zwhiytyga.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1LzE0YWEzOTIxLWE1YTAtNGQ4ZC1hMzg1LTNkNDViMzgzNzhiOC5qcGc='
+}
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[Evolink Task] 图片上传成功: {
+  location: 'https://z-image.6211726a06a81200271bc624e042a08c.r2.cloudflarestorage.com/ai-generated/images/2026/02/09/1770642382035-37zwhiytyga.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMT...',
+  bucket: 'z-image',
+  key: 'ai-generated/images/2026/02/09/1770642382035-37zwhiytyga.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1LzE0YWEzOTIxLWE1YTAtNGQ4ZC1hMzg1LTNkNDViMzgzNzhiOC5qcGc=',
+  filename: 'aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1LzE0YWEzOTIxLWE1YTAtNGQ4ZC1hMzg1LTNkNDViMzgzNzhiOC5qcGc=',
+  url: 'https://pub-bdf54eeaabfa45439d502f7c16d1a167.r2.dev/ai-generated/images/2026/02/09/1770642382035-37zwhiytyga.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1LzE0YWEzOTIxLWE1YTAt...'
+}
+ GET /api/ai/evolink/task/task-unified-1770642351-rohpk5rt 200 in 11048ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 34ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 23ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 31ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 19ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 29ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 23ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 24ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 22ms
 [NextAuth Session] User loaded: 114298030@qq.com
 [AppContext] Using initial user data from SSR: roy
- GET /en 200 in 1802ms
- ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 1372ms (1774 modules)
- GET /api/video-effects 200 in 1507ms
+ GET /en 200 in 1897ms
+ ○ Compiling /api/video-effects ...
+ ✓ Compiled /api/video-effects in 712ms (1132 modules)
+ GET /api/video-effects 200 in 1115ms
 [NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 2416ms
+ GET /api/auth/session 200 in 1324ms
 [NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 58ms
- ○ Compiling /[locale]/txt-to-image/[model] ...
- ✓ Compiled /[locale]/txt-to-image/[model] in 878ms (1141 modules)
- GET /en/txt-to-image/nano-banana 200 in 1386ms
- ✓ Compiled /api/video-effects in 373ms (1149 modules)
- GET /api/video-effects 200 in 589ms
- GET /en/txt-to-image/nano-banana 200 in 285ms
- GET /api/video-effects 200 in 62ms
- GET /en/txt-to-image/nano-banana 200 in 72ms
- GET /api/video-effects 200 in 47ms
- ✓ Compiled /api/auth/[...nextauth] in 352ms (1148 modules)
+ GET /api/auth/session 200 in 55ms
+ ✓ Compiled /api/ai/evolink/generate in 434ms (1268 modules)
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
 [NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 446ms
+[Evolink Generate] request received: {
+  user: '114298030@qq.com',
+  prompt: '一只老虎在狰狞咆哮',
+  size: '1:1',
+  quality: '2K',
+  hasImageUrls: false
+}
+[Evolink Generate] calling Evolink API: {
+  model: 'nano-banana-2-lite',
+  prompt: '一只老虎在狰狞咆哮',
+  size: '1:1',
+  quality: '2K'
+}
+
+[Evolink Request] POST https://api.evolink.ai/v1/images/generations
+Using API Key authentication
+Request data: {
+  model: 'nano-banana-2-lite',
+  prompt: '一只老虎在狰狞咆哮',
+  size: '1:1',
+  quality: '2K'
+}
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 0,
+  status: 'pending',
+  task_info: { can_cancel: true, estimated_time: 200 },
+  type: 'image',
+  usage: {
+    billing_rule: 'per_call',
+    credits_reserved: 3.1,
+    user_group: 'default'
+  }
+}
+[Evolink Generate] response: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 0,
+  status: 'pending',
+  task_info: { can_cancel: true, estimated_time: 200 },
+  type: 'image',
+  usage: {
+    billing_rule: 'per_call',
+    credits_reserved: 3.1,
+    user_group: 'default'
+  }
+}
+ POST /api/ai/evolink/generate 200 in 3788ms
+ ✓ Compiled /api/ai/evolink/task/[taskId] in 408ms (1686 modules)
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
 [NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 25ms
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 934ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 375ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 331ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 1,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 336ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 2,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 2,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 721ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 3,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 3,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 705ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 4,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 4,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 340ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 5,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 5,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 326ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 5,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 5,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 728ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 6,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 6,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 326ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 7,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 7,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 358ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 8,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 8,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 326ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 9,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 9,
+  status: 'processing',
+  task_info: { can_cancel: true },
+  type: 'image'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 330ms
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Task] 查询任务状态: {
+  user: '114298030@qq.com',
+  taskId: 'task-unified-1770645284-9cdy2dt8'
+}
+
+[Evolink Request] GET https://api.evolink.ai/v1/tasks/task-unified-1770645284-9cdy2dt8
+Using API Key authentication
+[Evolink Response] 200 OK
+Response data: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 100,
+  results: [
+    'https://media.evolink.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2YwMTdiNjFmLTA3YTEtNDJmNS05YjY1LWZlNDU2NDc3ZjA3MS5qcGc='
+  ],
+  status: 'completed',
+  task_info: { can_cancel: false },
+  type: 'image'
+}
+[Evolink Task] 任务状态响应: {
+  created: 1770645284,
+  id: 'task-unified-1770645284-9cdy2dt8',
+  model: 'nano-banana-2-lite',
+  object: 'image.generation.task',
+  progress: 100,
+  results: [
+    'https://media.evolink.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2YwMTdiNjFmLTA3YTEtNDJmNS05YjY1LWZlNDU2NDc3ZjA3MS5qcGc='
+  ],
+  status: 'completed',
+  task_info: { can_cancel: false },
+  type: 'image'
+}
+[Evolink Task] 任务已完成,开始上传结果到 R2
+[Evolink Task] 开始下载并上传图片: {
+  url: 'https://media.evolink.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2YwMTdiNjFmLTA3YTEtNDJmNS05YjY1LWZlNDU2NDc3ZjA3MS5qcGc=',
+  key: 'ai-generated/images/2026/02/09/1770645320167-otc7f404v6o.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2YwMTdiNjFmLTA3YTEtNDJmNS05YjY1LWZlNDU2NDc3ZjA3MS5qcGc='
+}
+[AI Hub Config] Using base URL: undefined
+[AI Hub Config] App Key configured: false
+[Evolink Config] Using base URL: https://api.evolink.ai
+[Evolink Config] API Key configured: true
+[Evolink Task] 图片上传成功: {
+  location: 'https://z-image.6211726a06a81200271bc624e042a08c.r2.cloudflarestorage.com/ai-generated/images/2026/02/09/1770645320167-otc7f404v6o.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMT...',
+  bucket: 'z-image',
+  key: 'ai-generated/images/2026/02/09/1770645320167-otc7f404v6o.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2YwMTdiNjFmLTA3YTEtNDJmNS05YjY1LWZlNDU2NDc3ZjA3MS5qcGc=',
+  filename: 'aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2YwMTdiNjFmLTA3YTEtNDJmNS05YjY1LWZlNDU2NDc3ZjA3MS5qcGc=',
+  url: 'https://pub-bdf54eeaabfa45439d502f7c16d1a167.r2.dev/ai-generated/images/2026/02/09/1770645320167-otc7f404v6o.ai/aHR0cHM6Ly93ZWJzdGF0aWMuYWlwcm94eS52aXAvb3V0cHV0LzIwMjYwMjA5LzcyMTI1L2YwMTdiNjFmLTA3YTEt...'
+}
+ GET /api/ai/evolink/task/task-unified-1770645284-9cdy2dt8 200 in 34557ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Generate] request received: {
+  user: '114298030@qq.com',
+  prompt: '一只老虎正在和一头狮子打斗，非常激烈',
+  size: '1:1',
+  quality: '2K',
+  hasImageUrls: false
+}
+[DB] Creating credits for user: 6a23c4ad-bf99-480a-8a9b-c4e3af14a691
+[DB] Initial balance: 0
+[DB] ✅ Credits created successfully
+[DB] Credits ID: 2
+[DB] Credits balance: 0
+ POST /api/ai/evolink/generate 402 in 2899ms
 [NextAuth Session] User loaded: 114298030@qq.com
  GET /api/auth/session 200 in 35ms
 [NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 26ms
- ✓ Compiled in 2.3s (1798 modules)
+ GET /api/auth/session 200 in 23ms
 [NextAuth Session] User loaded: 114298030@qq.com
- GET /en 200 in 316ms
- ○ Compiling /api/auth/[...nextauth] ...
- ✓ Compiled /api/auth/[...nextauth] in 776ms (1148 modules)
+ GET /api/auth/session 200 in 70ms
 [NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 936ms
+ GET /api/auth/session 200 in 18ms
 [NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 25ms
- ✓ Compiled in 2.7s (1805 modules)
+ GET /api/auth/session 200 in 32ms
 [NextAuth Session] User loaded: 114298030@qq.com
- GET /en 200 in 271ms
+ GET /api/auth/session 200 in 20ms
 [NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 40ms
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 26ms
-[NextAuth Session] User loaded: 114298030@qq.com
-[AppContext] Using initial user data from SSR: roy
- GET /en 200 in 707ms
- ○ Compiling /api/video-effects ...
- ✓ Compiled /api/video-effects in 1215ms (1151 modules)
- GET /api/video-effects 200 in 1561ms
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 1694ms
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 31ms
- GET /en 200 in 116ms
- GET /en 200 in 50ms
- GET /en 200 in 42ms
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 38ms
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 38ms
- ✓ Compiled in 2.4s (1798 modules)
- ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
-[NextAuth Session] User loaded: 114298030@qq.com
- ✓ Compiled in 762ms (657 modules)
-[NextAuth Session] User loaded: 114298030@qq.com
-[AppContext] Using initial user data from SSR: roy
- GET /en 200 in 1145ms
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /en 200 in 770ms
- ✓ Compiled /api/auth/[...nextauth] in 438ms (1149 modules)
- ✓ Compiled (1151 modules)
- GET /api/video-effects 200 in 875ms
-[NextAuth Session] User loaded: 114298030@qq.com
- GET /api/auth/session 200 in 875ms
+ GET /api/auth/session 200 in 34ms
 [NextAuth Session] User loaded: 114298030@qq.com
  GET /api/auth/session 200 in 21ms
- ✓ Compiled in 985ms (1798 modules)
 [NextAuth Session] User loaded: 114298030@qq.com
- GET /en 200 in 307ms
+[AppContext] Using initial user data from SSR: roy
+ GET /en 200 in 763ms
+ GET /api/video-effects 200 in 40ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 57ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 30ms
+[NextAuth Session] User loaded: 114298030@qq.com
+[Evolink Generate] request received: {
+  user: '114298030@qq.com',
+  prompt: '老虎和狮子正在激烈战斗',
+  size: '1:1',
+  quality: '2K',
+  hasImageUrls: false
+}
+ POST /api/ai/evolink/generate 402 in 2167ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 27ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 19ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 33ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 25ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 30ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 20ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 35ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 22ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 28ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 18ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 55ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 44ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 32ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 17ms
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /api/auth/session 200 in 25ms
+ ✓ Compiled in 1284ms (1668 modules)
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /en 200 in 333ms
+ ✓ Compiled in 359ms (546 modules)
+[NextAuth Session] User loaded: 114298030@qq.com
+ GET /en 200 in 86ms
